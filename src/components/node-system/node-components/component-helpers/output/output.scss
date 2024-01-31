@@ -1,0 +1,11 @@
+
+.output{
+  position: absolute;
+  top: calc(50% - 6px);
+  right: 3%;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 50%, #272727, #272727 40%, #aaa 55%, #272727 100%);
+  cursor: grab;
+}

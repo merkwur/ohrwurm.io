@@ -1,0 +1,17 @@
+.node-config-hub-container{
+  position: absolute;
+  bottom: 0%;
+  height: 25%;
+  width: 100%;
+  background-color: #171717;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  .node-config-hub {
+    height: 92%;
+    width: 98%;
+    background-color: #070707;
+    border: 2px solid #212121;
+  }
+}
