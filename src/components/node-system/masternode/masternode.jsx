@@ -11,7 +11,9 @@ const MasterNode =  ({node,
                       removeNode, 
                       addLine, 
                       updateLinePosition,
-                      isPositionValid
+                      isPositionValid,
+                      positionState
+
 
                     }) => {
 
@@ -28,7 +30,7 @@ const MasterNode =  ({node,
   const [reversed, setReversed] = useState(false)
   const [snapX, setSnapsX] = useState(0)
   const [snapY, setSnapsY] = useState(0)
-
+  const [previousPosition, setPreviousPosition] = useState({x: 0, y: 0})
 
 
 
@@ -80,12 +82,17 @@ const MasterNode =  ({node,
   useEffect(() => {
     if (isDragging && !lineMode) {
       const currentNode = nodeRef.current[node.id]
-      const diffX = -1 * (parseInt(currentNode.style.left) - snapX) / 40
-      const diffY = -1 * (parseInt(currentNode.style.top) - snapY) / 40
-      if (isPositionValid(snapX, snapY)) {}
+      const diffX = (parseInt(currentNode.style.left) - snapX) / 40
+      const diffY = (parseInt(currentNode.style.top) - snapY) / 40
+      isPositionValid(snapX, snapY, node.id)
+      
       currentNode.style.left = `${snapX}px`
       currentNode.style.top =  `${snapY}px`
+
+      updateNodePosition(draggedNode.id, parseInt(draggedNode.style.left),  
+                                         parseInt(draggedNode.style.top))
       updateLinePosition(diffX * 40, diffY * 40, currentNode.id)
+      setPreviousPosition({x: snapX, y: snapY})
     }
   }, [snapX, snapY])
 

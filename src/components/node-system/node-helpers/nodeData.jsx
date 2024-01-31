@@ -3,8 +3,6 @@ import { getToneObject, getNodeParameters, disposeToneNode, stopEvents } from ".
 
 
 
-
-
 export const addNode = (x, y, name, type, snapSize, nodes) => {
   const id = name + ":" + uuidv4().split("-")[0]
   const snappedX = (Math.floor(x / snapSize) * snapSize) + 5
@@ -175,9 +173,43 @@ export const updateNodePositions = (id, x, y, nodes) => {
   return updatedNodes
 }
 
-export const checkPositionValid = (x, y, position) => {
+export const checkPositionValid = (x, y, id, nodes) => {
+  let nx = x;
+  let ny = y;
+  const normx = Math.floor(x / 40);
+  const normy = Math.floor(y / 40);
 
-}
+  for (const nodeKey of Object.keys(nodes)) {
+    const node = nodes[nodeKey];
+    console.log(node.cellInd)
+    if (node.id !== id) {
+      if (node.cellIndices.x + 1 === normx) {
+        console.log("x+")
+        nx = x + 40;
+        return [nx, ny];
+      }
+      if (node.cellIndices.x - 1 === normx) {
+        console.log("x-")
+        nx = x - 40;
+        return [nx, ny];
+      }
+      if (node.cellIndices.y + 1 === normy) {
+        ny = y + 40;
+        console.log("y+")
+        return [nx, ny];
+      }
+      if (node.cellIndices.y - 1 === normy) {
+        ny = y - 40;
+        console.log("y-")
+        return [nx, ny];
+      }
+    }
+  }
+
+  // Return the original values if no conditions are met
+  return [nx, ny];
+};
+
 
 
 export const updateLinePosition = (x, y, id, lines) => {

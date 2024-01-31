@@ -31,7 +31,8 @@ const NodeCanvas = () => {
   const [positionArray, setPositionArray] = useState(Array(cols * rows).fill(0))  
   const [x, setX] = useState()
   const [y, setY] = useState()
-
+  const [positionState, setPositionState] = useState(true)
+  const [zeros, setZeros] = useState(Array(cols * rows).fill(0))
 
 
   const getNodeInfo = (x, y, node) => {
@@ -44,18 +45,10 @@ const NodeCanvas = () => {
 
 
   useEffect(() => { 
-    const arr = [...positionArray] 
-
-    const snappedX = (Math.floor(x / snapSize) * snapSize) + 5
-    const snappedY = (Math.floor(y / snapSize) * snapSize) + 5
-    console.log("y: ", Math.floor((snappedY-5) / (80)), 
-                "x: ", Math.floor((snappedX-5) / (80) ))
-    const normX = Math.floor((snappedX-5) / 40)
-    const normY = Math.floor((snappedY-5) / 40)
-
-    console.log(normX, normY, cols*normY + normX)
-    arr[cols*normY + normX] = 1
-
+    const arr = [...zeros] 
+    Object.keys(nodeData).forEach(node => {
+      arr[nodeData[node].cellIndex] = 1
+    })
     setPositionArray(arr)
   }, [nodeData])
 
@@ -84,38 +77,33 @@ const NodeCanvas = () => {
     setNodeData(updates[1])
   }
   
-  const handlePositionData = (x, y) => {
-    // check if is possition valid
-    const isPositionValid = checkPositionValid(x, y)
-
-  }
-
+  
   const handleLinePositionUpdate = (x, y, id) => {
     const updatedLines = updateLinePosition(x, y, id, lineData)    
     setLineData(updatedLines)
   }
-
+  
   const handleNotesToTrigger = (arr, ids, bpm) => {
     // some issue about the recursion 
     setTriggerData({notes: arr, instruments: ids, bpm: bpm})
   }
-
-   useEffect(() => {console.log(nodeData)}, [nodeData])
+  
+  useEffect(() => {console.log(nodeData)}, [nodeData])
   // useEffect(() => {console.log(lineData)}, [lineData])
   
-
+  
   const handleGlobalTime = (time) => {
     setGlobalTime(time)
   }
   useEffect(() => {
     invokeTriggerEvent(triggerData, nodeData)
   }, [globalTime])  
-
-
+  
+  
   const handleToneConnection = (from, to, type) => {
     handleToneBackend(from, to, type, nodeData)
   }
-
+  
   const handeLeftClick = (event) => {
     const targetNode = document.elementFromPoint(event.clientX, event.clientY)
     event.preventDefault()
@@ -127,28 +115,25 @@ const NodeCanvas = () => {
   const handleMouseDown = (event) => {
     event.preventDefault()
   }
-
+  
   const updateNodePosition = (currentNodeId, x, y) => {
-    const arr = [...positionArray]
-    const normX = (Math.floor(x / snapSize) * snapSize) / snapSize 
-    const normY = (Math.floor(y / snapSize) * snapSize) / snapSize 
-    arr[normY * cols + normX] = 1
-    setPositionArray(arr)
-    
     const updatedNodes = updateNodePositions(currentNodeId, x, y, nodeData)
-    
     setNodeData(updatedNodes)
-
+    
   }
-
-
+  
+  const handlePositionData = (x, y, id) => {
+    const state = checkPositionValid(x, y, id, nodeData)
+    setPositionState(state)
+  }
+  
   return (
     <div 
-      className='canvas'
-      onContextMenu={(event) => handeLeftClick(event)}
-      onMouseDown={(event) => handleMouseDown(event)}
-      
-      style={{
+    className='canvas'
+    onContextMenu={(event) => handeLeftClick(event)}
+    onMouseDown={(event) => handleMouseDown(event)}
+    
+    style={{
         backgroundSize: `${snapSize*2}px ${snapSize*2}px, ${snapSize}px ${snapSize}px`
       }}
     >
@@ -194,6 +179,7 @@ const NodeCanvas = () => {
                 key={node.id} 
                 node={node}
                 snapSize={snapSize}
+                positionState={positionState}
                 updateNodePosition={(currentNodeId, x, y) => updateNodePosition(currentNodeId, x, y)}
                 removeNode={(id) => nodeRemove(id)}
                 addToneConnection={(from, to, type) => handleToneConnection(from, to, type)}
@@ -202,7 +188,7 @@ const NodeCanvas = () => {
                 isLineExist={lineData ? lineData.length > 0 : false}
                 notesToTrigger={(arr, ids, bpm) => handleNotesToTrigger(arr, ids, bpm)}
                 getGlobalTime={(time) => handleGlobalTime(time)}
-                isPositionValid={(x, y) => handlePositionData(x, y)}
+                isPositionValid={(x, y, id) => handlePositionData(x, y, id)}
               />
             </React.Fragment>
           );  
