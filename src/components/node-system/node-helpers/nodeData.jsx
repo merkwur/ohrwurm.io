@@ -160,6 +160,9 @@ export const updateNodePositions = (id, x, y, nodes) => {
   const ry = Math.floor(normY/2)
   const reducedIndex = 24 * ry + rx
 
+  // the only requirement here is the node.positionIndices
+  // the rest of the props are here for debugging
+
   const updatedNodes = JSON.parse(JSON.stringify(nodes))
   updatedNodes[id].position.x = x
   updatedNodes[id].position.y = y
