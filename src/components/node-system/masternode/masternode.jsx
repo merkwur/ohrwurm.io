@@ -103,11 +103,11 @@ const MasterNode =  ({node,
       const dragEndElement = document.elementFromPoint( event.clientX, event.clientY)
       if (dragEndElement.getAttribute("sockettype")) {
         const {left, top} = dragEndElement.getBoundingClientRect()
-        setLine(line => ({...line, ex: Math.floor(left), 
-                                ey: Math.floor(top), 
-                                to: dragEndElement.id,
-                                toType: dragEndElement.getAttribute("whichparent"),
-                                which: dragEndElement.getAttribute("sockettype")
+        setLine(l => ({...l,  ex: Math.floor(left), 
+                              ey: Math.floor(top), 
+                              to: dragEndElement.id,
+                              toType: dragEndElement.getAttribute("whichparent"),
+                              which: dragEndElement.getAttribute("sockettype")
 
                               }))
       setIsConnectionValid(true)                            
