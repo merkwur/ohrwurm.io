@@ -5,8 +5,8 @@ import Output from '../component-helpers/output/output'
 
 
 
-const Gain = ({node}) => {
-  const inputs = Object.keys(node.input)
+const Core = ({node}) => {
+  const inputs = node.input ? Object.keys(node.input) : null
 
 
   return (
@@ -14,17 +14,23 @@ const Gain = ({node}) => {
       className='gain-container'
       id={node.id}      
       > {node.id}
-        {inputs.map((input, index) => (
-
-          <React.Fragment key={node.id + input}>
-            <Input 
-              id={node.id}
-              inputType={input} 
-              whichParent={input === "node" ? node.type : "natural"}
-              yPosition={node.size.y / (inputs.length + 1)  * (index + 1) - 6}
-              />
-          </React.Fragment>
-        ))}
+      <>
+        {inputs ? (
+          <>
+            {inputs.map((input, index) => (
+    
+              <React.Fragment key={node.id + input}>
+                <Input 
+                  id={node.id}
+                  inputType={input} 
+                  whichParent={input === "node" ? node.type : "natural"}
+                  yPosition={node.size.y / (inputs.length + 1)  * (index + 1) - 6}
+                  />
+              </React.Fragment>
+            ))}
+          </>
+        ) : null }
+      </>
         
         <Output 
           id={node.id}
@@ -36,4 +42,4 @@ const Gain = ({node}) => {
   )
 }
 
-export default Gain
+export default Core

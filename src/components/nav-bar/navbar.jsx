@@ -169,6 +169,7 @@ const Navbar = memo(({getNodeInfo}) => {
                 {node}
                 <a 
                   href={`https://tonejs.github.io/docs/14.7.77/${node}`}
+                  target='_blank'
                   style={{cursor: "help"}}
                 
                 >

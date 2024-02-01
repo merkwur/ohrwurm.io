@@ -5,13 +5,15 @@ import Source from '../node-components/source/source'
 
 
 
+
 const MasterNode =  ({node, 
                       snapSize,
                       updateNodePosition, 
                       removeNode, 
                       addLine, 
                       updateLinePosition,                     
-
+                      getValidMoves,
+                      validMoves
                     }) => {
 
   const [isDragging, setIsDragging] = useState(false)
@@ -68,10 +70,12 @@ const MasterNode =  ({node,
       const my = event.clientY
       const x = mx - initialX
       const y = my - initialY
-      const sX = Math.floor(x/snapSize)*snapSize-snapSize + 5
-      const sY = Math.floor(y/snapSize)*snapSize-snapSize + 5
-      setSnapsX(sX)
-      setSnapsY(sY)
+      const sx = Math.floor(x/snapSize)*snapSize-snapSize + 5
+      const sy = Math.floor(y/snapSize)*snapSize-snapSize + 5
+
+      
+      setSnapsX(sx)
+      setSnapsY(sy)
     }
   }
 
@@ -112,7 +116,6 @@ const MasterNode =  ({node,
                               }))
       setIsConnectionValid(true)                            
       }
-
     }
   }
 

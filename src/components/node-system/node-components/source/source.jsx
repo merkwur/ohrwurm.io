@@ -4,7 +4,7 @@ import Input from '../component-helpers/input/input'
 import Output from '../component-helpers/output/output'
 
 const Source = ({node}) => {
-  const inputs = Object.keys(node.input)
+  const inputs = node.input ? Object.keys(node.input) : null 
 
 
   return (
@@ -16,16 +16,22 @@ const Source = ({node}) => {
         width :`${node.size.x}px`,
       }}
     >
-      {inputs.map((input, index) => (
-        <React.Fragment key={node.id + index}>
-          <Input 
-            id={node.id}
-            inputType={input} 
-            whichParent={input === "node" ? node.type : "natural"}
-            yPosition={node.size.y / (inputs.length + 1)  * (index + 1) - 6}
-          />
-        </React.Fragment>
-      ))}
+      <>
+        {inputs ? (
+          <>
+            {inputs.map((input, index) => (
+              <React.Fragment key={node.id + index}>
+                <Input 
+                  id={node.id}
+                  inputType={input} 
+                  whichParent={input === "node" ? node.type : "natural"}
+                  yPosition={node.size.y / (inputs.length + 1)  * (index + 1) - 6}
+                />
+              </React.Fragment>
+            ))}
+         </>
+        ) : null }
+      </>
         <Output 
           id={node.id}
           outputType={"node"} 

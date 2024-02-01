@@ -12,7 +12,7 @@ export const menuContent = {
     'FatOscillator',
     'LFO',
     'Noise',
-    "OmniOscillator",
+    //"OmniOscillator",
     'Oscillator',
     'PWMOscillator',
     'PulseOscillator',

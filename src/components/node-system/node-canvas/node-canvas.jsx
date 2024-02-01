@@ -7,7 +7,7 @@ import {addNode,
         deleteLine,
         deleteNode,
         updateLinePosition,      
-        checkIfPositionIsValid,
+        getValidMoves,
         
       } from '../node-helpers/nodeData'
 
@@ -33,6 +33,7 @@ const NodeCanvas = () => {
   const [zeros, setZeros] = useState(Array(cols * rows).fill(0))
   const [reducedZeros, setReducedZeros] = useState(Array(Math.floor(cols * rows / 4)).fill(0))
   const [positionDebug, setPositionDebug] = useState(false)
+  const [valids, setValids] = useState([]) 
 
   const getNodeInfo = (x, y, node) => {
     const updatedNodes = addNode(x, y, node.name, node.type, snapSize, nodeData)
@@ -47,6 +48,11 @@ const NodeCanvas = () => {
     const posArr = []
     Object.keys(nodeData).forEach(node => {
       arr[nodeData[node].cellIndex] = 1
+      if (nodeData[node].size.y > 70){
+        reducedArr[nodeData[node].reducedIndex + 24] = 1
+        arr[nodeData[node].cellIndex+48] = 1
+        arr[nodeData[node].cellIndex+(48*2)] = 1
+      }
       reducedArr[nodeData[node].reducedIndex] = 1
       posArr.push(nodeData[node].id, nodeData[node].positionIndices)
     })
@@ -121,8 +127,13 @@ const NodeCanvas = () => {
   
   const updateNodePosition = (currentNodeId, x, y) => {
     const updatedNodes = updateNodePositions(currentNodeId, x, y, nodeData)
-    setNodeData(updatedNodes)
+    setNodeData(updatedNodes)  
+  }
+
+  const handleValidMoves = (x, y, id) => {
+    const validMoves = getValidMoves(x, y, id, nodeData)
     
+    setValids(validMoves)
   }
   
   
@@ -247,6 +258,8 @@ const NodeCanvas = () => {
                 isLineExist={lineData ? lineData.length > 0 : false}
                 notesToTrigger={(arr, ids, bpm) => handleNotesToTrigger(arr, ids, bpm)}
                 getGlobalTime={(time) => handleGlobalTime(time)}
+                getValidMoves={(x, y, id) => handleValidMoves(x, y, id)}
+                validMoves={valids}
               />
             </React.Fragment>
           );  

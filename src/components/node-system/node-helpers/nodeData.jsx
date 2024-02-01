@@ -176,19 +176,33 @@ export const updateNodePositions = (id, x, y, nodes) => {
   return updatedNodes
 }
 
-export const checkIfPositionIsValid = (x, y, id, nodes) => {
+
+
+export const getValidMoves = (x, y, id, nodes) => {
   let nx = x;
   let ny = y;
+  const validMoves = [1, 1, 1, 1]
   
   for (const nodeKey of Object.keys(nodes)) {
     const node = nodes[nodeKey]; 
     if (node.id !== id) {
-      if (Math.abs(nx - node.positionIndices.x) < 1) {return [1, 0]}
-      if (Math.abs(ny - node.positionIndices.y) < 1) {return [0, 1]}
+      if (node.cellIndices.x + 2 === nx && Math.abs(node.cellIndices.y - ny) < 2 || nx === 0) {
+        validMoves[0] = 0
+      }
+      if (node.cellIndices.x - 2 === nx && Math.abs(node.cellIndices.y - ny) < 2 || nx === 48) {
+        validMoves[2] = 0
+      }
+      if (node.cellIndices.y + 2 === ny && (node.cellIndices.x - nx) < 2 || ny === 0) {
+        validMoves[1] = 0
+      }
+      if (node.cellIndices.y - 2 === ny && Math.abs(node.cellIndices.x - nx) < 2 || ny === 16) {
+        validMoves[3] = 0
+      }
+
     }
   }
 
-  return [1, 1];
+  return validMoves;
 };
 
 
@@ -204,7 +218,7 @@ export const updateLinePosition = (x, y, id, lines) => {
         updateLines[line].sy += y;
       } else {
         updateLines[line].ex += x;
-        updateLines[line].ey += y; // Corrected from ex to ey
+        updateLines[line].ey += y; 
       }
       
     }
@@ -224,12 +238,14 @@ const getSize = (name, type, snap) => {
     },
     Source: {
       Oscillator: {x: snap, y: snap},
-      FatOscillator: {x: snap, y: snap},
-      PulseOscillator: {x: snap, y: snap},
-      PWMOascillator: {x: snap, y: snap},
+      FatOscillator: {x: snap, y: snap*2+10},
+      PulseOscillator: {x: snap, y: snap*2+10},
+      PWMOscillator: {x: snap, y: snap*2+10},
       Noise: {x: snap, y: snap},
-      AMOscillator: {x: snap, y: snap * 2}, 
-      FMOscillator: {x: snap, y: snap * 2},
+      AMOscillator: {x: snap, y: snap * 2+10}, 
+      FMOscillator: {x: snap, y: snap * 2+10},
+      LFO: {x: snap, y: snap}, 
+
     }
   }
 
@@ -240,6 +256,10 @@ const getSize = (name, type, snap) => {
 
 
 const getInputs = (name, type) => {
+  const commonOscillatorParams = {
+    frequency: null, 
+    detune: null
+  }
   const nodeInputData = {
     Core: {
       Destination: {
@@ -253,14 +273,33 @@ const getInputs = (name, type) => {
     },
     Source: {
       AMOscillator: {
-        harmonicity: true,
-        frequency: true, 
-        detune: true
+        harmonicity: null,
+        ...commonOscillatorParams
       }, 
       Oscillator: {
+        ...commonOscillatorParams
+      }, 
+      FMOscillator: {
+        ...commonOscillatorParams,
+        harmonicity: null, 
+        modulationIndex: null
+      }, 
+      FatOscillator: {
+        ...commonOscillatorParams, 
+        spread: null
+      }, 
+      LFO: {
         frequency: null, 
-        detune: null, 
-
+        amplitude: null, 
+      }, 
+      Noise: null, 
+      PWMOscillator: {
+        ...commonOscillatorParams, 
+        modulationFrquency: null,
+      }, 
+      PulseOscillator: {
+        ...commonOscillatorParams, 
+        width: null
       }
     }
   }

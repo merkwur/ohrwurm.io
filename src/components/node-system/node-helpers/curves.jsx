@@ -75,7 +75,7 @@ const Curves = ({ id, line, deleteLine, fromType, toType }) => {
         d={`M ${curvePosition.mx} ${curvePosition.my} C ${curvePosition.x1} ${curvePosition.y1}, ${curvePosition.x2} ${curvePosition.y2}, ${curvePosition.x} ${curvePosition.y}`}
         // stroke='#f734d7'
         stroke={`url(#${fromType}2${toType})`} 
-        strokeWidth={8}
+        strokeWidth={5}
         strokeLinecap="round"
         fill="transparent"
         onContextMenu={(event) => handleClick(event)}
