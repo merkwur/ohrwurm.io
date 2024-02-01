@@ -91,7 +91,7 @@ const NodeCanvas = () => {
     setTriggerData({notes: arr, instruments: ids, bpm: bpm})
   }
   
-  //useEffect(() => {console.log(nodeData)}, [nodeData])
+  useEffect(() => {console.log(nodeData)}, [nodeData])
   useEffect(() => {console.log(lineData)}, [lineData])
   
   

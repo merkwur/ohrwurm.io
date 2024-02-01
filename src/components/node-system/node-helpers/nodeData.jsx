@@ -16,7 +16,6 @@ export const addNode = (x, y, name, type, snapSize, nodes) => {
     name, 
     size: getSize(name, type, snapSize*2 - 10),
     input: getInputs(name,type),  
-    output: [],  
     position: {x: snappedX, y: snappedY},
     cellIndices: {x: normX, y: normY},
     reducedIndex: reducedIndex,
@@ -65,6 +64,8 @@ export const deleteNode = (id, nodes, lines) => {
   
   
   export const addLine = (lineProps, lines, nodes) => {
+
+    console.log("here we are adding a line")
     // Validate input
     if (
       !lines || 
@@ -82,7 +83,7 @@ export const deleteNode = (id, nodes, lines) => {
       const which = lineProps.which;
       
       // Generate a unique identifier for the line
-      const id = `${fromId}>${toId}`;
+      const id = `${fromId}>${toId}=${which}`;
       
       // Check if the line already exists to avoid duplication
       if (lines[id]) {
@@ -97,10 +98,6 @@ export const deleteNode = (id, nodes, lines) => {
         throw new Error('Node ID not found');
       }
       
-      // Update connections and inputs/outputs
-      if (!newNodes[fromId].output.includes(toId)) {
-        newNodes[fromId].output.push(toId);
-      }
       
       newNodes[fromId].connection.push(id);
       newNodes[toId].connection.push(id);
@@ -144,10 +141,11 @@ export const deleteLine = (id, lines, nodes) => {
   updatedNodes[line.from].connection = updatedNodes[line.from].connection.filter(c => c !== id)
   updatedNodes[line.to  ].connection = updatedNodes[line.to  ].connection.filter(c => c !== id)
   
-  if (line.whichInput === "node")  {
-    updatedNodes[line.to].input.node = updatedNodes[line.to].input.node.filter(i => i !== id)
+  if (line.which === "node")  {
+    console.log(updatedNodes[line.to].input.node, id)
+    updatedNodes[line.to].input.node = updatedNodes[line.to].input.node.filter(i => i !== line.from)
   } else {
-    updatedNodes[line.to].input[whichInput] = null
+    updatedNodes[line.to].input[line.which] = null
   }
   
   return [updatedLines, updatedNodes];
@@ -199,8 +197,9 @@ export const updateLinePosition = (x, y, id, lines) => {
   
   const updateLines = JSON.parse(JSON.stringify(lines))
   Object.keys(updateLines).forEach(line => {
+    
     if (line.includes(id)) {
-      if (updateLines[line].from.id === id) {
+      if (updateLines[line].from === id) {
         updateLines[line].sx += x;
         updateLines[line].sy += y;
       } else {

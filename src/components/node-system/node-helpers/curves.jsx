@@ -49,13 +49,13 @@ const Curves = ({ id, line, deleteLine, fromType, toType }) => {
 
     setCurvePosition({
       mx: line.sx,
-      my: line.sy,
+      my: line.sy + 1,
       x1: x1,
-      y1: line.sy,
+      y1: line.sy-1,
       x2: x2,
-      y2: line.ey,
+      y2: line.ey+1,
       x: line.ex,
-      y: line.ey,
+      y: line.ey+1,
     });
   }, [line]);
 

@@ -54,8 +54,8 @@ const MasterNode =  ({node,
       const {left, top} = topElement.getBoundingClientRect()
       setLine({ from: topElement.id, 
                 fromType: topElement.getAttribute("whichparent"),               
-                sx: Math.floor(left),
-                sy: Math.floor(top)  
+                sx: Math.floor(left) + 5,
+                sy: Math.floor(top) + 5 
               })
       setLineMode(true)      
     }
@@ -81,8 +81,8 @@ const MasterNode =  ({node,
   useEffect(() => {
     if (isDragging && !lineMode) {
       const currentNode = nodeRef.current[node.id]
-      const diffX = (parseInt(currentNode.style.left) - snapX) / 40
-      const diffY = (parseInt(currentNode.style.top) - snapY) / 40
+      const diffX = (parseInt(currentNode.style.left) - snapX)
+      const diffY = (parseInt(currentNode.style.top) - snapY) 
       currentNode.style.left = `${snapX}px`
       currentNode.style.top =  `${snapY}px`
       updateNodePosition(draggedNode.id, parseInt(draggedNode.style.left), 
@@ -90,7 +90,7 @@ const MasterNode =  ({node,
 
       // this update line position method is a garbage needs to revised.
       // when the nodes are aligned edge is dissapears.                                       
-      updateLinePosition(diffX * -40, diffY * -40, currentNode.id)
+      updateLinePosition(-diffX, -diffY, currentNode.id)
     }
   }, [snapX, snapY])
 
@@ -103,8 +103,8 @@ const MasterNode =  ({node,
       const dragEndElement = document.elementFromPoint( event.clientX, event.clientY)
       if (dragEndElement.getAttribute("sockettype")) {
         const {left, top} = dragEndElement.getBoundingClientRect()
-        setLine(l => ({...l,  ex: Math.floor(left), 
-                              ey: Math.floor(top), 
+        setLine(l => ({...l,  ex: Math.floor(left) + 5, 
+                              ey: Math.floor(top) + 5, 
                               to: dragEndElement.id,
                               toType: dragEndElement.getAttribute("whichparent"),
                               which: dragEndElement.getAttribute("sockettype")
