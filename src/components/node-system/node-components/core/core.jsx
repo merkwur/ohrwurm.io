@@ -13,7 +13,7 @@ const Gain = ({node}) => {
     <div 
       className='gain-container'
       id={node.id}      
-      >
+      > {node.id}
         {inputs.map((input, index) => (
 
           <React.Fragment key={node.id + input}>

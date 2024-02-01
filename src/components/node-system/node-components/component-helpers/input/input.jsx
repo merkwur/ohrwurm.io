@@ -17,7 +17,8 @@ const Input = ({id, inputType, whichParent, yPosition}) => {
       style={{
         backgroundColor: `${colorScheme[whichParent]}`,
         top: `${yPosition}px`,
-        background: `radial-gradient(circle at 50%, #272727, #272727 40%, ${colorScheme[type]} 55%, #272727 100%)`
+        background: `radial-gradient(circle at 50%, #272727, #272727 40%, ${colorScheme[type]} 55%, #272727 100%)`,
+        right: "3%"
       }}
       
       >

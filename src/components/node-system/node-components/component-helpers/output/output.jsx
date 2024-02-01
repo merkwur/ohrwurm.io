@@ -10,7 +10,8 @@ const Output = ({id, outputType, whichParent}) => {
       sockettype={outputType}
       whichparent={whichParent}
       style={{backgroundColor: `${colorScheme[whichParent]}`,
-              background: `radial-gradient(circle at 50%, #272727, #272727 40%, ${colorScheme[whichParent]} 55%, #272727 100%)`
+              background: `radial-gradient(circle at 50%, #272727, #272727 40%, ${colorScheme[whichParent]} 55%, #272727 100%)`,
+              top: "calc(50% - 6px)", right: "3%"
     }}
       >
       

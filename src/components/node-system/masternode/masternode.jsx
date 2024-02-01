@@ -10,10 +10,7 @@ const MasterNode =  ({node,
                       updateNodePosition, 
                       removeNode, 
                       addLine, 
-                      updateLinePosition,
-                      isPositionValid,
-                      positionState
-
+                      updateLinePosition,                     
 
                     }) => {
 
@@ -30,7 +27,6 @@ const MasterNode =  ({node,
   const [reversed, setReversed] = useState(false)
   const [snapX, setSnapsX] = useState(0)
   const [snapY, setSnapsY] = useState(0)
-  const [previousPosition, setPreviousPosition] = useState({x: 0, y: 0})
 
 
 
@@ -41,8 +37,8 @@ const MasterNode =  ({node,
     const x = event.clientX
     const y = event.clientY
     const topElement = document.elementFromPoint(x, y)
-    setInitialX(topElement.style.left - snapSize / 4)
-    setInitialY(topElement.style.top  - snapSize / 4)
+    setInitialX(topElement.style.left - snapSize / 2)
+    setInitialY(topElement.style.top  - snapSize / 2)
     setIsDragging(true)      
     
     if (topElement.className.includes("container")) {
@@ -55,10 +51,12 @@ const MasterNode =  ({node,
     if (topElement.getAttribute("sockettype")) {
       
       console.log("we have a socket: ", topElement.getAttribute("sockettype"))
-      setFromNode({ id: topElement.id, 
-                    type: topElement.getAttribute("whichparent"), 
-                    class: topElement.className
-                  })
+      const {left, top} = topElement.getBoundingClientRect()
+      setLine({ from: topElement.id, 
+                fromType: topElement.getAttribute("whichparent"),               
+                sx: Math.floor(left),
+                sy: Math.floor(top)  
+              })
       setLineMode(true)      
     }
   }
@@ -74,9 +72,10 @@ const MasterNode =  ({node,
       const sY = Math.floor(y/snapSize)*snapSize-snapSize + 5
       setSnapsX(sX)
       setSnapsY(sY)
-      
     }
   }
+
+
 
 
   useEffect(() => {
@@ -84,36 +83,43 @@ const MasterNode =  ({node,
       const currentNode = nodeRef.current[node.id]
       const diffX = (parseInt(currentNode.style.left) - snapX) / 40
       const diffY = (parseInt(currentNode.style.top) - snapY) / 40
-      isPositionValid(snapX, snapY, node.id)
-      
       currentNode.style.left = `${snapX}px`
       currentNode.style.top =  `${snapY}px`
-
-      updateNodePosition(draggedNode.id, parseInt(draggedNode.style.left),  
-                                         parseInt(draggedNode.style.top))
-      updateLinePosition(diffX * 40, diffY * 40, currentNode.id)
-      setPreviousPosition({x: snapX, y: snapY})
+      updateNodePosition(draggedNode.id, parseInt(draggedNode.style.left), 
+                                           parseInt(draggedNode.style.top))
+      updateLinePosition(diffX * -40, diffY * -40, currentNode.id)
     }
   }, [snapX, snapY])
 
 
   
   const handleMouseUp = (event) => {
-    if (isDragging  && !lineMode) {
-      updateNodePosition(draggedNode.id, parseInt(draggedNode.style.left),  
-                                         parseInt(draggedNode.style.top))
-    } else {
-      console.log("we have an end node: ", fromNode)
-      nodeRef.current[node.id].style.zIndex = 1 
-    }
     setIsDragging(false)
+
+    if (lineMode) {
+      const dragEndElement = document.elementFromPoint( event.clientX, event.clientY)
+      if (dragEndElement.getAttribute("sockettype")) {
+        const {left, top} = dragEndElement.getBoundingClientRect()
+        setLine(p => ({...line, ex: Math.floor(left), 
+                                ey: Math.floor(top), 
+                                to: dragEndElement.id,
+                                toType: dragEndElement.getAttribute("whichparent"),
+                                which: dragEndElement.getAttribute("sockettype")
+
+                              }))
+      setIsConnectionValid(true)                            
+      }
+
+    }
   }
 
 
   useEffect(() => {
     if (isConnectionValid) {
+      console.log(line)
       addLine(line, reversed)
       setIsConnectionValid(false)
+
     }
     setLine({})
   }, [isConnectionValid])

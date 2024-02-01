@@ -10,7 +10,7 @@ export const addNode = (x, y, name, type, snapSize, nodes) => {
   const normX = Math.floor((snappedX-5) / 40)
   const normY = Math.floor((snappedY-5) / 40)
   const cellIndex = 48 * normY + normX 
-
+  const reducedIndex = 24 * Math.floor(normY / 2) + Math.floor(normX / 2)
   const newNode = {
     id, 
     name, 
@@ -19,6 +19,8 @@ export const addNode = (x, y, name, type, snapSize, nodes) => {
     output: [],  
     position: {x: snappedX, y: snappedY},
     cellIndices: {x: normX, y: normY},
+    reducedIndex: reducedIndex,
+    positionIndices: {x: Math.floor(normX/2), y: Math.floor(normY/2)},
     connection: [],
     cellIndex: cellIndex,
     type, 
@@ -70,14 +72,14 @@ export const deleteNode = (id, nodes, lines) => {
       !lineProps || 
       !lineProps.to || 
       !lineProps.from || 
-      !lineProps.whichInput 
+      !lineProps.which 
       ) {
         throw new Error('Invalid line properties');
       }
       
-      const fromId = lineProps.from.id;
-      const toId = lineProps.to.id;
-      const whichInput = lineProps.whichInput;
+      const fromId = lineProps.from;
+      const toId = lineProps.to;
+      const which = lineProps.which;
       
       // Generate a unique identifier for the line
       const id = `${fromId}>${toId}`;
@@ -103,13 +105,13 @@ export const deleteNode = (id, nodes, lines) => {
       newNodes[fromId].connection.push(id);
       newNodes[toId].connection.push(id);
       
-      if (whichInput !== "node") {
-        newNodes[toId].input[whichInput] = fromId;
+      if (which !== "node") {
+        newNodes[toId].input[which] = fromId;
       } else {
-        if (!Array.isArray(newNodes[toId].input[whichInput])) {
-      newNodes[toId].input[whichInput] = [];
+        if (!Array.isArray(newNodes[toId].input[which])) {
+      newNodes[toId].input[which] = [];
     }
-    newNodes[toId].input[whichInput].push(fromId);
+    newNodes[toId].input[which].push(fromId);
   }
   
   // Clone the lines object to maintain immutability
@@ -156,58 +158,39 @@ export const deleteLine = (id, lines, nodes) => {
 
 export const updateNodePositions = (id, x, y, nodes) => {
 
-
-  const snappedX = (Math.floor(x / 40) * 40) + 5
-  const snappedY = (Math.floor(y / 40) * 40) + 5
-  const normX = Math.floor((snappedX-5) / 40)
-  const normY = Math.floor((snappedY-5) / 40)
-  const cellIndex = 48 * normY + normX 
+  const normX = (Math.floor(x / 40)) 
+  const normY = (Math.floor(y / 40)) 
+  const cellIndex = 48 * normY + normX
+  const rx = Math.floor(normX/2)  
+  const ry = Math.floor(normY/2)
+  const reducedIndex = 24 * ry + rx
 
   const updatedNodes = JSON.parse(JSON.stringify(nodes))
   updatedNodes[id].position.x = x
   updatedNodes[id].position.y = y
   updatedNodes[id].cellIndex = cellIndex
+  updatedNodes[id].reducedIndex = reducedIndex
   updatedNodes[id].cellIndices.x = normX
   updatedNodes[id].cellIndices.y = normY
+  updatedNodes[id].positionIndices.x = rx
+  updatedNodes[id].positionIndices.y = ry
   
   return updatedNodes
 }
 
-export const checkPositionValid = (x, y, id, nodes) => {
+export const checkIfPositionIsValid = (x, y, id, nodes) => {
   let nx = x;
   let ny = y;
-  const normx = Math.floor(x / 40);
-  const normy = Math.floor(y / 40);
-
+  
   for (const nodeKey of Object.keys(nodes)) {
-    const node = nodes[nodeKey];
-    console.log(node.cellInd)
+    const node = nodes[nodeKey]; 
     if (node.id !== id) {
-      if (node.cellIndices.x + 1 === normx) {
-        console.log("x+")
-        nx = x + 40;
-        return [nx, ny];
-      }
-      if (node.cellIndices.x - 1 === normx) {
-        console.log("x-")
-        nx = x - 40;
-        return [nx, ny];
-      }
-      if (node.cellIndices.y + 1 === normy) {
-        ny = y + 40;
-        console.log("y+")
-        return [nx, ny];
-      }
-      if (node.cellIndices.y - 1 === normy) {
-        ny = y - 40;
-        console.log("y-")
-        return [nx, ny];
-      }
+      if (Math.abs(nx - node.positionIndices.x) < 1) {return [1, 0]}
+      if (Math.abs(ny - node.positionIndices.y) < 1) {return [0, 1]}
     }
   }
 
-  // Return the original values if no conditions are met
-  return [nx, ny];
+  return [1, 1];
 };
 
 

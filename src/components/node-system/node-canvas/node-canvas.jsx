@@ -7,7 +7,7 @@ import {addNode,
         deleteLine,
         deleteNode,
         updateLinePosition,      
-        checkPositionValid,
+        checkIfPositionIsValid,
         
       } from '../node-helpers/nodeData'
 
@@ -29,15 +29,12 @@ const NodeCanvas = () => {
   const [globalTime, setGlobalTime] = useState(0)
   const [snapSize, setSnapSize] = useState(40)
   const [positionArray, setPositionArray] = useState(Array(cols * rows).fill(0))  
-  const [x, setX] = useState()
-  const [y, setY] = useState()
-  const [positionState, setPositionState] = useState(true)
+  const [reducedPositionArray, setReducedPositioniArray] = useState(Array(Math.floor(cols * rows / 4)).fill(0))  
   const [zeros, setZeros] = useState(Array(cols * rows).fill(0))
-
+  const [reducedZeros, setReducedZeros] = useState(Array(Math.floor(cols * rows / 4)).fill(0))
+  const [positionDebug, setPositionDebug] = useState(false)
 
   const getNodeInfo = (x, y, node) => {
-    setX(x)
-    setY(y)
     const updatedNodes = addNode(x, y, node.name, node.type, snapSize, nodeData)
 
     setNodeData(updatedNodes)    
@@ -46,10 +43,16 @@ const NodeCanvas = () => {
 
   useEffect(() => { 
     const arr = [...zeros] 
+    const reducedArr = [...reducedZeros]
+    const posArr = []
     Object.keys(nodeData).forEach(node => {
       arr[nodeData[node].cellIndex] = 1
+      reducedArr[nodeData[node].reducedIndex] = 1
+      posArr.push(nodeData[node].id, nodeData[node].positionIndices)
     })
+    
     setPositionArray(arr)
+    setReducedPositioniArray(reducedArr)
   }, [nodeData])
 
 
@@ -88,8 +91,8 @@ const NodeCanvas = () => {
     setTriggerData({notes: arr, instruments: ids, bpm: bpm})
   }
   
-  useEffect(() => {console.log(nodeData)}, [nodeData])
-  // useEffect(() => {console.log(lineData)}, [lineData])
+  //useEffect(() => {console.log(nodeData)}, [nodeData])
+  useEffect(() => {console.log(lineData)}, [lineData])
   
   
   const handleGlobalTime = (time) => {
@@ -122,10 +125,6 @@ const NodeCanvas = () => {
     
   }
   
-  const handlePositionData = (x, y, id) => {
-    const state = checkPositionValid(x, y, id, nodeData)
-    setPositionState(state)
-  }
   
   return (
     <div 
@@ -137,39 +136,100 @@ const NodeCanvas = () => {
         backgroundSize: `${snapSize*2}px ${snapSize*2}px, ${snapSize}px ${snapSize}px`
       }}
     >
+      <div 
+        className='position-debug'
+        style={{
+          position: "absolute", 
+          right: "5%",
+          bottom: "25%",
+          width: "50px", height: "30px", 
+          backgroundColor: "#171717", borderRadius: "10px",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          color: "#777",
+          fontSize: "8pt"
+
+        }}
+        onClick={() => setPositionDebug(!positionDebug)}
+      > pDebug
+      </div>
+      <div>
+      { positionDebug ? (
+        <>
         <div 
-          className='position-map'
-          style={{
-              width: "384px",
-              height: "144px",
-              position: "absolute",
-              right: "0",
-              bottom: "40%",
-              backgroundColor: "#171717",
-              backgroundSize: "10px",
-              backgroundImage: 
-                  `radial-gradient(to right, #22dbc027 1px, transparent 1px),
-                    radial-gradient(to bottom, #77777717 1px, transparent 1px)`
-          }}
-          >
-          {
-            positionArray.map((item, index) => (
-            <div 
-                className='cells'
-                key={index}
-                style={{
-                  position: "absolute",
-                  left: `${(index % 48) * 8}px`, // Assuming each cell + border is 9px wide
-                  top: `${Math.floor(index / 48) * 8}px`, // Assuming each cell + border is 9px high
-                  backgroundColor: item === 0 ? "#171717" : "#ff4242", // Corrected hex color codes
-                  width: "8px",
-                  height: "8px",
-                  border: ".01rem solid #77777717" // Corrected border color
-                }}
-              >
-              </div>
-            ))}
+            className='position-map'
+            style={{
+                width: "384px",
+                height: "144px",
+                position: "absolute",
+                right: "0",
+                bottom: "40%",
+                backgroundColor: "#171717",
+                backgroundSize: "10px",
+                backgroundImage: 
+                    `radial-gradient(to right, #22dbc027 1px, transparent 1px),
+                      radial-gradient(to bottom, #77777717 1px, transparent 1px)`
+            }}
+            >
+            {
+              positionArray.map((item, index) => (
+              <div 
+                  className='cells'
+                  key={index}
+                  style={{
+                    position: "absolute",
+                    left: `${(index % 48) * 8}px`, // Assuming each cell + border is 9px wide
+                    top: `${Math.floor(index / 48) * 8}px`, // Assuming each cell + border is 9px high
+                    backgroundColor: item === 0 ? "#171717" : "#ff4242", // Corrected hex color codes
+                    width: "8px",
+                    height: "8px",
+                    border: ".01rem solid #77777717" // Corrected border color
+                  }}
+                >
+                </div>
+              ))}
         </div>
+        <div 
+            className='position-map'
+            style={{
+                width: "384px",
+                height: "144px",
+                position: "absolute",
+                right: "0",
+                bottom: "60%",
+                backgroundColor: "#171717",
+                backgroundSize: "10px",
+                backgroundImage: 
+                    `radial-gradient(to right, #22dbc027 1px, transparent 1px),
+                      radial-gradient(to bottom, #77777717 1px, transparent 1px)`
+            }}
+            >
+            {
+              reducedPositionArray.map((item, index) => (
+              <div 
+                  className='cells'
+                  key={index}
+                  style={{
+                    position: "absolute",
+                    left: `${(index % 24) * 16}px`, // Assuming each cell + border is 9px wide
+                    top: `${Math.floor(index / 24) * 16}px`, // Assuming each cell + border is 9px high
+                    backgroundColor: item === 0 ? "#171717" : "#ff4242", // Corrected hex color codes
+                    width: "16px",
+                    height: "16px",
+                    border: ".01rem solid #77777717" // Corrected border color
+                  }}
+                >
+                </div>
+              ))}
+        </div>
+        </>
+      ) : null}
+      </div>
+      <LineCanvas 
+        lines={lineData} 
+        deleteLine={id => handleDeleteLine(id)}
+      />
       <Navbar getNodeInfo={(x, y, node) => getNodeInfo(x, y, node)}/>    
         {Object.keys(nodeData).map(nodeId => {        
           const node = nodeData[nodeId];
@@ -178,8 +238,7 @@ const NodeCanvas = () => {
               <MasterNode 
                 key={node.id} 
                 node={node}
-                snapSize={snapSize}
-                positionState={positionState}
+                snapSize={snapSize}      
                 updateNodePosition={(currentNodeId, x, y) => updateNodePosition(currentNodeId, x, y)}
                 removeNode={(id) => nodeRemove(id)}
                 addToneConnection={(from, to, type) => handleToneConnection(from, to, type)}
@@ -188,16 +247,11 @@ const NodeCanvas = () => {
                 isLineExist={lineData ? lineData.length > 0 : false}
                 notesToTrigger={(arr, ids, bpm) => handleNotesToTrigger(arr, ids, bpm)}
                 getGlobalTime={(time) => handleGlobalTime(time)}
-                isPositionValid={(x, y, id) => handlePositionData(x, y, id)}
               />
             </React.Fragment>
           );  
         })}
       <NodeConfigurationHub />
-      <LineCanvas 
-        lines={lineData} 
-        deleteLine={id => handleDeleteLine(id)}
-      />
     </div>
   )
 }
