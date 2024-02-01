@@ -87,6 +87,9 @@ const MasterNode =  ({node,
       currentNode.style.top =  `${snapY}px`
       updateNodePosition(draggedNode.id, parseInt(draggedNode.style.left), 
                                            parseInt(draggedNode.style.top))
+
+      // this update line position method is a garbage needs to revised.
+      // when the nodes are aligned edge is dissapears.                                       
       updateLinePosition(diffX * -40, diffY * -40, currentNode.id)
     }
   }, [snapX, snapY])
@@ -100,7 +103,7 @@ const MasterNode =  ({node,
       const dragEndElement = document.elementFromPoint( event.clientX, event.clientY)
       if (dragEndElement.getAttribute("sockettype")) {
         const {left, top} = dragEndElement.getBoundingClientRect()
-        setLine(p => ({...line, ex: Math.floor(left), 
+        setLine(line => ({...line, ex: Math.floor(left), 
                                 ey: Math.floor(top), 
                                 to: dragEndElement.id,
                                 toType: dragEndElement.getAttribute("whichparent"),
