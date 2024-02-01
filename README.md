@@ -1,5 +1,5 @@
 
-# Browser Based Digital Audio Worksation
+# Browser Based Digital Audio Worksation (Modulation)
 
 The UI/UX is heavily influenced by the [Bitwig](https://www.bitwig.com/) software. 
  
