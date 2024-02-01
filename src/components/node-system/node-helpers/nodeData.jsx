@@ -29,9 +29,6 @@ export const addNode = (x, y, name, type, snapSize, nodes) => {
   return updatedNodes
 }
 
-// make the position object and store all the pos data there, and by that 
-// I can prevent node overlap => no node overlaps 
-// data can be store an array of zeros and ones where the nodes are lies is ones empty places are 0
 
 
 
