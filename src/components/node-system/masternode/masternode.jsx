@@ -96,8 +96,7 @@ const MasterNode =  ({node,
       updateNodePosition(draggedNode.id, parseInt(draggedNode.style.left), 
                                            parseInt(draggedNode.style.top))
 
-      // this update line position method is a garbage needs to revised.
-      // when the nodes are aligned edge is dissapears.                                       
+      // this update line position method is somewhat a garbage but works ok.                                      
       updateLinePosition(-diffX, -diffY, currentNode.id)
     }
   }, [snapX, snapY])
