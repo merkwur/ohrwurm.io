@@ -1,0 +1,24 @@
+.detune-wrapper{
+  position: relative;  
+  width: 100px;
+  height: 30px;
+  
+  .header{
+    font-size: 7.3pt;
+    font-weight: 600;
+    height: 20%;
+  }
+  
+  .detune-slider{    
+    
+    cursor: e-resize;
+    height: 80%;
+    
+    .value{
+      position: absolute;
+      top:40%;
+      font-size: 6.7pt;
+      font-weight: 600;   
+    }
+  }
+}

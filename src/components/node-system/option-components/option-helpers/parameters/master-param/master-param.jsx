@@ -12,7 +12,7 @@ const MasterParam = ({id, name, type}) => {
         <Frequency id={id} name={name} type={type}/>
       ) 
       : name === "detune" ? (
-        <Detune id={id} name={name} type={type}/>
+       <></>
       ) : null}
       
     </div>

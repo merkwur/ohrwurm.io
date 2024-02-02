@@ -1,7 +1,7 @@
 .frequency-wrapper{
   position: relative;  
   width: 100px;
-  height: 40px;
+  height: 25px;
   
   .header{
     font-size: 7.3pt;
@@ -9,19 +9,15 @@
     height: 20%;
   }
   
-  .frequency-slider{
-    
+  .frequency-slider{    
     cursor: e-resize;
     height: 80%;
     
-
     .value{
       position: absolute;
-      top: 45%;
+      top: 50%;
       font-size: 6.7pt;
-      font-weight: 600;
-       
+      font-weight: 600;   
     }
   }
-  
 }

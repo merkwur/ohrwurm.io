@@ -12,7 +12,8 @@ const Frequency = ({id, name, type}) => {
   const [tortoise, setTortoise] = useState(false)
   const [unit, setUnit] = useState(100/8192)
   const centered = false
-  const height = 30
+  const height = 25
+  const width = 80
   const handleMouseDown = (event) => {
     setIsDragging(true)
     setInitialX(event.clientX)
@@ -90,12 +91,12 @@ const Frequency = ({id, name, type}) => {
         className='frequency-slider'
         onMouseDown={handleMouseDown}
         >
-        <svg width="100" height={`${height}`} viewBox={`0 0 100 ${height}`} xmlns="http://www.w3.org/2000/svg">
+        <svg width={width} height={`${height}`} viewBox={`0 0 ${width} ${height}`} xmlns="http://www.w3.org/2000/svg">
         <linearGradient id="freq-grad" >
-          <stop offset={`${100-value}%`} stopColor="#ffaaaa42" />
-          <stop offset={`${150-value}%`} stopColor="#aaaaff42" />
+          <stop offset={`${100-value}%`} stopColor="#ffaaaa22" />
+          <stop offset={`${150-value}%`} stopColor="#aaaaff22" />
         </linearGradient>
-          <path d={`M 0 ${height} C ${value} ${height}, ${value} -10, 98 ${height}`}  fill="url(#freq-grad)" stroke='#77777777' strokeWidth={2.5}/>
+          <path d={`M 0 ${height} C ${value-10} ${height}, ${value-22} ${0-(value/8)-(value/10)}, ${width-2} ${height}`}  fill="url(#freq-grad)" stroke='#77777777' strokeWidth={2.5}/>
         </svg>
       <div className='value'> 
         {parseInt(value/unit)} Hz

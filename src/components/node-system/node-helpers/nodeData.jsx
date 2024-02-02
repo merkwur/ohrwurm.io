@@ -34,7 +34,7 @@ export const addNode = (x, y, name, type, snapSize, nodes, tones) => {
 
 
 
-export const deleteNode = (id, nodes, lines) => {
+export const deleteNode = (id, nodes, lines, tones) => {
   if (!nodes[id]) {
     throw new Error('Node ID not found');
   }
@@ -50,14 +50,14 @@ export const deleteNode = (id, nodes, lines) => {
     [nodes, lines] // Initial values
     );
     
+    const { [id]: __, ...updateTones} = tones
     // Now remove the node itself
     const { [id]: _, ...finalNodes } = updatedNodes;
-    
-    return [finalNodes, updatedLines];
+  
+    return [finalNodes, updatedLines, updateTones];
     
     
   }
-  
   
   
   
@@ -80,6 +80,12 @@ export const deleteNode = (id, nodes, lines) => {
       const toId = lineProps.to;
       const which = lineProps.which;
       
+      // check for the capacity of an input
+
+      if (!Array.isArray(nodes[toId].input[which]) && nodes[toId].input[which]) {
+        console.log(`the ${which} input capacity is full!`)
+        return [lines, nodes]
+      }
       // Generate a unique identifier for the line
       const id = `${fromId}>${toId}=${which}`;
       
@@ -330,7 +336,9 @@ const getInputs = (name, type) => {
       AMSynth: {
         ...commonSynthParams, 
         modulation: 440, 
-        harmonicity: 1
+        harmonicity: 1, 
+        trigger: null,
+
 
       }
     }

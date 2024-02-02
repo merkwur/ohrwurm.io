@@ -9,7 +9,7 @@ const Instrument = ({node}) => {
 
   return (
     <div 
-      className='source-container'
+      className='instrument-container'
       id={node.id}
       style={{
         height: `${node.size.y}px`,
@@ -24,7 +24,7 @@ const Instrument = ({node}) => {
                 <Input 
                   id={node.id}
                   inputType={input} 
-                  whichParent={input === "node" ? node.type : "natural"}
+                  whichParent={input === "trigger" ? node.type : "natural"}
                   yPosition={node.size.y / (inputs.length + 1)  * (index + 1) - 6}
                 />
               </React.Fragment>

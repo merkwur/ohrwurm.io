@@ -64,10 +64,10 @@ const NodeCanvas = () => {
 
 
   const nodeRemove = (id) => {
-    const updated = deleteNode(id, nodeData, lineData)
+    const updated = deleteNode(id, nodeData, lineData, toneData)
     setNodeData(updated[0])
     setLineData(updated[1])
-    
+    setToneData(updated[2]) 
   }
  
   useEffect(() => {console.log("x: ", )}, [])
