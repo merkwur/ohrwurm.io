@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import "./masternode.scss"
 import Core from '../node-components/core/core'
 import Source from '../node-components/source/source'
+import Instrument from '../node-components/instruments/instruments'
 
 
 
@@ -42,7 +43,7 @@ const MasterNode =  ({node,
     
     setInitialX(x - parseInt(topElement.parentElement.style.left)-70)
     setInitialY(y - parseInt(topElement.parentElement.style.top)-70)
-    console.log(initialX)
+
     setIsDragging(true)      
     
     if (topElement.className.includes("container")) {
@@ -54,7 +55,7 @@ const MasterNode =  ({node,
     }
     if (topElement.getAttribute("sockettype")) {
       
-      console.log("we have a socket: ", topElement.getAttribute("sockettype"))
+      
       const {left, top} = topElement.getBoundingClientRect()
       setLine({ from: topElement.id, 
                 fromType: topElement.getAttribute("whichparent"),               
@@ -108,18 +109,22 @@ const MasterNode =  ({node,
 
     if (lineMode) {
       const dragEndElement = document.elementFromPoint( event.clientX, event.clientY)
-      if (dragEndElement.getAttribute("sockettype")) {
-        const {left, top} = dragEndElement.getBoundingClientRect()
-        setLine(l => ({...l,  ex: Math.floor(left) + 5, 
-                              ey: Math.floor(top) + 5, 
-                              to: dragEndElement.id,
-                              toType: dragEndElement.getAttribute("whichparent"),
-                              which: dragEndElement.getAttribute("sockettype")
+      
+      if (dragEndElement.id !== line.from) {
 
-                              }))
-      setIsConnectionValid(true)                            
+        if (dragEndElement.getAttribute("sockettype")) {
+          const {left, top} = dragEndElement.getBoundingClientRect()
+          setLine(l => ({...l,  ex: Math.floor(left) + 5, 
+                                ey: Math.floor(top) + 5, 
+                                to: dragEndElement.id,
+                                toType: dragEndElement.getAttribute("whichparent"),
+                                which: dragEndElement.getAttribute("sockettype")
+  
+                                }))
+        setIsConnectionValid(true)                            
+        }
       }
-    }
+      }
   }
 
 
@@ -189,6 +194,8 @@ const MasterNode =  ({node,
         
       ) : node.type === "Source" ? (
         <Source node={node}/> 
+      ) : node.type === "Instrument" ? (
+        <Instrument node={node}/>
       ) : null 
      }
 

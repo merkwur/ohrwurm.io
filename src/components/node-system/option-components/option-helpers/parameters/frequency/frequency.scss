@@ -1,21 +1,27 @@
 .frequency-wrapper{
+  position: relative;  
   width: 100px;
   height: 40px;
   
   .header{
     font-size: 7.3pt;
     font-weight: 600;
+    height: 20%;
   }
   
   .frequency-slider{
-    border: 1px solid #fabd4222;
-    height: 14px;
+    
     cursor: e-resize;
+    height: 80%;
+    
 
+    .value{
+      position: absolute;
+      top: 45%;
+      font-size: 6.7pt;
+      font-weight: 600;
+       
+    }
   }
   
-      .value{
-        font-size: 7.1pt;
-        font-weight: 300;
-      }
 }

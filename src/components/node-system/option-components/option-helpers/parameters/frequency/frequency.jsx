@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import "./frequency.scss"
 import { clamp, colorScheme } from '../../../../node-helpers/helperFunctions'
-import Slider from '../param-helpers/slider'
 
 
 const Frequency = ({id, name, type}) => {
@@ -13,7 +12,7 @@ const Frequency = ({id, name, type}) => {
   const [tortoise, setTortoise] = useState(false)
   const [unit, setUnit] = useState(100/8192)
   const centered = false
-
+  const height = 30
   const handleMouseDown = (event) => {
     setIsDragging(true)
     setInitialX(event.clientX)
@@ -24,18 +23,19 @@ const Frequency = ({id, name, type}) => {
   const handleMouseMove = (event) => {
     if (isDragging && event.clientX > 0) {
       if (achilles) {
-        const val = value + ((event.clientX - initialX) * unit * 10)
+        const val = value + ((event.clientX - initialX) * unit * 100)
         setValue(clamp(val, 0.1, 100))
       } else if (tortoise) {
         const val = value + (event.clientX - initialX) * unit / 10
         setValue(clamp( val, 0.1, 100))
       } else{
-        const val = value + (event.clientX - initialX) * unit
+        const val = value + (event.clientX - initialX) * unit * 10
         setValue(clamp(val, 0.1, 100))
       }
     }
   }
 
+  
 
   const handleMouseUp = () => {
     setIsDragging(false)
@@ -79,8 +79,28 @@ const Frequency = ({id, name, type}) => {
 
 
   return (
-    <div className='frequency-wrapper'>
-     <Slider id={id} name={name} type={type}/> 
+    <div 
+      className='frequency-wrapper'
+      >
+      <div className='header' 
+        >
+          {`< ${name} >`}
+      </div>
+      <div 
+        className='frequency-slider'
+        onMouseDown={handleMouseDown}
+        >
+        <svg width="100" height={`${height}`} viewBox={`0 0 100 ${height}`} xmlns="http://www.w3.org/2000/svg">
+        <linearGradient id="freq-grad" >
+          <stop offset={`${100-value}%`} stopColor="#ffaaaa42" />
+          <stop offset={`${150-value}%`} stopColor="#aaaaff42" />
+        </linearGradient>
+          <path d={`M 0 ${height} C ${value} ${height}, ${value} -10, 98 ${height}`}  fill="url(#freq-grad)" stroke='#77777777' strokeWidth={2.5}/>
+        </svg>
+      <div className='value'> 
+        {parseInt(value/unit)} Hz
+      </div>
+      </div>
     </div>
   )
 }

@@ -1,14 +1,7 @@
 import React, { useEffect, useState } from 'react';
+import { colorScheme } from './helperFunctions';
 
-const colorScheme = {
-  Core: "#b16286",
-  Source: "#8ec07c",
-  Instrument: "#fabd2f",
-  Effect: "#fb4934",
-  Component: "#b8bb26",
-  Signal: "#458588",
-  natural: "#777"
-};
+
 
 const generateGradients = () => {
   const gradientIDs = [];

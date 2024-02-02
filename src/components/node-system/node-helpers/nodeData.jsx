@@ -268,7 +268,6 @@ const getSize = (name, type, snap) => {
       PluckSynth: {...double},
       PolySynth: {...double},
     }
-
   }
 
   return nodeSizeData[type][name]
