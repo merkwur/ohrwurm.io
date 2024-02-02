@@ -1,0 +1,29 @@
+.source-options-wrapper{
+  height: 100%;
+  background-color: #17171777;
+  color: bisque;
+  display: flex;
+  flex-direction: row;
+
+  .left-stander{
+    border-right: 1px solid #77777777;
+    padding-top: 2rem;
+
+    .header{
+      writing-mode: vertical-rl;
+    }
+  }
+
+  .parameters{
+    min-width: 120px;
+    font-size: 8pt;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    padding-top: 2rem;
+  }
+
+  .saw{
+    height: 120px;
+    width: 120px;
+  }
+}

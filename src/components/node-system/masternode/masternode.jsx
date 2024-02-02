@@ -39,8 +39,11 @@ const MasterNode =  ({node,
     const x = event.clientX
     const y = event.clientY
     const topElement = document.elementFromPoint(x, y)
-    setInitialX(topElement.style.left - snapSize / 2)
-    setInitialY(topElement.style.top  - snapSize / 2)
+    
+    console.log(x, y, parseInt(topElement.parentElement.style.left), parseInt(topElement.parentElement.style.top))
+    setInitialX(x - parseInt(topElement.parentElement.style.left)-70)
+    setInitialY(y - parseInt(topElement.parentElement.style.top)-70)
+    console.log(initialX)
     setIsDragging(true)      
     
     if (topElement.className.includes("container")) {
@@ -70,10 +73,14 @@ const MasterNode =  ({node,
       const my = event.clientY
       const x = mx - initialX
       const y = my - initialY
+
+      // there is a room for movement improvement
+
       const sx = Math.floor(x/snapSize)*snapSize-snapSize + 5
       const sy = Math.floor(y/snapSize)*snapSize-snapSize + 5
 
-      
+      // node overlap checker here!
+
       setSnapsX(sx)
       setSnapsY(sy)
     }

@@ -8,52 +8,16 @@ export const stopEvents = () => {
   console.log("stopped")
   Tone.Transport.stop()
 }
-export const handleToneBackend = (from, to, type, nodes) => {
+export const addToneObject = (id, name, type, tones) => {
+  const newToneObject = {
+    id, 
+    name, 
+    type,
+    tone: getToneObject(name),
+    parameters: getNodeParameters(name, type)
+  }  
 
-  console.log("tone backend: ", from, to)
-
-  if (type === "node2node") {
-    const fromNode = nodes.find((node) => node.id === from)
-    const toNode = nodes.find((node) => node.id === to)
-  
-    if (fromNode.output.includes(toNode.id)) {
-      console.log("Tone backend connection has already been established")
-      return 
-    }
-
-    if (!fromNode || !toNode) {
-      console.log("one or both nodes are invalid")
-    }
-  
-    if (toNode.name === "Destination"){
-      fromNode.Tone.toDestination()
-  
-    } else {
-      if (toNode.Tone) {
-        fromNode.Tone.connect(toNode.Tone)
-      }
-    }
-  } else {
-    const [toId, whichParam] = to.split("=");
- 
-    const fromNode = nodes.find((node) => node.id === from)
-    const toNode = nodes.find((node) => node.id === toId)
-  
-    if (!fromNode || !toNode) {
-      console.log("one or both nodes are invalid")
-      return
-    }
-
-    if (fromNode.output.includes(to)) {
-      console.log("Tone parameter connection has already been established")
-      return 
-    }
-
-    fromNode.Tone.connect(toNode.Tone[whichParam])    
-
-
-  }
-
+  return {...tones, [id]: newToneObject}
 }
 
 export const invokeTriggerEvent = (triggerData, nodes) => {
@@ -231,14 +195,13 @@ export const getNodeParameters = (name, type) => {
   }
 
   const commonOscParams = {
-    osc: {
       detune: 0,
       frequency: 0,
       type: "sine",
       phase: 0,
       partialCount: 0,
       partials: 0,
-    }
+    
   }
 
   const commonSynthesizerParameters = {
@@ -292,9 +255,7 @@ export const getNodeParameters = (name, type) => {
         min: -10000,
         max: 10000,
         amplitude: 1,
-      },
-
-      
+      },      
     }, 
   }
   
@@ -350,29 +311,28 @@ export const getNodeParameters = (name, type) => {
 
 
 
-
 export const initialStates = { 
-                  attack:             {value: .1,     min: 0,     max: 1,     multiplier: .001    , float: true    ,centered: false, hasInput: true     },
-                  decay:              {value: .2,     min: 0,     max: 1,     multiplier: .001    , float: true    ,centered: false, hasInput: true     },
-                  sustain:            {value: .5,     min: 0,     max: 1,     multiplier: .001    , float: true    ,centered: false, hasInput: true     },
-                  release:            {value: .6,     min: 0,     max: 1,     multiplier: .001    , float: true    ,centered: false, hasInput: true     },
-                  detune:             {value:  0,     min: -1200, max: 1200,  multiplier:  1      , float: false   ,centered: true , hasInput: true     },
-                  portamento:         {value:  0,     min: 0,     max: 1,     multiplier: .001    , float: true    ,centered: false, hasInput: true     },
-                  frequency:          {value:  440,   min: 20,    max: 8192,  multiplier: 1       , float: false   ,centered: false, hasInput: true     },
-                  phase:              {value:  0,     min: 0,     max: 360,   multiplier: 1       , float: false   ,centered: false, hasInput: false    },
-                  modulationFrequency:{value:  0.1,   min: .1,    max: 440,   multiplier: .1      , float: true    ,centered: false, hasInput: true     },
-                  pitchDecay:         {value:  0,     min: 0,     max: 1,     multiplier: .001    , float: true    ,centered: false, hasInput: true     },
-                  harmonicity:        {value:  1,     min: .1,    max: 10,    multiplier: .001    , float: true    ,centered: false, hasInput: true     },
-                  octaves:            {value:  0,     min: 0,     max: 8,     multiplier: .001    , float: true    ,centered: false, hasInput: true     },
-                  width:              {value:  0,     min: -1,    max: 1,     multiplier: .01     , float: true    ,centered: true , hasInput: true     },
-                  spread:             {value:  1,     min: -1200, max: 100,   multiplier: 1       , float: false   ,centered: false, hasInput: true     },
-                  partials:           {value:  0,     min: 0,     max: 24,    multiplier: 1       , float: false   ,centered: false, hasInput: true     },
-                  gain:               {value:  .5,    min: 0,     max: 1,     multiplier: 0.01     , float: true    ,centered: false, hasInput: true     },
-                  count:              {value:  1,     min: 1,     max: 12,    multiplier: 1       , float: false   ,centered: false, hasInput: true     },
-                  resonance:          {value:  0,     min: 0,     max: 7000,  multiplier:  1      , float: false   ,centered: false, hasInput: true     },
-                  modulationIndex:    {value:  1,     min: 1,     max: 100,   multiplier:  1      , float: false   ,centered: false, hasInput: false    },
-                  dampening:          {value:  1,     min: 1,     max: 7000,  multiplier:  1      , float: false   ,centered: false, hasInput: true     },
-                  attackNoise:        {value:  1,     min: .1,    max: 20,    multiplier:  .01    , float: true    ,centered: false, hasInput: true     },
+                  attack:             {value: .1,     min: 0,     max: 1,     multiplier: .001    , float: true    ,centered: false, hasInput: true  , unit: null   },
+                  decay:              {value: .2,     min: 0,     max: 1,     multiplier: .001    , float: true    ,centered: false, hasInput: true  , unit: null   },
+                  sustain:            {value: .5,     min: 0,     max: 1,     multiplier: .001    , float: true    ,centered: false, hasInput: true  , unit: null   },
+                  release:            {value: .6,     min: 0,     max: 1,     multiplier: .001    , float: true    ,centered: false, hasInput: true  , unit: null   },
+                  detune:             {value:  0,     min: -1200, max: 1200,  multiplier:  1      , float: false   ,centered: true , hasInput: true  , unit: "cent"   },
+                  portamento:         {value:  0,     min: 0,     max: 1,     multiplier: .001    , float: true    ,centered: false, hasInput: true  , unit: null   },
+                  frequency:          {value:  440,   min: 20,    max: 8192,  multiplier: 1       , float: false   ,centered: false, hasInput: true  , unit: "Hz"   },
+                  phase:              {value:  0,     min: 0,     max: 360,   multiplier: 1       , float: false   ,centered: false, hasInput: false , unit: "degree"   },
+                  modulationFrequency:{value:  0.1,   min: .1,    max: 440,   multiplier: .1      , float: true    ,centered: false, hasInput: true  , unit: "Hz"   },
+                  pitchDecay:         {value:  0,     min: 0,     max: 1,     multiplier: .001    , float: true    ,centered: false, hasInput: true  , unit: null   },
+                  harmonicity:        {value:  1,     min: .1,    max: 10,    multiplier: .001    , float: true    ,centered: false, hasInput: true  , unit: null   },
+                  octaves:            {value:  0,     min: 0,     max: 8,     multiplier: .001    , float: true    ,centered: false, hasInput: true  , unit: null   },
+                  width:              {value:  0,     min: -1,    max: 1,     multiplier: .01     , float: true    ,centered: true , hasInput: true  , unit: null   },
+                  spread:             {value:  1,     min: -1200, max: 100,   multiplier: 1       , float: false   ,centered: false, hasInput: true  , unit: null   },
+                  partials:           {value:  0,     min: 0,     max: 24,    multiplier: 1       , float: false   ,centered: false, hasInput: true  , unit: null   },
+                  gain:               {value:  .5,    min: 0,     max: 1,     multiplier: 0.01    , float: true    ,centered: false, hasInput: true  , unit: null   },
+                  count:              {value:  1,     min: 1,     max: 12,    multiplier: 1       , float: false   ,centered: false, hasInput: true  , unit: null   },
+                  resonance:          {value:  0,     min: 0,     max: 7000,  multiplier:  1      , float: false   ,centered: false, hasInput: true  , unit: null   },
+                  modulationIndex:    {value:  1,     min: 1,     max: 100,   multiplier:  1      , float: false   ,centered: false, hasInput: false , unit: null   },
+                  dampening:          {value:  1,     min: 1,     max: 7000,  multiplier:  1      , float: false   ,centered: false, hasInput: true  , unit: null   },
+                  attackNoise:        {value:  1,     min: .1,    max: 20,    multiplier:  .01    , float: true    ,centered: false, hasInput: true  , unit: null   },
 
 }
 

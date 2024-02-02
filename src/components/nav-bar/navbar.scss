@@ -84,8 +84,10 @@
         overflow-y: scroll;
         margin-bottom: 1rem;
         padding-bottom: 1rem;
-        .text{
 
+        .text{
+          white-space: pre-wrap;
+          padding-right: .5rem;
         }
       }
     }

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+<svg width="360" height="360" version="1.1" viewBox="0 0 95.25 95.25" xmlns="http://www.w3.org/2000/svg">
+ <g fill="none" stroke-linecap="round" stroke-width="5.8208">
+  <path d="m-142.88-127s4.6497-15.875 15.875-15.875 20.525 31.75 31.75 31.75 15.875-15.875 15.875-15.875" stroke="#010000"/>
+  <g stroke="#000">
+   <path d="m-142.88-79.375v-15.875h31.75v31.75h31.75v-15.875"/>
+   <path d="m-142.88-174.62 15.875-15.875 31.75 31.75 15.875-15.875"/>
+   <path d="m15.875 63.5 63.5-31.75v31.75"/>
+  </g>
+ </g>
+</svg>

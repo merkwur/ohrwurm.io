@@ -1,9 +1,9 @@
 import {v4 as uuidv4} from "uuid"
-import { getToneObject, getNodeParameters, disposeToneNode, stopEvents } from "./toneData"
+import { addToneObject } from "./toneData"
 
 
 
-export const addNode = (x, y, name, type, snapSize, nodes) => {
+export const addNode = (x, y, name, type, snapSize, nodes, tones) => {
   const id = name + ":" + uuidv4().split("-")[0]
   const snappedX = (Math.floor(x / snapSize) * snapSize) + 5
   const snappedY = (Math.floor(y / snapSize) * snapSize) + 5
@@ -26,7 +26,8 @@ export const addNode = (x, y, name, type, snapSize, nodes) => {
   }
 
   const updatedNodes = {...nodes, [id]: newNode}
-  return updatedNodes
+  const toneData = addToneObject(id, name, type, tones)
+  return [updatedNodes, toneData]
 }
 
 
@@ -230,23 +231,44 @@ export const updateLinePosition = (x, y, id, lines) => {
 
 
 const getSize = (name, type, snap) => {
+  const single = {
+    x: snap, y: snap
+  }
+  const double = {
+    x: snap, y: snap*2+10
+  }
+  const quads = {
+    x: snap * 2 + 10, y: snap * 2 + 10
+  }
   const nodeSizeData = {
+
     Core: {
-      Destination: {x: snap, y: snap},
-      Gain: {x: snap, y: snap},
-      Transport: {x: snap, y: snap},
+      Destination: {...single},
+      Gain: {...single},
+      Transport:  {...single}
     },
     Source: {
-      Oscillator: {x: snap, y: snap},
-      FatOscillator: {x: snap, y: snap*2+10},
-      PulseOscillator: {x: snap, y: snap*2+10},
-      PWMOscillator: {x: snap, y: snap*2+10},
-      Noise: {x: snap, y: snap},
-      AMOscillator: {x: snap, y: snap * 2+10}, 
-      FMOscillator: {x: snap, y: snap * 2+10},
-      LFO: {x: snap, y: snap}, 
-
+      Oscillator: {...single },
+      FatOscillator: {...double },
+      PulseOscillator: {...double },
+      PWMOscillator: {...single },
+      Noise: {...single },
+      AMOscillator:{...double },
+      FMOscillator: {...double },
+      LFO: {...single }
+    }, 
+    Instrument: {
+      AMSynth: {...double},
+      FMSynth: {...double},
+      DuoSynth: {...quads},
+      MembraneSynth: {...double},
+      MetalSynth: {...double},
+      MonoSynth: {...double},
+      NoiseSynth: {...double},
+      PluckSynth: {...double},
+      PolySynth: {...double},
     }
+
   }
 
   return nodeSizeData[type][name]
@@ -259,6 +281,10 @@ const getInputs = (name, type) => {
   const commonOscillatorParams = {
     frequency: null, 
     detune: null
+  }
+
+  const commonSynthParams = {
+    ...commonOscillatorParams
   }
   const nodeInputData = {
     Core: {
@@ -300,6 +326,13 @@ const getInputs = (name, type) => {
       PulseOscillator: {
         ...commonOscillatorParams, 
         width: null
+      }
+    }, Instrument: {
+      AMSynth: {
+        ...commonSynthParams, 
+        modulation: 440, 
+        harmonicity: 1
+
       }
     }
   }

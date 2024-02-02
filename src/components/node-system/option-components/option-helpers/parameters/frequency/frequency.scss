@@ -1,0 +1,21 @@
+.frequency-wrapper{
+  width: 100px;
+  height: 40px;
+  
+  .header{
+    font-size: 7.3pt;
+    font-weight: 600;
+  }
+  
+  .frequency-slider{
+    border: 1px solid #fabd4222;
+    height: 14px;
+    cursor: e-resize;
+
+  }
+  
+      .value{
+        font-size: 7.1pt;
+        font-weight: 300;
+      }
+}

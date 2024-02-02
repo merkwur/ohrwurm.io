@@ -12,7 +12,7 @@ import {addNode,
       } from '../node-helpers/nodeData'
 
 import LineCanvas from '../node-helpers/lineCanvas'
-import { handleToneBackend, invokeTriggerEvent} from '../node-helpers/toneData'
+import { addToneObject, invokeTriggerEvent} from '../node-helpers/toneData'
 import MasterNode from '../masternode/masternode'
 import NodeConfigurationHub from '../node-configuration-hub/node-configuration-hub'
 
@@ -24,7 +24,8 @@ const cols = Math.floor((width ) / (40 * 2))  * 2
 
 const NodeCanvas = () => {
   const [nodeData, setNodeData] = useState({})
-  const [lineData, setLineData] = useState([])
+  const [lineData, setLineData] = useState({})
+  const [toneData, setToneData] = useState({})
   const [triggerData, setTriggerData] = useState({})
   const [globalTime, setGlobalTime] = useState(0)
   const [snapSize, setSnapSize] = useState(40)
@@ -36,9 +37,9 @@ const NodeCanvas = () => {
   const [valids, setValids] = useState([]) 
 
   const getNodeInfo = (x, y, node) => {
-    const updatedNodes = addNode(x, y, node.name, node.type, snapSize, nodeData)
-
-    setNodeData(updatedNodes)    
+    const updatedNodes = addNode(x, y, node.name, node.type, snapSize, nodeData, toneData)
+    setNodeData(updatedNodes[0])   
+    setToneData(updatedNodes[1])
   }
 
 
@@ -97,8 +98,11 @@ const NodeCanvas = () => {
     setTriggerData({notes: arr, instruments: ids, bpm: bpm})
   }
   
-  useEffect(() => {console.log(nodeData)}, [nodeData])
-  useEffect(() => {console.log(lineData)}, [lineData])
+  //useEffect(() => {console.log(nodeData)}, [nodeData])
+  //useEffect(() => {console.log(lineData)}, [lineData])
+  useEffect(() => {console.log(toneData)}, [toneData])
+
+
   
   
   const handleGlobalTime = (time) => {
@@ -109,9 +113,6 @@ const NodeCanvas = () => {
   }, [globalTime])  
   
   
-  const handleToneConnection = (from, to, type) => {
-    handleToneBackend(from, to, type, nodeData)
-  }
   
   const handeLeftClick = (event) => {
     const targetNode = document.elementFromPoint(event.clientX, event.clientY)
@@ -252,7 +253,6 @@ const NodeCanvas = () => {
                 snapSize={snapSize}      
                 updateNodePosition={(currentNodeId, x, y) => updateNodePosition(currentNodeId, x, y)}
                 removeNode={(id) => nodeRemove(id)}
-                addToneConnection={(from, to, type) => handleToneConnection(from, to, type)}
                 addLine={(line) => handleAddLine(line)}
                 updateLinePosition={(x, y, id) => handleLinePositionUpdate(x, y, id)}
                 isLineExist={lineData ? lineData.length > 0 : false}
@@ -264,7 +264,7 @@ const NodeCanvas = () => {
             </React.Fragment>
           );  
         })}
-      <NodeConfigurationHub />
+      <NodeConfigurationHub tone={toneData}/>
     </div>
   )
 }
