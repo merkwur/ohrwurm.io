@@ -12,7 +12,7 @@ import {addNode,
       } from '../node-helpers/nodeData'
 
 import LineCanvas from '../node-helpers/lineCanvas'
-import { addToneObject, invokeTriggerEvent} from '../node-helpers/toneData'
+import { addToneObject, connectToneObjects, disconnectToneNode, disposeToneNode, invokeTriggerEvent} from '../node-helpers/toneData'
 import MasterNode from '../masternode/masternode'
 import NodeConfigurationHub from '../node-configuration-hub/node-configuration-hub'
 
@@ -65,17 +65,17 @@ const NodeCanvas = () => {
 
   const nodeRemove = (id) => {
     const updated = deleteNode(id, nodeData, lineData, toneData)
+    disposeToneNode(id, toneData)
     setNodeData(updated[0])
     setLineData(updated[1])
     setToneData(updated[2]) 
   }
  
-  useEffect(() => {console.log("x: ", )}, [])
 
   const handleAddLine = (line) => {
     if (line) {
       const updated = addLine(line, lineData, nodeData)
-      
+      connectToneObjects(line.from, line.to, toneData)  
       setLineData(updated[0])
       setNodeData(updated[1])
     }
@@ -83,6 +83,7 @@ const NodeCanvas = () => {
   
   const handleDeleteLine = (id) => {
     const updates = deleteLine(id, lineData, nodeData)
+    disconnectToneNode(lineData[id].from, lineData[id].to, toneData)
     setLineData(updates[0])
     setNodeData(updates[1])
   }

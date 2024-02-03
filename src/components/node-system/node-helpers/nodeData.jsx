@@ -81,7 +81,6 @@ export const deleteNode = (id, nodes, lines, tones) => {
       const which = lineProps.which;
       
       // check for the capacity of an input
-
       if (!Array.isArray(nodes[toId].input[which]) && nodes[toId].input[which]) {
         console.log(`the ${which} input capacity is full!`)
         return [lines, nodes]
@@ -118,6 +117,9 @@ export const deleteNode = (id, nodes, lines, tones) => {
   // Clone the lines object to maintain immutability
   const newLines = { ...lines, [id]: lineProps };
   
+  // call tone connections 
+  
+
   return [newLines, newNodes];
 }
 

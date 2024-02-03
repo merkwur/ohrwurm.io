@@ -3,7 +3,7 @@ import "./source-options.scss"
 import MasterParam from '../option-helpers/parameters/master-param/master-param'
 
 
-const SourceOptions = ({id, name, type, parameters}) => {
+const SourceOptions = ({id, name, type, parameters, startOscillator}) => {
   const [openProperties, setOpenProperties] = useState(false)
 
 
@@ -26,7 +26,12 @@ const SourceOptions = ({id, name, type, parameters}) => {
                 className='params'
                 key={param + index}
                 > 
-                <MasterParam id={id} name={param} type={type}/>
+                <MasterParam 
+                  id={id} 
+                  name={param} 
+                  type={type}
+                  startOscillator={startOscillator}
+                  />
               </div>
             ))}      
           </div>

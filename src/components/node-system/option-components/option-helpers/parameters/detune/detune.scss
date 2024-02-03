@@ -1,7 +1,7 @@
 .detune-wrapper{
   position: relative;  
   width: 100px;
-  height: 30px;
+  height: 25px;
   
   .header{
     font-size: 7.3pt;
@@ -13,10 +13,13 @@
     
     cursor: e-resize;
     height: 80%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     
     .value{
       position: absolute;
-      top:40%;
+      top:45%;
       font-size: 6.7pt;
       font-weight: 600;   
     }

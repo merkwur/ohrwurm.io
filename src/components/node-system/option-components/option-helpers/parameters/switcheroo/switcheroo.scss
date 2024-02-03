@@ -1,0 +1,27 @@
+.switcheroo-container{
+  width: 100%;
+  height: 20px;
+  background-color: #171717;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  
+  .switches{
+    display: flex;
+    height: 100%;
+    border-collapse: collapse;
+    justify-content: center;
+    align-items: center;
+    font-size: 6pt;
+    color: #fabd42;
+    cursor: pointer;
+
+    &.active{
+      background-color: #272727;
+    }
+
+    &.selected{
+      background-color: #fabd42;
+    }
+  }
+}

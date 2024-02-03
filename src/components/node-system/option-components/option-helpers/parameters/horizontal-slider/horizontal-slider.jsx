@@ -1,16 +1,26 @@
 import React, { useEffect, useState } from 'react'
-import "./frequency.scss"
+import "./horizontal-slider.scss"
 import { clamp, colorScheme } from '../../../../node-helpers/helperFunctions'
+import { initialStates } from '../../../../node-helpers/toneData'
 
 
-const Frequency = ({id, name, type}) => {
+
+
+const HorizontalSlider = ({
+                            id, 
+                            name, 
+                            type,
+                            param
+                          }) => {
+
+  
   const [isDragging, setIsDragging] = useState(false)
-  const [value, setValue] = useState(440/8192*100)
+  const [value, setValue] = useState(param.value)
   const [initialX, setInitialX] = useState(0)
   const [initialY, setInitialY] = useState(0)
   const [achilles, setAchilles] = useState(false)
   const [tortoise, setTortoise] = useState(false)
-  const [unit, setUnit] = useState(100/8192)
+  const [unit, setUnit] = useState(param.multiplier)
   const centered = false
   const height = 25
   const width = 80
@@ -24,14 +34,14 @@ const Frequency = ({id, name, type}) => {
   const handleMouseMove = (event) => {
     if (isDragging && event.clientX > 0) {
       if (achilles) {
-        const val = value + ((event.clientX - initialX) * unit * 100)
-        setValue(clamp(val, 0.1, 100))
+        const val = value + ((event.clientX - initialX) * unit * 10)
+        setValue(clamp(val, param.min, param.max))
       } else if (tortoise) {
-        const val = value + (event.clientX - initialX) * unit / 10
-        setValue(clamp( val, 0.1, 100))
+        const val = value + Math.floor(((event.clientX - initialX) * unit) / 20)
+        setValue(clamp( val, param.min, param.max))
       } else{
-        const val = value + (event.clientX - initialX) * unit * 10
-        setValue(clamp(val, 0.1, 100))
+        const val = value + (event.clientX - initialX) * unit
+        setValue(clamp(val, param.min, param.max))
       }
     }
   }
@@ -91,19 +101,12 @@ const Frequency = ({id, name, type}) => {
         className='frequency-slider'
         onMouseDown={handleMouseDown}
         >
-        <svg width={width} height={`${height}`} viewBox={`0 0 ${width} ${height}`} xmlns="http://www.w3.org/2000/svg">
-        <linearGradient id="freq-grad" >
-          <stop offset={`${100-value}%`} stopColor="#ffaaaa22" />
-          <stop offset={`${150-value}%`} stopColor="#aaaaff22" />
-        </linearGradient>
-          <path d={`M 0 ${height} C ${value-10} ${height}, ${value-22} ${0-(value/8)-(value/10)}, ${width-2} ${height}`}  fill="url(#freq-grad)" stroke='#77777777' strokeWidth={2.5}/>
-        </svg>
       <div className='value'> 
-        {parseInt(value/unit)} Hz
+        {parseInt(value/unit)} {param.unit}
       </div>
       </div>
     </div>
   )
 }
 
-export default Frequency
+export default HorizontalSlider 

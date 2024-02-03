@@ -2,6 +2,7 @@
   position: relative;  
   width: 100px;
   height: 25px;
+  // border: 1px solid #ff2442;
   
   .header{
     font-size: 7.3pt;
@@ -10,12 +11,16 @@
   }
   
   .frequency-slider{    
+    position: absolute;
     cursor: e-resize;
     height: 80%;
+    width: 100%;
+    top: 0;
+    // border: 1px solid red;
     
     .value{
       position: absolute;
-      top: 50%;
+      top: 55%;
       font-size: 6.7pt;
       font-weight: 600;   
     }

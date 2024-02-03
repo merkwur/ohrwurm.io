@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react'
-import Slider from '../param-helpers/slider'
 import { clamp } from 'three/src/math/MathUtils'
 import "./detune.scss"
 const Detune = ({id, name, type}) => {
@@ -12,7 +11,8 @@ const Detune = ({id, name, type}) => {
   const [tortoise, setTortoise] = useState(false)
   const [unit, setUnit] = useState(100/1200)
   const centered = false
-  const height = 40
+  const height = 25
+  const width = 80 
 
   const handleMouseDown = (event) => {
     setIsDragging(true)
@@ -79,9 +79,6 @@ const Detune = ({id, name, type}) => {
   }, []); 
 
 
-
-
-
   return (
     <div 
       className='detune-wrapper'
@@ -94,11 +91,15 @@ const Detune = ({id, name, type}) => {
         className='detune-slider'
         onMouseDown={handleMouseDown}
         >
-        <svg width="100" height={height} viewBox={`0 0 100 ${height}`} xmlns="http://www.w3.org/2000/svg">
-          <path d={`M ${0-Math.abs(value)} 20 Q ${(value)+12.5} 0, ${(value)+25} 20 T ${(value)+50} 20 T ${(value)+75} 20 T ${100+Math.abs(value)} 20`} stroke="#ff4242" fill="transparent"/>
+        <svg width={width} height={`${height}`} viewBox={`0 0 ${width} ${height}`} xmlns="http://www.w3.org/2000/svg">
+        <linearGradient id="freq-grad" >
+          <stop offset={`${100-value}%`} stopColor="#ffaaaa22" />
+          <stop offset={`${150-value}%`} stopColor="#aaaaff22" />
+        </linearGradient>
+          <path d={`M 0 ${height} C ${value} ${height}, ${value-(value/4)} ${0-(value/8)-(value/8)}, ${width-2} ${height}`}  fill="url(#freq-grad)" stroke='#77777777' strokeWidth={2.5}/>
         </svg>
       <div className='value'>
-        {parseInt(value/unit)}
+        {parseInt(value/unit)} c
       </div>
       </div>
 

@@ -59,10 +59,25 @@ export const invokeTriggerEvent = (triggerData, nodes) => {
   }
 };
 
+export const connectToneObjects = (from, to, nodes) => {
 
+  
+  if (nodes[to].name !== "Destination") {
+    nodes[from].tone.connect(nodes[to].tone)
+  } else {
+    nodes[from].tone.toDestination()
+  }
+}
 
-export const disposeToneNode = (node) => {
-  node.Tone.dispose()
+export const disposeToneNode = (id, tones) => {
+  if (tones[id].name !== "Destination") {
+    tones[id].tone.dispose()
+  }
+}
+
+export const disconnectToneNode = (from, to, nodes) => {
+  console.log(`tone disconnection from ${from} to ${to}`)
+  nodes[from].tone.disconnect(nodes[to].tone)
 }
 
 export const getToneObject = (nodeName ) => {
@@ -195,6 +210,7 @@ export const getNodeParameters = (name, type) => {
   }
 
   const commonOscParams = {
+      start: false,
       detune: 0,
       frequency: 0,
       type: "sine",
@@ -316,17 +332,17 @@ export const initialStates = {
                   decay:              {value: .2,     min: 0,     max: 1,     multiplier: .001    , float: true    ,centered: false, hasInput: true  , unit: null   },
                   sustain:            {value: .5,     min: 0,     max: 1,     multiplier: .001    , float: true    ,centered: false, hasInput: true  , unit: null   },
                   release:            {value: .6,     min: 0,     max: 1,     multiplier: .001    , float: true    ,centered: false, hasInput: true  , unit: null   },
-                  detune:             {value:  0,     min: -1200, max: 1200,  multiplier:  1      , float: false   ,centered: true , hasInput: true  , unit: "cent"   },
+                  detune:             {value:  0,     min: -1200, max: 1200,  multiplier:  1      , float: false   ,centered: true , hasInput: true  , unit: "c"   },
                   portamento:         {value:  0,     min: 0,     max: 1,     multiplier: .001    , float: true    ,centered: false, hasInput: true  , unit: null   },
                   frequency:          {value:  440,   min: 20,    max: 8192,  multiplier: 1       , float: false   ,centered: false, hasInput: true  , unit: "Hz"   },
-                  phase:              {value:  0,     min: 0,     max: 360,   multiplier: 1       , float: false   ,centered: false, hasInput: false , unit: "degree"   },
+                  phase:              {value:  0,     min: 0,     max: 360,   multiplier: 1       , float: false   ,centered: false, hasInput: false , unit: "\u00b0"   },
                   modulationFrequency:{value:  0.1,   min: .1,    max: 440,   multiplier: .1      , float: true    ,centered: false, hasInput: true  , unit: "Hz"   },
                   pitchDecay:         {value:  0,     min: 0,     max: 1,     multiplier: .001    , float: true    ,centered: false, hasInput: true  , unit: null   },
                   harmonicity:        {value:  1,     min: .1,    max: 10,    multiplier: .001    , float: true    ,centered: false, hasInput: true  , unit: null   },
                   octaves:            {value:  0,     min: 0,     max: 8,     multiplier: .001    , float: true    ,centered: false, hasInput: true  , unit: null   },
                   width:              {value:  0,     min: -1,    max: 1,     multiplier: .01     , float: true    ,centered: true , hasInput: true  , unit: null   },
                   spread:             {value:  1,     min: -1200, max: 100,   multiplier: 1       , float: false   ,centered: false, hasInput: true  , unit: null   },
-                  partials:           {value:  0,     min: 0,     max: 24,    multiplier: 1       , float: false   ,centered: false, hasInput: true  , unit: null   },
+                  partialCount:       {value:  0,     min: 0,     max: 24,    multiplier: 1       , float: false   ,centered: false, hasInput: true  , unit: null   },
                   gain:               {value:  .5,    min: 0,     max: 1,     multiplier: 0.01    , float: true    ,centered: false, hasInput: true  , unit: null   },
                   count:              {value:  1,     min: 1,     max: 12,    multiplier: 1       , float: false   ,centered: false, hasInput: true  , unit: null   },
                   resonance:          {value:  0,     min: 0,     max: 7000,  multiplier:  1      , float: false   ,centered: false, hasInput: true  , unit: null   },
