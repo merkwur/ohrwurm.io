@@ -9,4 +9,22 @@
   font-size: 5.5pt;
   padding-top: .75rem ;
   padding-left: .5rem;
+
+  .input-tooltips {
+    color: #aaa;
+    padding-left: .5em;
+    padding-right: .5em;
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    right: 100%;
+    top: -20px;
+    width: fit-content;
+    height: 13px;
+    font-size: 7pt;
+    background-color: #070707;
+    border-radius: 4px;
+    border: 1px solid #77777777;
+  }
 }

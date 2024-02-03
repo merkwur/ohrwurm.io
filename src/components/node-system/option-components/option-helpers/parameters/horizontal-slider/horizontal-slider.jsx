@@ -102,7 +102,7 @@ const HorizontalSlider = ({
         onMouseDown={handleMouseDown}
         >
       <div className='value'> 
-        {parseInt(value/unit)} {param.unit}
+        {param.float ? (value).toFixed(2) : parseInt(value/unit)} {param.unit}
       </div>
       </div>
     </div>

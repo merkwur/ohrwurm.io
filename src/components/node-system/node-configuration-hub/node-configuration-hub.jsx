@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
 import "./node-configuration-hub.scss"
-import { colorScheme } from '../node-helpers/helperFunctions'
 import MasterOptions from '../master-options/master-options'
 
 const NodeConfigurationHub = ({tone}) => {
@@ -11,7 +10,6 @@ const NodeConfigurationHub = ({tone}) => {
         {Object.keys(tone).map((toneObj) => (
           <React.Fragment key={toneObj}>
             <MasterOptions tone={tone[toneObj]}/>
-            
           </React.Fragment>
         ))}
       </div>      

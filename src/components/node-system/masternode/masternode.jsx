@@ -3,6 +3,7 @@ import "./masternode.scss"
 import Core from '../node-components/core/core'
 import Source from '../node-components/source/source'
 import Instrument from '../node-components/instruments/instruments'
+import { colorScheme } from '../node-helpers/helperFunctions'
 
 
 
@@ -30,11 +31,14 @@ const MasterNode =  ({node,
   const [reversed, setReversed] = useState(false)
   const [snapX, setSnapsX] = useState(0)
   const [snapY, setSnapsY] = useState(0)
+  const [isNodeSelected, setIsNodeSelected] = useState(false)
+
+
+  
 
 
 
   const handleMouseDown = (event) => {
-        
     setLineMode(false)
     event.preventDefault()
     const x = event.clientX
@@ -49,6 +53,7 @@ const MasterNode =  ({node,
     if (topElement.className.includes("container")) {
       const grabbedNode = nodeRef.current[node.id]
       nodeRef.current[node.id].style.zIndex = 99 
+      nodeRef.current[node.id].style.boxShadow = `0 0 3px 2px ${colorScheme[node.type]}42`
       setDraggedNode(grabbedNode)
       if (grabbedNode) {
       }
@@ -124,7 +129,9 @@ const MasterNode =  ({node,
         setIsConnectionValid(true)                            
         }
       }
-      }
+    }
+    nodeRef.current[node.id].style.boxShadow = null
+    setIsNodeSelected(false)
   }
 
 
@@ -169,18 +176,19 @@ const MasterNode =  ({node,
 
   return (
     <div 
-      className='masternode-container'
+      className={`masternode-container ${isNodeSelected ? "selected" : ""}`}
       id={node.id}
       style={{left: node.position.x, top: node.position.y, zIndex: "1"}}
-      onMouseDown={(event) => handleMouseDown(event)}
       ref={(ref) => (nodeRef.current[node.id] = ref)}
+      onMouseDown={(event) => handleMouseDown(event)}
       onContextMenu={(id) => handleRemoveNode(node.id)}
+      
     >
      {
       node.type === "Core" ? (
         <>
           {
-            node.name !== "Tramsport" ? (
+            node.name !== "Transport" ? (
               <Core
                 node={node}
               />

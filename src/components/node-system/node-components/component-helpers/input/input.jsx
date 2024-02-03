@@ -7,6 +7,15 @@ const Input = ({id, inputType, whichParent, yPosition}) => {
   const type = inputType === "node" || inputType === "trigger" ? whichParent : "natural"
   const [focusOn, setFocusOn] = useState(false)
 
+  const handleMouseEnter = () => {
+    setFocusOn(true)
+    console.log(inputType)
+  }
+
+  const handleMouseLeave = () => {
+    setFocusOn(false)
+  }
+
   return (
     <div
       id={id} 
@@ -14,8 +23,8 @@ const Input = ({id, inputType, whichParent, yPosition}) => {
       socket="io"
       sockettype={inputType}
       whichparent={whichParent}
-      onMouseEnter={() => setFocusOn(true)}
-      onMouseLeave={() => setFocusOn(false)}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
       style={{
         backgroundColor: `${colorScheme[whichParent]}`,
         top: `${yPosition}px`,
@@ -26,8 +35,11 @@ const Input = ({id, inputType, whichParent, yPosition}) => {
                     : ""
       }}
       >
-        {inputType} {focusOn}
-      
+        {focusOn ? (
+          <div className='input-tooltips'>
+            {inputType}
+          </div>
+        ) : null}
     </div>
   )
 }

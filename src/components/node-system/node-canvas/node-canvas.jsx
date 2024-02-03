@@ -154,7 +154,7 @@ const NodeCanvas = () => {
         style={{
           position: "absolute", 
           right: "5%",
-          bottom: "25%",
+          bottom: "30%",
           width: "50px", height: "30px", 
           backgroundColor: "#171717", borderRadius: "10px",
           display: "flex",
@@ -239,10 +239,6 @@ const NodeCanvas = () => {
         </>
       ) : null}
       </div>
-      <LineCanvas 
-        lines={lineData} 
-        deleteLine={id => handleDeleteLine(id)}
-      />
       <Navbar getNodeInfo={(x, y, node) => getNodeInfo(x, y, node)}/>    
         {Object.keys(nodeData).map(nodeId => {        
           const node = nodeData[nodeId];
@@ -266,6 +262,10 @@ const NodeCanvas = () => {
           );  
         })}
       <NodeConfigurationHub tone={toneData}/>
+        <LineCanvas 
+          lines={lineData} 
+          deleteLine={id => handleDeleteLine(id)}
+        />
     </div>
   )
 }

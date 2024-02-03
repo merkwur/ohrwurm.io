@@ -338,7 +338,7 @@ export const initialStates = {
                   phase:              {value:  0,     min: 0,     max: 360,   multiplier: 1       , float: false   ,centered: false, hasInput: false , unit: "\u00b0"   },
                   modulationFrequency:{value:  0.1,   min: .1,    max: 440,   multiplier: .1      , float: true    ,centered: false, hasInput: true  , unit: "Hz"   },
                   pitchDecay:         {value:  0,     min: 0,     max: 1,     multiplier: .001    , float: true    ,centered: false, hasInput: true  , unit: null   },
-                  harmonicity:        {value:  1,     min: .1,    max: 10,    multiplier: .001    , float: true    ,centered: false, hasInput: true  , unit: null   },
+                  harmonicity:        {value:  1,     min: .1,    max: 10,    multiplier: .001    , float: true    ,centered: false, hasInput: true  , unit: "mf/cf"   },
                   octaves:            {value:  0,     min: 0,     max: 8,     multiplier: .001    , float: true    ,centered: false, hasInput: true  , unit: null   },
                   width:              {value:  0,     min: -1,    max: 1,     multiplier: .01     , float: true    ,centered: true , hasInput: true  , unit: null   },
                   spread:             {value:  1,     min: -1200, max: 100,   multiplier: 1       , float: false   ,centered: false, hasInput: true  , unit: null   },
