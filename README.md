@@ -7,17 +7,17 @@ This project is a browser-based Digital Audio Workstation (DAW) that leverages t
 ## Features
 - **Gesture-Based Controls:** Create and delete nodes, and establish connections between them using simple gestures (drag and drop) for an intuitive user experience.
 - **Tone.js Integration:** Built on top of the Tone.js library, offering a wide range of audio synthesis and processing capabilities.
-- **Core and Source Nodes:** Currently supports the creation of core and source sections of Tone.js parameters are disabled for now.
-
+- **Almost all Tone.js nodes can be created**
 
 ## Current Limitations
-- **Node Parameters:** Modification of node parameters is currently disabled and will be addressed in the next updates.
-
+- Besides a few bugs the daw is working correctly, there are still a few components missing but they will be handled in the design section.
+- 
 ## Next Steps
-- **Bind Node Parameters:** The immediate goal is to enable the binding of node parameters to the Tone.js object parameters, allowing for more detailed and refined control over the audio processing.
+- Improving UI/UX,
+- complete missing components. (the rest of the components related to the design of the UI, the first thing to solve is the design)
 
 ## Getting Started
-To begin using this Browser-Based DAW, simply clone the repository, and move in tot the file and install the depencencies. 
+To begin using this Browser-Based DAW, clone the repository, move into the file, and install the dependencies. 
 
 ```
 git clone https://github.com/merkwur/browser-daw.git
