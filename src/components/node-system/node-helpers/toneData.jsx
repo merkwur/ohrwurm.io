@@ -80,7 +80,7 @@ export const disconnectToneNode = (from, to, nodes) => {
   nodes[from].tone.disconnect(nodes[to].tone)
 }
 
-export const getToneObject = (nodeName ) => {
+export const getToneObject = ( nodeName ) => {
   switch (nodeName) {
     case "Clock":
       return {bpm: 120, timeSignature: 4}
@@ -220,11 +220,6 @@ export const getNodeParameters = (name, type) => {
     
   }
 
-  const commonSynthesizerParameters = {
-    
-  }
-
-  
 
   const nodeParams = {
 
@@ -286,9 +281,13 @@ export const getNodeParameters = (name, type) => {
 
   const envelope = {
     attack: .1, 
+    attackCurve: "linear", 
     decay: .2,
+    decayCurve: "linear",
     sustain: .5, 
     release: .6,
+    releaseCurve: "linear",
+    value: 0
   }
 
   const commonSynthParams = {
@@ -395,60 +394,101 @@ export const getNodeParameters = (name, type) => {
 
     }
     const ComponentParams = {
-      AmplitudeEnvelope: {},
-      Analyser: {},
-      BiquadFilter: {},
-      Channel: {},
-      Compressor: {},
-      Convolver: {},
-      CrossFade: {},
+      AmplitudeEnvelope: {...envelope},
+      Analyser: {size: 128, smoothing: 0, type: "fft"},
+      BiquadFilter: {
+        detune: 0, 
+        gain: .5, 
+        frequency: 440,
+        Q: 1, 
+        type: "lowpass"
+      },
+      Channel: {
+        pan: 0, 
+      },
+      Compressor: {
+        knee: 0,
+        ratio: 1, 
+        reduction: 0, 
+        release: .2, 
+        threshold: 0
+      },
+      Convolver: {normalize: true},
+      CrossFade: {fade: .5},
       DCMeter: {},
-      EQ3: {},
-      Envelope: {},
-      FFT: {},
-      FeedbackCombFilter: {},
-      Filter: {},
-      Follower: {},
-      FrequencyEnvelope: {},
-      Gate: {},
-      Limiter: {},
-      LowpassCombFilter: {},
+      EQ3: {low: 0, lowFrequency: 120, mid: 0, high: 0, highFrequency: 4096, Q: 1},
+      Envelope: {...envelope},
+      FFT: {normalRange: true, smoothing: 0},
+      FeedbackCombFilter: {delayTime: .2, resonance: .5},
+      Filter: {...filterParams},
+      Follower: {smoothing: 0},
+      FrequencyEnvelope: {...envelope, octaves: 1},
+      Gate: {smoothing: 0, threshold: 0},
+      Limiter: {reduction: 0, threshold: 0},
+      LowpassCombFilter: {dampening: .2, delayTime: .2, resonance: 2.},
       Merge: {},
       Meter: {},
       MidSideCompressor: {},
       MidSideMerge: {},
       MidSideSplit: {},
       Mono: {},
-      MultibandCompressor: {},
-      MultibandSplit: {},
-      OnePoleFilter: {},
-      PanVol: {},
-      Panner: {},
-      Panner3D: {},
-      PhaseShiftAllpass: {},
-      Recorder: {},
+      MultibandCompressor: {
+        high: 0, 
+        highFrequency: 4096, 
+        mid: 0, 
+        low: 0, 
+        lowFrequency: 120
+      },
+      MultibandSplit: {
+        low: 0, 
+        lowFrequency: 120, 
+        mid: 0, 
+        high: 0, 
+        highFrequency: 4096, 
+        Q: 1,
+      },
+      OnePoleFilter: {frequency: 440, type: "lowpass"},
+      PanVol: {pan: 0, volume: 0},
+      Panner: {pan: 0},
+      Panner3D: {
+        coneInnerAngle: 0, 
+        coneOuterAngle: 0, 
+        coneOuterGain: 0, 
+        distanceModel: "linear", 
+        maxDistance: 1,
+        orientationX: 1,
+        orientationY: 1,
+        orientationZ: 1,
+        panningModel: "equalpower", 
+        positionX: 0,
+        positionY: 0,
+        positionZ: 0, 
+        rolloffFactor: .1, 
+      },
+      PhaseShiftAllpass: {offset90: .5},
+      Recorder: {state: "stopped", },
       Solo: {},
       Split: {},
-      Volume: {},
+      Volume: {volume: 0},
       Waveform: {},
     } 
    
     const SignalParams = {
       
       Abs: {},
-      Add: {},
+      Add: {addend: 0},
       AudioToGain: {},
       GainToAudio: {},
-      GreaterThan: {},
+      GreaterThan: {comparator: 0},
       GreaterThanZero: {},
-      Multiply: {},
+      Multiply: {factor: 1},
       Negate: {},
       Pow: {},
-      Scale: {},
-      ScaleExp: {},
+      Scale: {min: -1, max:1},
+      ScaleExp: {min: -1, max: 1, exponent: 1},
       Signal: {},
-      Subtract: {},
-      ToneConstantSource: {},
+      Subtract: {subtrahend: 0},
+      ToneConstantSource: {curve: new Float32Array()},
       WaveShaper: {},
       Zero: {},
 
@@ -481,27 +521,63 @@ export const getNodeParameters = (name, type) => {
 
 
 export const initialStates = { 
-    attack:             { min: 0,      max: 1,      multiplier: .001 ,  float: true ,  unit: null   },
-    decay:              { min: 0,      max: 1,      multiplier: .001 ,  float: true ,  unit: null   },
-    sustain:            { min: 0,      max: 1,      multiplier: .001 ,  float: true ,  unit: null   },
-    release:            { min: 0,      max: 1,      multiplier: .001 ,  float: true ,  unit: null   },
-    detune:             { min: -1200,  max: 1200,   multiplier:  1   ,  float: false,  unit: "cents"   },
-    portamento:         { min: 0,      max: 1,      multiplier: .001 ,  float: true ,  unit: null   },
-    frequency:          { min: 20,     max: 8192,   multiplier: 1    ,  float: false,  unit: "Hz"   },
-    phase:              { min: 0,      max: 360,    multiplier: 1    ,  float: false,  unit: "\u00b0"   },
-    modulationFrequency:{ min: .1,     max: 440,    multiplier: .1   ,  float: true ,  unit: "Hz"   },
-    pitchDecay:         { min: 0,      max: 1,      multiplier: .001 ,  float: true ,  unit: null   },
-    harmonicity:        { min: .1,     max: 10,     multiplier: .001 ,  float: true ,  unit: "mf/cf"   },
-    octaves:            { min: 0,      max: 8,      multiplier: .001 ,  float: true ,  unit: null   },
-    width:              { min: -1,     max: 1,      multiplier: .01  ,  float: true ,  unit: null   },
-    spread:             { min: -1200,  max: 100,    multiplier: 1    ,  float: false,  unit: null   },
-    partialCount:       { min: 0,      max: 24,     multiplier: 1    ,  float: false,  unit: null   },
-    gain:               { min: 0,      max: 1,      multiplier: 0.01 ,  float: true ,  unit: null   },
-    count:              { min: 1,      max: 12,     multiplier: 1    ,  float: false,  unit: null   },
-    resonance:          { min: 0,      max: 7000,   multiplier:  1   ,  float: false,  unit: null   },
-    modulationIndex:    { min: 1,      max: 100,    multiplier:  1   ,  float: false,  unit: null   },
-    dampening:          { min: 1,      max: 7000,   multiplier:  1   ,  float: false,  unit: null   },
-    attackNoise:        { min: .1,     max: 20,     multiplier:  .01 ,  float: true ,  unit: null   },
+    attack:             {type: "slider",  min: 0,      max: 1,      multiplier: .001 ,  float: true ,  unit: null   },
+    decay:              {type: "slider",  min: 0,      max: 1,      multiplier: .001 ,  float: true ,  unit: null   },
+    sustain:            {type: "slider",  min: 0,      max: 1,      multiplier: .001 ,  float: true ,  unit: null   },
+    release:            {type: "slider",  min: 0,      max: 1,      multiplier: .001 ,  float: true ,  unit: null   },
+    detune:             {type: "slider",  min: -1200,  max: 1200,   multiplier:  1   ,  float: false,  unit: "cents"   },
+    portamento:         {type: "slider",  min: 0,      max: 1,      multiplier: .001 ,  float: true ,  unit: null   },
+    frequency:          {type: "slider",  min: 20,     max: 8192,   multiplier: 1    ,  float: false,  unit: "Hz"   },
+    phase:              {type: "slider",  min: 0,      max: 360,    multiplier: 1    ,  float: false,  unit: "\u00b0"   },
+    modulationFrequency:{type: "slider",  min: .1,     max: 440,    multiplier: .1   ,  float: true ,  unit: "Hz"   },
+    pitchDecay:         {type: "slider",  min: 0,      max: 1,      multiplier: .001 ,  float: true ,  unit: null   },
+    harmonicity:        {type: "slider",  min: .1,     max: 10,     multiplier: .001 ,  float: true ,  unit: "mf/cf"   },
+    octaves:            {type: "slider",  min: 0,      max: 8,      multiplier: .001 ,  float: true ,  unit: null   },
+    width:              {type: "slider",  min: -1,     max: 1,      multiplier: .01  ,  float: true ,  unit: null   },
+    spread:             {type: "slider",  min: -1200,  max: 100,    multiplier: 1    ,  float: false,  unit: null   },
+    partialCount:       {type: "slider",  min: 0,      max: 24,     multiplier: 1    ,  float: false,  unit: null   },
+    gain:               {type: "slider",  min: 0,      max: 1,      multiplier: 0.01 ,  float: true ,  unit: null   },
+    count:              {type: "slider",  min: 1,      max: 12,     multiplier: 1    ,  float: false,  unit: null   },
+    resonance:          {type: "slider",  min: 0,      max: 7000,   multiplier:  1   ,  float: false,  unit: null   },
+    modulationIndex:    {type: "slider",  min: 1,      max: 100,    multiplier:  1   ,  float: false,  unit: null   },
+    dampening:          {type: "slider",  min: 1,      max: 7000,   multiplier:  1   ,  float: false,  unit: null   },
+    baseFrequency:      {type: "slider",  min: 20,     max: 8192,   multiplier: 1    ,  float: false,  unit: "Hz"   },
+    attackCurve:        {type: "select",  value: ["linear", "exponential", "sine", "cosine", "bounce", "ripple", "step"]},
+    releaseCurve:       {type: "select",  value: ["linear", "exponential", "sine", "cosine", "bounce", "ripple", "step"]},
+    decayCurve:         {type: "select",  value: ["linear", "exponential"]},
+    pan:                {type: "slider",  min: .1,     max: 20,     multiplier:  .01 ,  float: true ,  unit: null   },
+    knee:               {type: "slider",  min: .1,     max: 20,     multiplier:  .01 ,  float: true ,  unit: null   },
+    ratio:              {type: "slider",  min: .1,     max: 20,     multiplier:  .01 ,  float: true ,  unit: null   },
+    threshold:          {type: "slider",  min: .1,     max: 20,     multiplier:  .01 ,  float: true ,  unit: null   },
+    volume:             {type: "slider",  min: .1,     max: 20,     multiplier:  .01 ,  float: true ,  unit: null   },
+    release:            {type: "slider",  min: .1,     max: 20,     multiplier:  .01 ,  float: true ,  unit: null   },
+    Q:                  {type: "slider",  min: .1,     max: 20,     multiplier:  .01 ,  float: true ,  unit: null   },
+    low:                {type: "slider",  min: .1,     max: 20,     multiplier:  .01 ,  float: true ,  unit: null   },
+    lowFrequency:       {type: "slider",  min: .1,     max: 20,     multiplier:  .01 ,  float: true ,  unit: null   },
+    mid:                {type: "slider",  min: .1,     max: 20,     multiplier:  .01 ,  float: true ,  unit: null   },
+    high:               {type: "slider",  min: .1,     max: 20,     multiplier:  .01 ,  float: true ,  unit: null   },
+    highFrequency:      {type: "slider",  min: .1,     max: 20,     multiplier:  .01 ,  float: true ,  unit: null   },
+    delayTime:          {type: "slider",  min: .1,     max: 20,     multiplier:  .01 ,  float: true ,  unit: null   },
+    reduction:          {type: "slider",  min: .1,     max: 20,     multiplier:  .01 ,  float: true ,  unit: null   },
+    normalize:          {type: "boolean", min: .1,     max: 20,     multiplier:  .01 ,  float: true ,  unit: null   },
+    fade:               {type: "slider",  min: .1,     max: 20,     multiplier:  .01 ,  float: true ,  unit: null   },
+    reduction:          {type: "slider",  min: .1,     max: 20,     multiplier:  .01 ,  float: true ,  unit: null   },
+    smoothing:          {type: "slider",  min: .1,     max: 20,     multiplier:  .01 ,  float: true ,  unit: null   },
+    type:               {type: "slider",  min: .1,     max: 20,     multiplier:  .01 ,  float: true ,  unit: null   },
+    coneInnerAngle:     {type: "slider",  min: .1,     max: 20,     multiplier:  .01 ,  float: true ,  unit: null   },
+    coneOuterAngle:     {type: "slider",  min: .1,     max: 20,     multiplier:  .01 ,  float: true ,  unit: null   },
+    coneOuterGain:      {type: "slider",  min: .1,     max: 20,     multiplier:  .01 ,  float: true ,  unit: null   },
+    distanceModel:      {type: "select",  min: .1,     max: 20,     multiplier:  .01 ,  float: true ,  unit: null   },
+    maxDistance:        {type: "slider",  min: .1,     max: 20,     multiplier:  .01 ,  float: true ,  unit: null   },
+    orientationX:       {type: "slider",  min: .1,     max: 20,     multiplier:  .01 ,  float: true ,  unit: null   },
+    orientationY:       {type: "slider",  min: .1,     max: 20,     multiplier:  .01 ,  float: true ,  unit: null   },
+    orientationZ:       {type: "slider",  min: .1,     max: 20,     multiplier:  .01 ,  float: true ,  unit: null   },
+    panningModel:       {type: "slider",  min: .1,     max: 20,     multiplier:  .01 ,  float: true ,  unit: null   },
+    positionX:          {type: "slider",  min: .1,     max: 20,     multiplier:  .01 ,  float: true ,  unit: null   },
+    positionY:          {type: "slider",  min: .1,     max: 20,     multiplier:  .01 ,  float: true ,  unit: null   },
+    positionZ:          {type: "slider",  min: .1,     max: 20,     multiplier:  .01 ,  float: true ,  unit: null   },
+    rolloffFactor:      {type: "slider",  min: .1,     max: 20,     multiplier:  .01 ,  float: true ,  unit: null   },
+    bits:               {type: "slider",  min: 1,     max: 20,     multiplier:  .01 ,  float: true ,  unit: null   },
 
 }
 

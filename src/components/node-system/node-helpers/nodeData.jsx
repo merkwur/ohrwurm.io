@@ -479,7 +479,7 @@ const getInputs = (name, type) => {
       }, 
       BitCrusher: {
         bits: null, 
-        wets: null, 
+        wet: null, 
         node: null,
       }, 
       Chebyshev: {
@@ -563,7 +563,7 @@ const getInputs = (name, type) => {
       },
     }, 
       Component: {
-        AmplitudeEnvelope: {node: null,},
+        AmplitudeEnvelope: {trigger: null, node: null},
         Analyser: {node: null,}, 
         BiquadFilter: {node: null,}, 
         Channel:{
@@ -583,7 +583,7 @@ const getInputs = (name, type) => {
         FeedbackCombFilter: {resonance: null,node: null},
         Filter: {frequency:null, gain: null, Q: null,}, 
         Follower: {node: null},
-        FrequencyEnvelope: {node: null},
+        FrequencyEnvelope: {trigger:null, node: null},
         Gate: {node: null}, 
         Limiter:{node: null},
         LowpassCombFilter: {resonance: null, node: null}, 
@@ -599,6 +599,9 @@ const getInputs = (name, type) => {
         PanVol: {pan: null, volume: null,node: null},
         Panner: {pan: null, node: null},
         Panner3D: {
+          coneInnerAngle: null,
+          coneOuterAngle: null, 
+          coneOuterGain: null,
           orientationX: null,
           orientationY: null,
           orinetationZ: null,

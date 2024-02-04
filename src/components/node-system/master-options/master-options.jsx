@@ -40,7 +40,6 @@ const MasterOptions = ({tone}) => {
     <div 
       className='master-options-wrapper'
     > 
-      {tone.type === "Source" ? (
         <SourceOptions 
           id={tone.id}
           name={tone.name}
@@ -50,7 +49,6 @@ const MasterOptions = ({tone}) => {
           getParameter={(value, type) => handleParameterChange(value, type)}
           setParameter={null}
         />
-      ) : null}
     </div>
   )
 }

@@ -25,7 +25,7 @@ const MasterParam = ({id,
             getWaveType={(whichElement) => handleSelection(whichElement)}
             />
           )
-        : initialStates[name] ? (
+        : initialStates[name] && initialStates[name].type === "slider" ? (
           <HorizontalSlider 
             id={id} 
             name={name} 
