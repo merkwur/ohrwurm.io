@@ -10,12 +10,14 @@ const HorizontalSlider = ({
                             id, 
                             name, 
                             type,
-                            param
+                            parameterValue,
+                            param,
+                            getParameter
                           }) => {
 
   
   const [isDragging, setIsDragging] = useState(false)
-  const [value, setValue] = useState(param.value)
+  const [value, setValue] = useState(parameterValue)
   const [initialX, setInitialX] = useState(0)
   const [initialY, setInitialY] = useState(0)
   const [achilles, setAchilles] = useState(false)
@@ -24,12 +26,12 @@ const HorizontalSlider = ({
   const centered = false
   const height = 25
   const width = 80
+
+
   const handleMouseDown = (event) => {
     setIsDragging(true)
-    setInitialX(event.clientX)
-    
+    setInitialX(event.clientX)  
   }
-
 
   const handleMouseMove = (event) => {
     if (isDragging && event.clientX > 0) {
@@ -46,7 +48,10 @@ const HorizontalSlider = ({
     }
   }
 
-  
+
+  useEffect(() => {
+    getParameter(id, value, name)
+  }, [value])
 
   const handleMouseUp = () => {
     setIsDragging(false)

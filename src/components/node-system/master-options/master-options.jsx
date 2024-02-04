@@ -4,14 +4,34 @@ import './master-options.scss'
 
 const MasterOptions = ({tone}) => {
   const [isOscillatorRunning, setIsOscillatorRunning] = useState(true)
+  const [toneParameters, setToneParameters] = useState({})
+
 
   const handleStartOscillator = (id) => {
-    if (!isOscillatorRunning) {
-      setIsOscillatorRunning(true)
+    if (!tone.parameters.start) {
+      tone.parameters.start = true
       tone.tone.start()
     } else {
-      setIsOscillatorRunning(false)
+      tone.parameters.start = false
       tone.tone.stop()
+    }
+  }
+
+  const handleParameterChange = (id, value, type) => {
+    if (type) {
+      if (type === "detune" || type === " width") {
+        tone.parameters[type] = value
+        tone.tone[type].set({value: value})
+      } else {
+        if (tone.tone[type].value) {
+          tone.tone[type].value = value
+          tone.parameters[type] = value
+        } else {
+          tone.tone[type] = value
+          tone.parameters[type] = value
+        }
+      }
+
     }
   }
 
@@ -26,7 +46,9 @@ const MasterOptions = ({tone}) => {
           name={tone.name}
           type={tone.type}
           parameters={tone.parameters}
-          startOscillator={(id) => handleStartOscillator(id)}
+          getOscillatorState={(id) => handleStartOscillator(id)}
+          getParameter={(id, value, type) => handleParameterChange(id, value, type)}
+          setParameter={null}
         />
       ) : null}
     </div>

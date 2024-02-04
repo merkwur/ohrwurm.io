@@ -211,9 +211,9 @@ export const getNodeParameters = (name, type) => {
 
   const commonOscParams = {
       start: false,
-      detune: 0,
-      frequency: 0,
       type: "sine",
+      detune: 0,
+      frequency: 440,
       phase: 0,
       partialCount: 0,
       partials: 0,
@@ -256,12 +256,12 @@ export const getNodeParameters = (name, type) => {
       },
       AMOscillator: {
         ...commonOscParams,
-        harmonicity: 0,
-        modulationType: "sine", 
+        harmonicity: 1,
+        modulationType: "square", 
       },
       FMOscillator: {
         ...commonOscParams, 
-        harmonicity: 0,
+        harmonicity: 1,
         modulationIndex: 0,
         modulationType: "sine"
       }, 
@@ -332,7 +332,7 @@ export const initialStates = {
                   decay:              {value: .2,     min: 0,     max: 1,     multiplier: .001    , float: true    ,centered: false, hasInput: true  , unit: null   },
                   sustain:            {value: .5,     min: 0,     max: 1,     multiplier: .001    , float: true    ,centered: false, hasInput: true  , unit: null   },
                   release:            {value: .6,     min: 0,     max: 1,     multiplier: .001    , float: true    ,centered: false, hasInput: true  , unit: null   },
-                  detune:             {value:  0,     min: -1200, max: 1200,  multiplier:  1      , float: false   ,centered: true , hasInput: true  , unit: "c"   },
+                  detune:             {value:  0,     min: -1200, max: 1200,  multiplier:  1      , float: false   ,centered: true , hasInput: true  , unit: "cents"   },
                   portamento:         {value:  0,     min: 0,     max: 1,     multiplier: .001    , float: true    ,centered: false, hasInput: true  , unit: null   },
                   frequency:          {value:  440,   min: 20,    max: 8192,  multiplier: 1       , float: false   ,centered: false, hasInput: true  , unit: "Hz"   },
                   phase:              {value:  0,     min: 0,     max: 360,   multiplier: 1       , float: false   ,centered: false, hasInput: false , unit: "\u00b0"   },

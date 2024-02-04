@@ -193,7 +193,7 @@ const Navbar = memo(({getNodeInfo}) => {
             height: '24px',
             width: "40px",
             left: ".75rem",
-            top: openMenu ? "14%" : "0%",
+            top: openMenu ? "20%" : "0%",
             backgroundColor: '#171717',
             display: "flex", 
             justifyContent: "center",
@@ -202,8 +202,7 @@ const Navbar = memo(({getNodeInfo}) => {
             borderBottomLeftRadius: "10px",
             borderBottomRightRadius: "10px",
             fontWeight: "800",
-            borderBottom: "1px solid #aaaaff77",
-            color: "#77777777"
+            borderBottom: "1px solid #77777777",
              
             
         }}  

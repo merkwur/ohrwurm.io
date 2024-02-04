@@ -9,7 +9,6 @@ const Input = ({id, inputType, whichParent, yPosition}) => {
 
   const handleMouseEnter = () => {
     setFocusOn(true)
-    console.log(inputType)
   }
 
   const handleMouseLeave = () => {

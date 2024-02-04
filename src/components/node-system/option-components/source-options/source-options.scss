@@ -16,11 +16,14 @@
   }
 
   .parameters{
-    min-width: 80%;
     font-size: 8pt;
     padding-left: 1rem;
     padding-right: 1rem;
     padding-top: .5rem;
+
+    &.options{
+      width: 0;
+    }
   }
 
   .saw{

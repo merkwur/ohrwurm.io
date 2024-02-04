@@ -63,7 +63,6 @@ export const deleteNode = (id, nodes, lines, tones) => {
   
   export const addLine = (lineProps, lines, nodes) => {
 
-    console.log("here we are adding a line")
     // Validate input
     if (
       !lines || 

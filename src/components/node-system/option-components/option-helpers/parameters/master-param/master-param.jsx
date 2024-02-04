@@ -1,46 +1,50 @@
 import React, { useEffect, useState } from 'react'
 import HorizontalSlider from '../horizontal-slider/horizontal-slider'
-import Detune from '../detune/detune'
+
 import './master-param.scss'
 import { initialStates } from '../../../../node-helpers/toneData'
 import Switcheroo from '../switcheroo/switcheroo'
+import StartButton from '../start-button/start-button'
 
-const MasterParam = ({id, name, type, startOscillator}) => {
-  const [runOscillator, setRunOscillator] = useState(false)
-
-  const handleSelection = (which) => {
-
-  }
-  const handleStartOscillator =() => {
-    setRunOscillator(!runOscillator)
-  }
-
-  useEffect(() => {
-    startOscillator(id)
-  }, [runOscillator])
+const MasterParam = ({id, 
+                      name, 
+                      type, 
+                      value,
+                      getOscillatorState, 
+                      getParameter,
+                      
+                    }) => {
 
   return (
-    <div className='param-wrapper'>
-      { name === "type" ? (
-        <Switcheroo 
-          elements={["sine", "square", "sawtooth", "triangle"]}
-          type={type}
-          getWaveType={(whichElement) => handleSelection(whichElement)}
+    <>
+      <div className='param-wrapper'>
+        { name === "type" ? (
+          <Switcheroo 
+            elements={["sine", "square", "sawtooth", "triangle"]}
+            type={type}
+            getWaveType={(whichElement) => handleSelection(whichElement)}
+            />
+          )
+        : initialStates[name] ? (
+          <HorizontalSlider 
+            id={id} 
+            name={name} 
+            type={type} 
+            parameterValue={value}
+            param={initialStates[name]}
+            getParameter={getParameter}
+            
+            />
+        ) 
+        : name === "start" ? (
+          <StartButton 
+            value={value}
+            getOscillatorState={getOscillatorState}
           />
-      )
-      : initialStates[name] ? (
-        <HorizontalSlider id={id} name={name} type={type} param={initialStates[name]}/>
-      ) 
-      : name === "start" ? (
-        <div 
-          className='start-button'
-          onClick={handleStartOscillator}
-          >
-
-        </div>
-      ) : null}
-      
-    </div>
+        ) : null}
+        
+      </div>
+    </>
   )
 }
 

@@ -2,7 +2,7 @@
   position: absolute;
   left: 0%;
   top: 0%;
-  height: 20%;
+  height: 14%;
   width: 100%;
   background-color: #171717;
   z-index: 999999;
@@ -25,7 +25,9 @@
         display: flex;
         color: bisque;
         font-size: 10.5pt;
-        font-weight: 500;        
+        font-weight: 600;        
+        align-items: end;
+        
       }
     }
     .navbar-selectable-elements{
@@ -34,7 +36,7 @@
       display: flex;
       overflow-x: scroll;
       white-space: nowrap;
-      align-items: center;
+      padding-top: 1.5rem;
       gap: 10px;
       padding-left: 1rem;      
       padding-right: 1rem;
@@ -59,16 +61,17 @@
       .title{
         padding-top: .3rem;
         font-weight: 600;
-        height: 13%;
+        font-size: 11pt;
+        height: 16%;
         border-bottom: 1px solid #77777777;
         
       }
       
       .subtitle{
         
-        padding-top: .25rem;
+        padding-top: .12rem;
         font-size: 10pt;
-        height: 10%;
+        height: 15%;
         border-bottom: 1px solid #77777777;
         font-weight: 500;
         display: flex;
@@ -79,9 +82,11 @@
       
       .description{
         padding-top: 1rem;
-        font-size: 8pt;
+        font-size: 7.5pt;
         height: 70%;
         overflow-y: scroll;
+        scroll-behavior: smooth;
+      
         margin-bottom: 1rem;
         padding-bottom: 1rem;
 
