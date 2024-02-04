@@ -274,9 +274,85 @@ const getSize = (name, type, snap) => {
       NoiseSynth: {...double},
       PluckSynth: {...double},
       PolySynth: {...double},
+    },
+    Effect: {
+      AutoFilter: {...single},
+      AutoPanner: {...single},
+      AutoWah: {...single},
+      BitCrusher: {...single},
+      Chebyshev: {...single},
+      Chorus: {...single},
+      Distortion:{...single},
+      FeedbackDelay: {...single},
+      Freeverb: {...single}, 
+      FrequencyShifter: {...single}, 
+      JCReverb:{...single}, 
+      MidSideEffect:{...single},
+      Phaser:{...single},
+      PingPongDelay:{...single},
+      PitchShift:{...single},
+      Reverb:{...single},
+      StereoWidener:{...single},
+      Tremolo:{...single},
+      Vibrato:{...single},
+    }, 
+    Component : {
+      AmplitudeEnvelope:{...single},
+      Analyser:{...single},
+      BiquadFilter:{...single},
+      Channel:{...single},
+      Compressor:{...single},
+      Convolver:{...single},
+      CrossFade:{...single},
+      DCMeter:{...single},
+      EQ3:{...single},
+      Envelope:{...single},
+      FFT:{...single},
+      FeedbackCombFilter:{...single},
+      Filter:{...single},
+      Follower:{...single},
+      FrequencyEnvelope:{...single},
+      Gate:{...single},
+      Limiter:{...single},
+      LowpassCombFilter:{...single},
+      Merge:{...single},
+      Meter:{...single},
+      MidSideCompressor:{...single},
+      MidSideMerge:{...single},
+      MidSideSplit:{...single},
+      Mono:{...single},
+      MultibandCompressor:{...single},
+      MultibandSplit:{...single},
+      OnePoleFilter:{...single},
+      PanVol:{...single},
+      Panner:{...single},
+      Panner3D:{...single},
+      PhaseShiftAllpass:{...single},
+      Recorder:{...single},
+      Solo:{...single},
+      Split:{...single},
+      Volume:{...single},
+      Waveform:{...single},
+    }, 
+    Signal: {
+      Abs:{...single},
+      Add:{...single},
+      AudioToGain:{...single},
+      GainToAudio:{...single},
+      GreaterThan:{...single},
+      GreaterThanZero:{...single},
+      Multiply:{...single},
+      Negate:{...single},
+      Pow:{...single},
+      Scale:{...single},
+      ScaleExp:{...single},
+      Signal:{...single},
+      Subtract:{...single},
+      ToneConstantSource:{...single},
+      WaveShaper:{...single},
+      Zero:{...single},
     }
   }
-
   return nodeSizeData[type][name]
 }
 
@@ -336,13 +412,226 @@ const getInputs = (name, type) => {
     }, Instrument: {
       AMSynth: {
         ...commonSynthParams, 
-        modulation: 440, 
-        harmonicity: 1, 
+        modulation: null, 
+        harmonicity: null, 
         trigger: null,
+      }, 
+      FMSynth: {
+        ...commonSynthParams,
+        harmonicity: null, 
+        modulation: null, 
+        modulationIndex: null, 
+        trigger: null
+      }, 
+      MembraneSynth: {
+        ...commonSynthParams, 
+      }, 
+      MetalSynth: {
+        ...commonSynthParams, 
+        harmonicity: null, 
+        modulationIndex: null,
+        octaves: null, 
 
-
+      }, 
+      MonoSynth: {
+        ...commonSynthParams,
+        filterFrequency: null,
+        filterGain: null 
+      }, 
+      NoiseSynth: {
+        ...commonSynthParams, 
+      }, 
+      PluckSynth: {
+        ...commonSynthParams, 
+        resonance: null, 
+      }, 
+      PolySynth: {
+        ...commonSynthParams, 
+        maxPolyphony: null, 
+      }, 
+      DuoSynth: {
+        ...commonSynthParams, 
+        vibratoAmount: null, 
+        vibratoRate: null
+      }, 
+      Synth: {
+        ...commonSynthParams
+      }      
+    }, Effect: {
+      AutoFilter: {
+        frequency: null, 
+        filterFrequency: null,
+        filterGain: null, 
+        wet: null,
+        node: null,
+      }, 
+      AutoPanner: {
+        baseFrequency: null,
+        frequency: null, 
+        wet: null, 
+        node: null,
+      }, 
+      AutoWah: {
+        gain: null, 
+        wet: null, 
+        Q: null, 
+        node: null,
+      }, 
+      BitCrusher: {
+        bits: null, 
+        wets: null, 
+        node: null,
+      }, 
+      Chebyshev: {
+        wet: null, 
+        node: null,
+      }, 
+      Chorus: {
+        feedback: null, 
+        frequency: null, 
+        wet: null,         
+        node: null,
+      }, 
+      Distortion: {
+        wet: null, 
+        node: null,
+      }, 
+      FeedbackDelay: {
+        feedback: null, 
+        wet: null,
+        node: null,
+      }, 
+      Freeverb: {
+        roomSize: null, 
+        dampening: null, 
+        wet: null, 
+        node: null,
+      },
+      FrequencyShifter: {
+        frequency: null, 
+        wet: null, 
+        node: null,
+      },
+      JCReverb: {
+        roomSize: null, 
+        wet: null,
+        node: null,
+      },
+      MidSideEffect: {
+        wet: null, 
+        node: null,
+      },
+      Phaser: {
+        Q: null, 
+        octaves: null, 
+        wet: null, 
+        frequency: null,
+        node: null,
+      },
+      PingPongDelay: {
+        feedback: null, 
+        wet: null, 
+        node: null,
+      },
+      PitchShift: {
+        feedback: null, 
+        pitch: null, 
+        wet: null,
+        node: null,
+      },
+      Reverb: {
+        wet: null, 
+        node: null,
+      }, 
+      StereoWidener: {
+        width: null, 
+        wet: null,
+        node: null,
+      },
+      Tremolo: {
+        depth: null, 
+        wet: null,
+        frequency: null,
+        spread: null,  
+        node: null,
+      },
+      Vibrato: {
+        frequency: null,
+        depth: null, 
+        wet: null,
+        node: null,
+      },
+    }, 
+      Component: {
+        AmplitudeEnvelope: {node: null,},
+        Analyser: {node: null,}, 
+        BiquadFilter: {node: null,}, 
+        Channel:{
+          pan: null,node: null,
+        }, 
+        Compressor:{
+          knee: null, ratio: null, node: null,
+        }, 
+        Convolver: {
+          node: null
+        },
+        CrossFade:{fade: null, node: null,node: null}, 
+        DCMeter:{node: null,},
+        EQ3:{Q: null, low: null, mid: null, high: null, node: null},
+        Envelope:{node: null}, 
+        FFT: {node: null},
+        FeedbackCombFilter: {resonance: null,node: null},
+        Filter: {frequency:null, gain: null, Q: null,}, 
+        Follower: {node: null},
+        FrequencyEnvelope: {node: null},
+        Gate: {node: null}, 
+        Limiter:{node: null},
+        LowpassCombFilter: {resonance: null, node: null}, 
+        Merge: {node: null}, 
+        Meter: {node: null},
+        MidSideCompressor: {knee: null, ratio: null, knee: null, ratio: null,node: null}, 
+        MidSideMerge: {node: null}, 
+        MidSideSplit: {node: null}, 
+        Mono: {node: null}, 
+        MultibandCompressor: {low: null, mid:null, high: null,node: null},
+        MultibandSplit: {low: null, mid: null, high: null, Q:null,node: null}, 
+        OnePoleFilter: {frequency: null,node: null}, 
+        PanVol: {pan: null, volume: null,node: null},
+        Panner: {pan: null, node: null},
+        Panner3D: {
+          orientationX: null,
+          orientationY: null,
+          orinetationZ: null,
+          positionX: null, 
+          positoinY: null,
+          positoinZ: null,
+          node: null}, 
+        PhaseShiftAllpass: {offset90: null, node: null}, 
+        Recorder: {node: null},
+        Solo: {node: null}, 
+        Split: {node: null},
+        Volume: {node: null}, 
+        Waveform: {node: null}
+      }, 
+      Signal: {
+        Abs: {node: null}, 
+        Add: {addend: null, node: null}, 
+        AudioToGain: {node: null}, 
+        GainToAudio: {node: null}, 
+        GreaterThan: {node: null},
+        GreaterThanZero: {node: null},
+        Multiply: {factor: null, node: null},
+        Negate: {node: null},
+        Pow: {node: null}, 
+        Scale: {node: null},
+        ScaleExp: {node: null}, 
+        Signal: {node: null}, 
+        Subtract: {subtrahend: null, node: null}, 
+        ToneConstantSource: {node: null}, 
+        WaveShaper: {node: null},
+        Zero: {node: null}
       }
-    }
+    
   }
 
   return nodeInputData[type][name]

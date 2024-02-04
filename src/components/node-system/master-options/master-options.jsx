@@ -17,7 +17,7 @@ const MasterOptions = ({tone}) => {
     }
   }
 
-  const handleParameterChange = (id, value, type) => {
+  const handleParameterChange = (value, type) => {
     if (type) {
       if (type === "detune" || type === " width") {
         tone.parameters[type] = value
@@ -47,7 +47,7 @@ const MasterOptions = ({tone}) => {
           type={tone.type}
           parameters={tone.parameters}
           getOscillatorState={(id) => handleStartOscillator(id)}
-          getParameter={(id, value, type) => handleParameterChange(id, value, type)}
+          getParameter={(value, type) => handleParameterChange(value, type)}
           setParameter={null}
         />
       ) : null}

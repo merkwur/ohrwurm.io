@@ -231,7 +231,7 @@ export const getNodeParameters = (name, type) => {
     Core: {
       Destination: null,
       Transporter: null,
-      Gain: {gain: 0}
+      Gain: {gain: .5}
     },
 
     Source: {
@@ -245,7 +245,7 @@ export const getNodeParameters = (name, type) => {
       },
       PWMOscillator: {
         ...commonOscParams, 
-        modulationFrequency: 0, 
+        modulationFrequency: 220, 
       },
       PulseOscillator: {
         ...commonOscParams, 
@@ -262,7 +262,7 @@ export const getNodeParameters = (name, type) => {
       FMOscillator: {
         ...commonOscParams, 
         harmonicity: 1,
-        modulationIndex: 0,
+        modulationIndex: 1,
         modulationType: "sine"
       }, 
 
@@ -296,30 +296,183 @@ export const getNodeParameters = (name, type) => {
     detune: 0, 
     envelope: {...envelope},
     portamento: 0,
-    oscillator: {...OmniOscillator}
+    oscillator: {...OmniOscillator},
+    volume: 0, 
+  }
+
+  const filterParams = {
+    gain: .5, Q: 10,frequency: 440, rolloff: 0, type: "lowpass"
   }
   
+  const monoSynthParams = {
+    ...commonSynthParams,  
+    filter: {...filterParams}, 
+    filterEnvelope: {...envelope}
+  }
+
   const InstrumentParams = {
       AMSynth: {
-        frequency: 440,
-        detune: 0, 
-        harmonicity: 1,
+        ...commonSynthParams,
         envelope: {...envelope},
         modulationEnvelope: {...envelope},
-        portamento: 0,
-        oscillator: {...OmniOscillator}, 
         modulation: {...OmniOscillator},
+      }, 
+      Synth: {
+        ...commonSynthParams
+      }, 
+      DuoSynth: {
+        voice0: {...monoSynthParams},
+        voice1: {...monoSynthParams}
+      }, 
+      FMSynth: {
+        ...commonSynthParams, 
+        modulationIndex: 1, 
+        envelope: {...envelope},
+        modulationEnvelope: {...envelope},  
+        modulation: {...commonOscParams}
+      }, 
+      MembraneSynth: {
+        ...commonSynthParams, 
+        octaves: 1, 
+        pitchDecay: 0, 
+      }, 
+      MetalSynth:{
+        ...commonSynthParams, 
+        modulationIndex: 1, 
+        octaves: 1, 
+        harmonicity: 1, 
+      },
+      MonoSynth: {
+        ...monoSynthParams
+      }, 
+      NoiseSynth: {
+        noise: "brown",
+        ...envelope, 
+        volume: 0, 
+      }, 
+      PluckSynth: {
+        attackNoise: .1, 
+        dampening: 0, 
+        resonance: 0, 
+        volume: 0,
+      }, 
+      PolySynth: {
+        maxPolyphony: 1, 
+        volume: 0
       }, 
       Synth: {
         ...commonSynthParams
       }
     }
+    const EffectParams = {
+      AutoFilter: {depth:0, ...filterParams, baseFrequency: 440, frequency: 220, wet: 1},
+      AutoPanner: {depth: 0, frequency: 440, wet: 1},
+      AutoWah: {
+        baseFrequency: 440, 
+        follower: 0, 
+        gain: .5, 
+        octaves: 1, 
+        Q: 1, 
+        sensitivity: 0,
+        wet:1
+      }, 
+      BitCrusher: {bits: 1, wet:1},
+      Chebyshev: {order: 1, wet:1},
+      Chorus: {delayTime: .2, depth: 0, feedback: .2, frequency: 440, sperad: 0, wet:1 }, 
+      Distortion: {distortoin: 1, wet:1},
+      FeedbackDelay: {delayTime: .2, feedback: .2, wet:1},
+      Freeverb:{dampening: .2, roomSize: .5, wet: 1},
+      FrequencyShifter: {frequency: 440, wet: 1}, 
+      JCReverb: {roomSize: .5, wet: 1},
+      MidSideEffect: {wet: 1},
+      Phaser: {baseFrequency: 440, frequency: 220, octaves: 1, Q: 1, wet: 1},
+      PingPongDelay: {delayTime: .2, feedback: .2, wet: 1},
+      PitchShift: {delayTime: .2, feedback: .2, pitch: 0, windowSize: .03},
+      Reverb: {decay: .2, preDelay: 0, wet: 1},
+      StereoWidener: {width: 0, wet: 1},
+      Tremolo: {depth: .2, frequency: 440, spread: 0, type: "sine", wet: 1},
+      Vibrato: {depth:.2, frequency: 1, type: "sine", wet: 1},
+
+    }
+    const ComponentParams = {
+      AmplitudeEnvelope: {},
+      Analyser: {},
+      BiquadFilter: {},
+      Channel: {},
+      Compressor: {},
+      Convolver: {},
+      CrossFade: {},
+      DCMeter: {},
+      EQ3: {},
+      Envelope: {},
+      FFT: {},
+      FeedbackCombFilter: {},
+      Filter: {},
+      Follower: {},
+      FrequencyEnvelope: {},
+      Gate: {},
+      Limiter: {},
+      LowpassCombFilter: {},
+      Merge: {},
+      Meter: {},
+      MidSideCompressor: {},
+      MidSideMerge: {},
+      MidSideSplit: {},
+      Mono: {},
+      MultibandCompressor: {},
+      MultibandSplit: {},
+      OnePoleFilter: {},
+      PanVol: {},
+      Panner: {},
+      Panner3D: {},
+      PhaseShiftAllpass: {},
+      Recorder: {},
+      Solo: {},
+      Split: {},
+      Volume: {},
+      Waveform: {},
+    } 
+   
+    const SignalParams = {
+      
+      Abs: {},
+      Add: {},
+      AudioToGain: {},
+      GainToAudio: {},
+      GreaterThan: {},
+      GreaterThanZero: {},
+      Multiply: {},
+      Negate: {},
+      Pow: {},
+      Scale: {},
+      ScaleExp: {},
+      Signal: {},
+      Subtract: {},
+      ToneConstantSource: {},
+      WaveShaper: {},
+      Zero: {},
+
+
+    }
+
+
+
   if (name === "OmniOscillator") {
     return OmniOscillator
   }
   if (type === "Instrument") {
     return InstrumentParams[name]
   }
+  if (type === "Effect") {
+    return EffectParams[name]
+  }
+  if (type === "Component") {
+    return ComponentParams[name]
+  }
+  if (type === "Signal") {
+    return SignalParams[name]
+  }
+
 
   return nodeParams[type][name]
 }  
@@ -328,27 +481,27 @@ export const getNodeParameters = (name, type) => {
 
 
 export const initialStates = { 
-                  attack:             {value: .1,     min: 0,     max: 1,     multiplier: .001    , float: true    ,centered: false, hasInput: true  , unit: null   },
-                  decay:              {value: .2,     min: 0,     max: 1,     multiplier: .001    , float: true    ,centered: false, hasInput: true  , unit: null   },
-                  sustain:            {value: .5,     min: 0,     max: 1,     multiplier: .001    , float: true    ,centered: false, hasInput: true  , unit: null   },
-                  release:            {value: .6,     min: 0,     max: 1,     multiplier: .001    , float: true    ,centered: false, hasInput: true  , unit: null   },
-                  detune:             {value:  0,     min: -1200, max: 1200,  multiplier:  1      , float: false   ,centered: true , hasInput: true  , unit: "cents"   },
-                  portamento:         {value:  0,     min: 0,     max: 1,     multiplier: .001    , float: true    ,centered: false, hasInput: true  , unit: null   },
-                  frequency:          {value:  440,   min: 20,    max: 8192,  multiplier: 1       , float: false   ,centered: false, hasInput: true  , unit: "Hz"   },
-                  phase:              {value:  0,     min: 0,     max: 360,   multiplier: 1       , float: false   ,centered: false, hasInput: false , unit: "\u00b0"   },
-                  modulationFrequency:{value:  0.1,   min: .1,    max: 440,   multiplier: .1      , float: true    ,centered: false, hasInput: true  , unit: "Hz"   },
-                  pitchDecay:         {value:  0,     min: 0,     max: 1,     multiplier: .001    , float: true    ,centered: false, hasInput: true  , unit: null   },
-                  harmonicity:        {value:  1,     min: .1,    max: 10,    multiplier: .001    , float: true    ,centered: false, hasInput: true  , unit: "mf/cf"   },
-                  octaves:            {value:  0,     min: 0,     max: 8,     multiplier: .001    , float: true    ,centered: false, hasInput: true  , unit: null   },
-                  width:              {value:  0,     min: -1,    max: 1,     multiplier: .01     , float: true    ,centered: true , hasInput: true  , unit: null   },
-                  spread:             {value:  1,     min: -1200, max: 100,   multiplier: 1       , float: false   ,centered: false, hasInput: true  , unit: null   },
-                  partialCount:       {value:  0,     min: 0,     max: 24,    multiplier: 1       , float: false   ,centered: false, hasInput: true  , unit: null   },
-                  gain:               {value:  .5,    min: 0,     max: 1,     multiplier: 0.01    , float: true    ,centered: false, hasInput: true  , unit: null   },
-                  count:              {value:  1,     min: 1,     max: 12,    multiplier: 1       , float: false   ,centered: false, hasInput: true  , unit: null   },
-                  resonance:          {value:  0,     min: 0,     max: 7000,  multiplier:  1      , float: false   ,centered: false, hasInput: true  , unit: null   },
-                  modulationIndex:    {value:  1,     min: 1,     max: 100,   multiplier:  1      , float: false   ,centered: false, hasInput: false , unit: null   },
-                  dampening:          {value:  1,     min: 1,     max: 7000,  multiplier:  1      , float: false   ,centered: false, hasInput: true  , unit: null   },
-                  attackNoise:        {value:  1,     min: .1,    max: 20,    multiplier:  .01    , float: true    ,centered: false, hasInput: true  , unit: null   },
+    attack:             { min: 0,      max: 1,      multiplier: .001 ,  float: true ,  unit: null   },
+    decay:              { min: 0,      max: 1,      multiplier: .001 ,  float: true ,  unit: null   },
+    sustain:            { min: 0,      max: 1,      multiplier: .001 ,  float: true ,  unit: null   },
+    release:            { min: 0,      max: 1,      multiplier: .001 ,  float: true ,  unit: null   },
+    detune:             { min: -1200,  max: 1200,   multiplier:  1   ,  float: false,  unit: "cents"   },
+    portamento:         { min: 0,      max: 1,      multiplier: .001 ,  float: true ,  unit: null   },
+    frequency:          { min: 20,     max: 8192,   multiplier: 1    ,  float: false,  unit: "Hz"   },
+    phase:              { min: 0,      max: 360,    multiplier: 1    ,  float: false,  unit: "\u00b0"   },
+    modulationFrequency:{ min: .1,     max: 440,    multiplier: .1   ,  float: true ,  unit: "Hz"   },
+    pitchDecay:         { min: 0,      max: 1,      multiplier: .001 ,  float: true ,  unit: null   },
+    harmonicity:        { min: .1,     max: 10,     multiplier: .001 ,  float: true ,  unit: "mf/cf"   },
+    octaves:            { min: 0,      max: 8,      multiplier: .001 ,  float: true ,  unit: null   },
+    width:              { min: -1,     max: 1,      multiplier: .01  ,  float: true ,  unit: null   },
+    spread:             { min: -1200,  max: 100,    multiplier: 1    ,  float: false,  unit: null   },
+    partialCount:       { min: 0,      max: 24,     multiplier: 1    ,  float: false,  unit: null   },
+    gain:               { min: 0,      max: 1,      multiplier: 0.01 ,  float: true ,  unit: null   },
+    count:              { min: 1,      max: 12,     multiplier: 1    ,  float: false,  unit: null   },
+    resonance:          { min: 0,      max: 7000,   multiplier:  1   ,  float: false,  unit: null   },
+    modulationIndex:    { min: 1,      max: 100,    multiplier:  1   ,  float: false,  unit: null   },
+    dampening:          { min: 1,      max: 7000,   multiplier:  1   ,  float: false,  unit: null   },
+    attackNoise:        { min: .1,     max: 20,     multiplier:  .01 ,  float: true ,  unit: null   },
 
 }
 

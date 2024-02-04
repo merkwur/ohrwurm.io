@@ -50,7 +50,7 @@ const HorizontalSlider = ({
 
 
   useEffect(() => {
-    getParameter(id, value, name)
+    getParameter(value, name)
   }, [value])
 
   const handleMouseUp = () => {
@@ -107,7 +107,7 @@ const HorizontalSlider = ({
         onMouseDown={handleMouseDown}
         >
       <div className='value'> 
-        {param.float ? (value).toFixed(2) : parseInt(value/unit)} {param.unit}
+        {param.float ? (value).toFixed(3) : parseInt(value/unit)} {param.unit}
       </div>
       </div>
     </div>

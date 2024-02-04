@@ -53,7 +53,7 @@ export const menuContent = {
   Component:[
     'AmplitudeEnvelope',
     'Analyser',
-    'BiquadFilter',
+    //'BiquadFilter',
     'Channel',
     'Compressor',
     'Convolver',

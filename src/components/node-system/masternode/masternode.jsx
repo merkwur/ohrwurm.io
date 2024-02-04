@@ -4,6 +4,9 @@ import Core from '../node-components/core/core'
 import Source from '../node-components/source/source'
 import Instrument from '../node-components/instruments/instruments'
 import { colorScheme } from '../node-helpers/helperFunctions'
+import Effect from '../node-components/effects/effect'
+import Component from '../node-components/component/component'
+import Signal from '../node-components/signal/signal'
 
 
 
@@ -204,7 +207,13 @@ const MasterNode =  ({node,
         <Source node={node}/> 
       ) : node.type === "Instrument" ? (
         <Instrument node={node}/>
-      ) : null 
+      ) : node.type === "Effect"? (
+        <Effect node={node}/>
+      ) : node.type === "Component" ? (
+        <Component node={node}/>
+      ) : node.type === "Signal" ? (
+        <Signal node={node} />
+      ): null 
      }
 
     </div>
