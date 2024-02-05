@@ -59,25 +59,39 @@ export const invokeTriggerEvent = (triggerData, nodes) => {
   }
 };
 
-export const connectToneObjects = (from, to, nodes) => {
+export const connectToneObjects = (from, to, which, nodes) => {
+  if (from.includes("Transport")) return
 
-  
-  if (nodes[to].name !== "Destination") {
-    nodes[from].tone.connect(nodes[to].tone)
+  if (which === "node") {
+    if (nodes[to].name !== "Destination") {
+      nodes[from].tone.connect(nodes[to].tone)
+    } else {
+      nodes[from].tone.toDestination()
+    }
+  } else if (which === "trigger") {
+    
   } else {
-    nodes[from].tone.toDestination()
+    nodes[from].tone.connect(nodes[to].tone[which])
   }
 }
 
 export const disposeToneNode = (id, tones) => {
+  if (tones[id].name === "Transport") return
   if (tones[id].name !== "Destination") {
     tones[id].tone.dispose()
   }
 }
 
-export const disconnectToneNode = (from, to, nodes) => {
+export const disconnectToneNode = (from, to, which, nodes) => {
+  if (from.includes("Transport")) return 
   console.log(`tone disconnection from ${from} to ${to}`)
-  nodes[from].tone.disconnect(nodes[to].tone)
+  if (which === "node") {
+    nodes[from].tone.disconnect(nodes[to].tone)
+  } else if (which === "trigger"){
+
+  } else {
+    nodes[from].tone.disconnect(nodes[to].tone[which])
+  }
 }
 
 export const getToneObject = ( nodeName ) => {
@@ -262,10 +276,13 @@ export const getNodeParameters = (name, type) => {
       }, 
 
       LFO: {
-        frequency: 0,
+        start: false,
+        frequency: 1,
         min: -10000,
         max: 10000,
         amplitude: 1,
+        
+
       },      
     }, 
   }
@@ -359,9 +376,7 @@ export const getNodeParameters = (name, type) => {
         maxPolyphony: 1, 
         volume: 0
       }, 
-      Synth: {
-        ...commonSynthParams
-      }
+     
     }
     const EffectParams = {
       AutoFilter: {depth:0, ...filterParams, baseFrequency: 440, frequency: 220, wet: 1},
@@ -524,7 +539,6 @@ export const initialStates = {
     attack:             {type: "slider",  min: 0,      max: 1,      multiplier: .001 ,  float: true ,  unit: null   },
     decay:              {type: "slider",  min: 0,      max: 1,      multiplier: .001 ,  float: true ,  unit: null   },
     sustain:            {type: "slider",  min: 0,      max: 1,      multiplier: .001 ,  float: true ,  unit: null   },
-    release:            {type: "slider",  min: 0,      max: 1,      multiplier: .001 ,  float: true ,  unit: null   },
     detune:             {type: "slider",  min: -1200,  max: 1200,   multiplier:  1   ,  float: false,  unit: "cents"   },
     portamento:         {type: "slider",  min: 0,      max: 1,      multiplier: .001 ,  float: true ,  unit: null   },
     frequency:          {type: "slider",  min: 20,     max: 8192,   multiplier: 1    ,  float: false,  unit: "Hz"   },
@@ -536,7 +550,7 @@ export const initialStates = {
     width:              {type: "slider",  min: -1,     max: 1,      multiplier: .01  ,  float: true ,  unit: null   },
     spread:             {type: "slider",  min: -1200,  max: 100,    multiplier: 1    ,  float: false,  unit: null   },
     partialCount:       {type: "slider",  min: 0,      max: 24,     multiplier: 1    ,  float: false,  unit: null   },
-    gain:               {type: "slider",  min: 0,      max: 1,      multiplier: 0.01 ,  float: true ,  unit: null   },
+    gain:               {type: "slider",  min: 0.01,      max: 1,      multiplier: 0.01 ,  float: true ,  unit: null   },
     count:              {type: "slider",  min: 1,      max: 12,     multiplier: 1    ,  float: false,  unit: null   },
     resonance:          {type: "slider",  min: 0,      max: 7000,   multiplier:  1   ,  float: false,  unit: null   },
     modulationIndex:    {type: "slider",  min: 1,      max: 100,    multiplier:  1   ,  float: false,  unit: null   },
@@ -561,7 +575,6 @@ export const initialStates = {
     reduction:          {type: "slider",  min: .1,     max: 20,     multiplier:  .01 ,  float: true ,  unit: null   },
     normalize:          {type: "boolean", min: .1,     max: 20,     multiplier:  .01 ,  float: true ,  unit: null   },
     fade:               {type: "slider",  min: .1,     max: 20,     multiplier:  .01 ,  float: true ,  unit: null   },
-    reduction:          {type: "slider",  min: .1,     max: 20,     multiplier:  .01 ,  float: true ,  unit: null   },
     smoothing:          {type: "slider",  min: .1,     max: 20,     multiplier:  .01 ,  float: true ,  unit: null   },
     type:               {type: "slider",  min: .1,     max: 20,     multiplier:  .01 ,  float: true ,  unit: null   },
     coneInnerAngle:     {type: "slider",  min: .1,     max: 20,     multiplier:  .01 ,  float: true ,  unit: null   },
@@ -577,13 +590,16 @@ export const initialStates = {
     positionY:          {type: "slider",  min: .1,     max: 20,     multiplier:  .01 ,  float: true ,  unit: null   },
     positionZ:          {type: "slider",  min: .1,     max: 20,     multiplier:  .01 ,  float: true ,  unit: null   },
     rolloffFactor:      {type: "slider",  min: .1,     max: 20,     multiplier:  .01 ,  float: true ,  unit: null   },
-    bits:               {type: "slider",  min: 1,     max: 20,     multiplier:  .01 ,  float: true ,  unit: null   },
+    bits:               {type: "slider",  min: 1,     max: 20,      multiplier:  .01 ,  float: true ,  unit: null   },
+    bpm:                {type: "slider",  min: 1,     max: 999,     multiplier:   1 ,   float: false,  unit: "bpm"  },
+    length:             {type: "slider",  min: 1,     max: 16,      multiplier:   1 ,   float: false , unit: null   },
 
 }
 
 export const LFOStates = {
-                  frequency:          {value:  1,   min: .1,        max: 10,     multiplier: .1      , float: true    ,centered: false, hasInput: true      },
-                  min:                {value:  -1,  min: -10000,    max: 10000,  multiplier: 1       , float: false   ,centered: false, hasInput: false     },
-                  max:                {value:  1,   min: -10000,    max: 10000,  multiplier: 1       , float: false   ,centered: false, hasInput: false     },
-                  amplitude:          {value:  1,   min: .001,      max: 1,      multiplier: .001    , float: true    ,centered: false, hasInput: true     },
+                  frequency:          {type: "slider",   min: .1,        max: 10,     multiplier: .1      , float: true   },
+                  min:                {type: "slider",   min: -10000,    max: 10000,  multiplier: 1       , float: false  },
+                  max:                {type: "slider",   min: -10000,    max: 10000,  multiplier: 1       , float: false  },
+                  amplitude:          {type: "slider",   min: .001,      max: 1,      multiplier: .001    , float: true   },
+                  
 }

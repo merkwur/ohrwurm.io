@@ -1,6 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import SourceOptions from '../option-components/source-options/source-options'
 import './master-options.scss'
+import Transport from '../option-components/option-helpers/transport/transport'
+
+
+
 
 const MasterOptions = ({tone}) => {
   const [isOscillatorRunning, setIsOscillatorRunning] = useState(true)
@@ -40,6 +44,7 @@ const MasterOptions = ({tone}) => {
     <div 
       className='master-options-wrapper'
     > 
+      {tone.name !== "Destination" && tone.name !== "Transport" && tone.type !== "Signal"? (
         <SourceOptions 
           id={tone.id}
           name={tone.name}
@@ -49,6 +54,9 @@ const MasterOptions = ({tone}) => {
           getParameter={(value, type) => handleParameterChange(value, type)}
           setParameter={null}
         />
+      ): tone.name === "Transport" ? (
+        <Transport id={tone.id} name={tone.name} type={tone.type}/>
+      ) : null}
     </div>
   )
 }

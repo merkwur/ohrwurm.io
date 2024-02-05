@@ -37,6 +37,7 @@ const SourceOptions = ({
                   id={id} 
                   name={param} 
                   type={type}
+                  parent={name}
                   getParameter={getParameter}
                   value={parameters[param]}
                   getOscillatorState={getOscillatorState}

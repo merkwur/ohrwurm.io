@@ -189,19 +189,9 @@ const MasterNode =  ({node,
     >
      {
       node.type === "Core" ? (
-        <>
-          {
-            node.name !== "Transport" ? (
-              <Core
-                node={node}
-              />
-            ) : (
-              <div>
-                here will be destination component
-              </div>
-            )
-          }
-        </>
+            <Core
+              node={node}
+            />
         
       ) : node.type === "Source" ? (
         <Source node={node}/> 

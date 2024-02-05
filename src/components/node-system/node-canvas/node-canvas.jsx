@@ -44,6 +44,9 @@ const NodeCanvas = () => {
 
 
   useEffect(() => { 
+    // this is an extremely basic and slow approach
+    // can be solved by using simple svg canvas and rects.
+    // however, it is good for stress testing. 
     const arr = [...zeros] 
     const reducedArr = [...reducedZeros]
     const posArr = []
@@ -75,7 +78,7 @@ const NodeCanvas = () => {
   const handleAddLine = (line) => {
     if (line) {
       const updated = addLine(line, lineData, nodeData)
-      connectToneObjects(line.from, line.to, toneData)  
+      connectToneObjects(line.from, line.to, line.which, toneData)  
       setLineData(updated[0])
       setNodeData(updated[1])
     }
@@ -83,7 +86,7 @@ const NodeCanvas = () => {
   
   const handleDeleteLine = (id) => {
     const updates = deleteLine(id, lineData, nodeData)
-    disconnectToneNode(lineData[id].from, lineData[id].to, toneData)
+    disconnectToneNode(lineData[id].from, lineData[id].to, lineData[id].which, toneData)
     setLineData(updates[0])
     setNodeData(updates[1])
   }
@@ -99,7 +102,7 @@ const NodeCanvas = () => {
     setTriggerData({notes: arr, instruments: ids, bpm: bpm})
   }
   
-  //useEffect(() => {console.log(nodeData)}, [nodeData])
+  // useEffect(() => {console.log(nodeData)}, [nodeData])
   //useEffect(() => {console.log(lineData)}, [lineData])
   useEffect(() => {console.log(toneData)}, [toneData])
 
