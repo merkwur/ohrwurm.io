@@ -97,12 +97,12 @@ const NodeCanvas = () => {
     setLineData(updatedLines)
   }
   
-  const handleNotesToTrigger = (arr, ids, bpm) => {
-    // some issue about the recursion 
+  const handleNotesToTrigger = (arr, bpm) => {
+    const ids = nodeData["Transport"].connection.map(e => e.split(">")[1].split("=")[0])
     setTriggerData({notes: arr, instruments: ids, bpm: bpm})
   }
   
-  // useEffect(() => {console.log(nodeData)}, [nodeData])
+  useEffect(() => {console.log(nodeData)}, [nodeData])
   //useEffect(() => {console.log(lineData)}, [lineData])
   useEffect(() => {console.log(toneData)}, [toneData])
 
@@ -113,18 +113,14 @@ const NodeCanvas = () => {
     setGlobalTime(time)
   }
   useEffect(() => {
-    invokeTriggerEvent(triggerData, nodeData)
+    invokeTriggerEvent(triggerData, toneData, nodeData)
+    console.log("time from canvas", globalTime)
   }, [globalTime])  
   
   
   
   const handeLeftClick = (event) => {
-    const targetNode = document.elementFromPoint(event.clientX, event.clientY)
     event.preventDefault()
-    if (targetNode.id) {
-      const updatedNodes = nodeRemove(event.target.id)
-      return updatedNodes
-    }
   }
   const handleMouseDown = (event) => {
     event.preventDefault()
@@ -257,14 +253,17 @@ const NodeCanvas = () => {
                 updateLinePosition={(x, y, id) => handleLinePositionUpdate(x, y, id)}
                 isLineExist={lineData ? lineData.length > 0 : false}
                 notesToTrigger={(arr, ids, bpm) => handleNotesToTrigger(arr, ids, bpm)}
-                getGlobalTime={(time) => handleGlobalTime(time)}
                 getValidMoves={(x, y, id) => handleValidMoves(x, y, id)}
                 validMoves={valids}
-              />
+                />
             </React.Fragment>
           );  
         })}
-      <NodeConfigurationHub tone={toneData}/>
+      <NodeConfigurationHub 
+        tone={toneData} 
+        notesToTrigger={(notes, bpm) => handleNotesToTrigger(notes, bpm)}
+        getGlobalTime={(time) => handleGlobalTime(time)}
+        />
         <LineCanvas 
           lines={lineData} 
           deleteLine={id => handleDeleteLine(id)}

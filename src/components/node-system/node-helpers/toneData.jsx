@@ -20,13 +20,15 @@ export const addToneObject = (id, name, type, tones) => {
   return {...tones, [id]: newToneObject}
 }
 
-export const invokeTriggerEvent = (triggerData, nodes) => {
+export const invokeTriggerEvent = (triggerData, tones, nodes) => {
   if (!triggerData.instruments || triggerData.instruments.length <= 0) {
     return
   }
+  console.log(triggerData)
   if (triggerData.notes) {
     let noteDuration = (60 / triggerData.bpm)
-    const instruments = nodes.filter(node => triggerData.instruments.includes(node.id));
+    const instruments = Object.keys(nodes).filter(node => triggerData.instruments.includes(nodes[node].id));
+    console.log(instruments)
     if (Array.isArray(triggerData.notes)) {
       noteDuration /= triggerData.notes.length
 
@@ -34,26 +36,26 @@ export const invokeTriggerEvent = (triggerData, nodes) => {
         for (let i = 0; i < triggerData.notes.length; i++) {
           setTimeout(() => {
             instruments.forEach(instrument => {
-              instrument.Tone.triggerAttackRelease(triggerData.notes[i], noteDuration);
+              tones[instrument].tone.triggerAttackRelease(triggerData.notes[i], noteDuration);
             })
           }, i * noteDuration * 1000); 
         } 
       } else {
         for (let i = 0; i < triggerData.notes.length; i++) {
           setTimeout(() => {
-            instruments[0].Tone.triggerAttackRelease(triggerData.notes[i], noteDuration);
+            tones[instruments[0]].tone.triggerAttackRelease(triggerData.notes[i], noteDuration);
           }, i * noteDuration * 1000); 
         }
       }
 
     } else {
       if (instruments.length > 1) {
-        console.log(instruments)
+        
         instruments.forEach((instrument) => {
-          instrument.Tone.triggerAttackRelease(triggerData.notes, noteDuration)
+          tones[instrument].tone.triggerAttackRelease(triggerData.notes, noteDuration)
         })
       } else {
-        instruments[0].Tone.triggerAttackRelease(triggerData.notes, noteDuration);
+        tones[instruments[0]].tone.triggerAttackRelease(triggerData.notes, noteDuration);
       }
     }
   }
@@ -219,7 +221,7 @@ export const getToneObject = ( nodeName ) => {
 
 export const getNodeParameters = (name, type) => {
   console.log(name)
-  if (name === "Destiantion" || name === "Transporter") {
+  if (name === "Destiantion") {
     return null
   }
 
@@ -239,7 +241,7 @@ export const getNodeParameters = (name, type) => {
 
     Core: {
       Destination: null,
-      Transporter: null,
+      Transport: {bpm: 120, notes: null, time: 0},
       Gain: {gain: .5}
     },
 
@@ -278,8 +280,8 @@ export const getNodeParameters = (name, type) => {
       LFO: {
         start: false,
         frequency: 1,
-        min: -10000,
-        max: 10000,
+        min: -1,
+        max: 1,
         amplitude: 1,
         
 
@@ -590,9 +592,9 @@ export const initialStates = {
     positionY:          {type: "slider",  min: .1,     max: 20,     multiplier:  .01 ,  float: true ,  unit: null   },
     positionZ:          {type: "slider",  min: .1,     max: 20,     multiplier:  .01 ,  float: true ,  unit: null   },
     rolloffFactor:      {type: "slider",  min: .1,     max: 20,     multiplier:  .01 ,  float: true ,  unit: null   },
-    bits:               {type: "slider",  min: 1,     max: 20,      multiplier:  .01 ,  float: true ,  unit: null   },
-    bpm:                {type: "slider",  min: 1,     max: 999,     multiplier:   1 ,   float: false,  unit: "bpm"  },
-    length:             {type: "slider",  min: 1,     max: 16,      multiplier:   1 ,   float: false , unit: null   },
+    bits:               {type: "slider",  min: 1,      max: 20,     multiplier:  .01 ,  float: true ,  unit: null   },
+    bpm:                {type: "slider",  min: 1,      max: 999,    multiplier:   1 ,   float: false,  unit: "bpm"  },
+    length:             {type: "slider",  min: 1,      max: 8,      multiplier:   1 ,   float: false , unit: null   },
 
 }
 

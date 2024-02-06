@@ -6,10 +6,7 @@ import Transport from '../option-components/option-helpers/transport/transport'
 
 
 
-const MasterOptions = ({tone}) => {
-  const [isOscillatorRunning, setIsOscillatorRunning] = useState(true)
-  const [toneParameters, setToneParameters] = useState({})
-
+const MasterOptions = ({tone, notesToTrigger, getGlobalTime}) => {
 
   const handleStartOscillator = (id) => {
     if (!tone.parameters.start) {
@@ -55,7 +52,14 @@ const MasterOptions = ({tone}) => {
           setParameter={null}
         />
       ): tone.name === "Transport" ? (
-        <Transport id={tone.id} name={tone.name} type={tone.type}/>
+        <Transport 
+          id={tone.id} 
+          name={tone.name} 
+          type={tone.type}
+          notesToTrigger={notesToTrigger}
+          getGlobalTime={getGlobalTime}
+          
+          />
       ) : null}
     </div>
   )

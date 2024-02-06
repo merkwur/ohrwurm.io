@@ -4,7 +4,12 @@ import { addToneObject } from "./toneData"
 
 
 export const addNode = (x, y, name, type, snapSize, nodes, tones) => {
-  const id = name + ":" + uuidv4().split("-")[0]
+  let id
+  if (name !== "Transport") {
+    id = name + ":" + uuidv4().split("-")[0]
+  } else {
+    id = name
+  }
   const snappedX = (Math.floor(x / snapSize) * snapSize) + 5
   const snappedY = (Math.floor(y / snapSize) * snapSize) + 5
   const normX = Math.floor((snappedX-5) / 40)
@@ -575,7 +580,7 @@ const getInputs = (name, type) => {
         Convolver: {
           node: null
         },
-        CrossFade:{fade: null, node: null,node: null}, 
+        CrossFade:{fade: null, a: null, b: null}, 
         DCMeter:{node: null,},
         EQ3:{Q: null, low: null, mid: null, high: null, node: null},
         Envelope:{node: null}, 
@@ -589,7 +594,7 @@ const getInputs = (name, type) => {
         LowpassCombFilter: {resonance: null, node: null}, 
         Merge: {node: null}, 
         Meter: {node: null},
-        MidSideCompressor: {knee: null, ratio: null, knee: null, ratio: null,node: null}, 
+        MidSideCompressor: {knee: null, ratio: null,node: null}, 
         MidSideMerge: {node: null}, 
         MidSideSplit: {node: null}, 
         Mono: {node: null}, 
