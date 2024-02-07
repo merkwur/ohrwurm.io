@@ -46,7 +46,7 @@ export const invokeTriggerEvent = (triggerData, tones, nodes) => {
         for (let i = 0; i < triggerData.notes.length; i++) {
           setTimeout(() => {
             if (triggerData.probabilities[i] > Math.random()) {
-              console.log(triggerData.probabilities[0], Math.random())
+      
               tones[instruments[0]].tone.triggerAttackRelease(triggerData.notes[i], noteDuration * triggerData.durations[i]);
             }
           }, i * noteDuration * 1000); 

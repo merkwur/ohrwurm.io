@@ -305,7 +305,7 @@ const Transport = ({id, name, type, notesToTrigger, getGlobalTime}) => {
                           id={id} 
                           name={"d"} 
                           type={type}
-                          parameterValue={probabilities[index]}
+                          parameterValue={durations[index][i] ? durations[index][i] : 1}
                           param={initialStates["d"]}
                           getParameter={(value) => handleDurations(value, index, i)}
                           isParamCentered={true}

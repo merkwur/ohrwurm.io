@@ -28,7 +28,6 @@ const HorizontalSlider = ({
   const height = 25
   const width = 80
 
-
   const handleMouseDown = (event) => {
     setIsDragging(true)
     setInitialX(event.clientX)  
