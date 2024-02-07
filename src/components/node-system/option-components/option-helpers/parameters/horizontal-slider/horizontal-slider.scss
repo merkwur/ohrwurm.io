@@ -4,10 +4,14 @@
   height: 25px;
   // border: 1px solid #ff2442;
   
+  
   .header{
     font-size: 7.3pt;
     font-weight: 600;
     height: 20%;
+    display: flex;
+    
+    
   }
   
   .frequency-slider{    
@@ -16,6 +20,8 @@
     height: 80%;
     width: 100%;
     top: 0;
+    display: flex;
+  
     // border: 1px solid red;
     
     .value{
@@ -23,6 +29,7 @@
       top: 55%;
       font-size: 6.7pt;
       font-weight: 600;   
+      
     }
   }
 }

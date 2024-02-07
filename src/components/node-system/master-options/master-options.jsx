@@ -24,7 +24,7 @@ const MasterOptions = ({tone, notesToTrigger, getGlobalTime}) => {
         tone.parameters[type] = value
         tone.tone[type].set({value: value})
       } else {
-        if (tone.tone[type].value) {
+        if (typeof tone.tone[type] === "object") {
           tone.tone[type].value = value
           tone.parameters[type] = value
         } else {

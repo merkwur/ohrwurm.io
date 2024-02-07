@@ -24,38 +24,32 @@ export const invokeTriggerEvent = (triggerData, tones, nodes) => {
   if (!triggerData.instruments || triggerData.instruments.length <= 0) {
     return
   }
-  console.log(triggerData)
+  
   if (triggerData.notes) {
     let noteDuration = (60 / triggerData.bpm)
     const instruments = Object.keys(nodes).filter(node => triggerData.instruments.includes(nodes[node].id));
-    console.log(instruments)
+    
     if (Array.isArray(triggerData.notes)) {
       noteDuration /= triggerData.notes.length
 
       if (instruments.length > 1) {
         for (let i = 0; i < triggerData.notes.length; i++) {
           setTimeout(() => {
-            instruments.forEach(instrument => {
-              tones[instrument].tone.triggerAttackRelease(triggerData.notes[i], noteDuration);
-            })
+            if (!triggerData.probabilities[i] < Math.random()) {
+              instruments.forEach(instrument => {
+                tones[instrument].tone.triggerAttackRelease(triggerData.notes[i], noteDuration * triggerData.durations[i]);
+              })
+            }
           }, i * noteDuration * 1000); 
         } 
       } else {
         for (let i = 0; i < triggerData.notes.length; i++) {
           setTimeout(() => {
-            tones[instruments[0]].tone.triggerAttackRelease(triggerData.notes[i], noteDuration);
+            if (!triggerData.probabilities[i] < Math.random()) {
+              tones[instruments[0]].tone.triggerAttackRelease(triggerData.notes[i], noteDuration * triggerData.durations[i]);
+            }
           }, i * noteDuration * 1000); 
         }
-      }
-
-    } else {
-      if (instruments.length > 1) {
-        
-        instruments.forEach((instrument) => {
-          tones[instrument].tone.triggerAttackRelease(triggerData.notes, noteDuration)
-        })
-      } else {
-        tones[instruments[0]].tone.triggerAttackRelease(triggerData.notes, noteDuration);
       }
     }
   }
@@ -306,7 +300,7 @@ export const getNodeParameters = (name, type) => {
     sustain: .5, 
     release: .6,
     releaseCurve: "linear",
-    value: 0
+    
   }
 
   const commonSynthParams = {
@@ -315,7 +309,7 @@ export const getNodeParameters = (name, type) => {
     envelope: {...envelope},
     portamento: 0,
     oscillator: {...OmniOscillator},
-    volume: 0, 
+    
   }
 
   const filterParams = {
@@ -534,7 +528,7 @@ export const getNodeParameters = (name, type) => {
   return nodeParams[type][name]
 }  
 
-
+// complete the states
 
 
 export const initialStates = { 
@@ -573,7 +567,7 @@ export const initialStates = {
     mid:                {type: "slider",  min: .1,     max: 20,     multiplier:  .01 ,  float: true ,  unit: null   },
     high:               {type: "slider",  min: .1,     max: 20,     multiplier:  .01 ,  float: true ,  unit: null   },
     highFrequency:      {type: "slider",  min: .1,     max: 20,     multiplier:  .01 ,  float: true ,  unit: null   },
-    delayTime:          {type: "slider",  min: .1,     max: 20,     multiplier:  .01 ,  float: true ,  unit: null   },
+    delayTime:          {type: "slider",  min: .1,     max: 1,     multiplier:  .01 ,  float: true ,  unit: null   },
     reduction:          {type: "slider",  min: .1,     max: 20,     multiplier:  .01 ,  float: true ,  unit: null   },
     normalize:          {type: "boolean", min: .1,     max: 20,     multiplier:  .01 ,  float: true ,  unit: null   },
     fade:               {type: "slider",  min: .1,     max: 20,     multiplier:  .01 ,  float: true ,  unit: null   },
@@ -582,19 +576,23 @@ export const initialStates = {
     coneInnerAngle:     {type: "slider",  min: .1,     max: 20,     multiplier:  .01 ,  float: true ,  unit: null   },
     coneOuterAngle:     {type: "slider",  min: .1,     max: 20,     multiplier:  .01 ,  float: true ,  unit: null   },
     coneOuterGain:      {type: "slider",  min: .1,     max: 20,     multiplier:  .01 ,  float: true ,  unit: null   },
-    distanceModel:      {type: "select",  min: .1,     max: 20,     multiplier:  .01 ,  float: true ,  unit: null   },
-    maxDistance:        {type: "slider",  min: .1,     max: 20,     multiplier:  .01 ,  float: true ,  unit: null   },
-    orientationX:       {type: "slider",  min: .1,     max: 20,     multiplier:  .01 ,  float: true ,  unit: null   },
-    orientationY:       {type: "slider",  min: .1,     max: 20,     multiplier:  .01 ,  float: true ,  unit: null   },
-    orientationZ:       {type: "slider",  min: .1,     max: 20,     multiplier:  .01 ,  float: true ,  unit: null   },
-    panningModel:       {type: "slider",  min: .1,     max: 20,     multiplier:  .01 ,  float: true ,  unit: null   },
-    positionX:          {type: "slider",  min: .1,     max: 20,     multiplier:  .01 ,  float: true ,  unit: null   },
-    positionY:          {type: "slider",  min: .1,     max: 20,     multiplier:  .01 ,  float: true ,  unit: null   },
-    positionZ:          {type: "slider",  min: .1,     max: 20,     multiplier:  .01 ,  float: true ,  unit: null   },
+    distanceModel:      {type: "select",  value: ["linear", "inverse", "exponential"]},
+    maxDistance:        {type: "slider",  min: 1,     max: Infinity, multiplier:  1 ,  float: false ,  unit: "cm"   },
+    panningModel:       {type: "select",  value: ["equalpower, HRTF"]},
     rolloffFactor:      {type: "slider",  min: .1,     max: 20,     multiplier:  .01 ,  float: true ,  unit: null   },
     bits:               {type: "slider",  min: 1,      max: 20,     multiplier:  .01 ,  float: true ,  unit: null   },
     bpm:                {type: "slider",  min: 1,      max: 999,    multiplier:   1 ,   float: false,  unit: "bpm"  },
     length:             {type: "slider",  min: 1,      max: 8,      multiplier:   1 ,   float: false , unit: null   },
+    wet:                {type: "slider",  min: 0,      max: 1,      multiplier:   .01 , float: true  , unit: null   },
+    feedback:           {type: "slider",  min: 0,      max: 1,      multiplier:   .01 , float: true  , unit: null   },
+    p:                  {type: "slider",  min: 0,      max: 1,      multiplier:   .01 , float: true  , unit: null   },
+    d:                  {type: "slider",  min: 0,      max: 1,      multiplier:   .01 , float: true  , unit: null   },
+    orientationX:       {type: "slider",  min: -Infinity, max: Infinity,     multiplier:  1 ,  float: false ,  unit: "cm"   },
+    orientationY:       {type: "slider",  min: -Infinity, max: Infinity,     multiplier:  1 ,  float: false ,  unit: "cm"   },
+    orientationZ:       {type: "slider",  min: -Infinity, max: Infinity,     multiplier:  1 ,  float: false ,  unit: "cm"   },
+    positionX:          {type: "slider",  min: -Infinity, max: Infinity,     multiplier:  1 ,  float: false ,  unit: "cm"   },
+    positionY:          {type: "slider",  min: -Infinity, max: Infinity,     multiplier:  1 ,  float: false ,  unit: "cm"   },
+    positionZ:          {type: "slider",  min: -Infinity, max: Infinity,     multiplier:  1 ,  float: false ,  unit: "cm"   },
 
 }
 

@@ -97,13 +97,17 @@ const NodeCanvas = () => {
     setLineData(updatedLines)
   }
   
-  const handleNotesToTrigger = (arr, bpm) => {
+  const handleNotesToTrigger = (notes, probabilities, durations, bpm) => {
     const ids = nodeData["Transport"].connection.map(e => e.split(">")[1].split("=")[0])
-    setTriggerData({notes: arr, instruments: ids, bpm: bpm})
+    setTriggerData({notes: notes, 
+                    instruments: ids, 
+                    probabilities: probabilities, 
+                    durations: durations, 
+                    bpm: bpm})
   }
   
-  useEffect(() => {console.log(nodeData)}, [nodeData])
-  //useEffect(() => {console.log(lineData)}, [lineData])
+  // useEffect(() => {console.log(nodeData)}, [nodeData])
+  // useEffect(() => {console.log(lineData)}, [lineData])
   useEffect(() => {console.log(toneData)}, [toneData])
 
 
@@ -114,7 +118,6 @@ const NodeCanvas = () => {
   }
   useEffect(() => {
     invokeTriggerEvent(triggerData, toneData, nodeData)
-    console.log("time from canvas", globalTime)
   }, [globalTime])  
   
   
@@ -261,7 +264,7 @@ const NodeCanvas = () => {
         })}
       <NodeConfigurationHub 
         tone={toneData} 
-        notesToTrigger={(notes, bpm) => handleNotesToTrigger(notes, bpm)}
+        notesToTrigger={(notes, probabilities, durations, bpm) => handleNotesToTrigger(notes, probabilities, durations, bpm)}
         getGlobalTime={(time) => handleGlobalTime(time)}
         />
         <LineCanvas 

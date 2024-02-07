@@ -430,37 +430,45 @@ const getInputs = (name, type) => {
       }, 
       MembraneSynth: {
         ...commonSynthParams, 
+        trigger: null
       }, 
       MetalSynth: {
         ...commonSynthParams, 
         harmonicity: null, 
         modulationIndex: null,
         octaves: null, 
+        trigger: null
 
       }, 
       MonoSynth: {
         ...commonSynthParams,
         filterFrequency: null,
-        filterGain: null 
+        filterGain: null, 
+        trigger: null
       }, 
       NoiseSynth: {
         ...commonSynthParams, 
+        trigger: null
       }, 
       PluckSynth: {
         ...commonSynthParams, 
         resonance: null, 
+        trigger: null
       }, 
       PolySynth: {
         ...commonSynthParams, 
         maxPolyphony: null, 
+        trigger: null
       }, 
       DuoSynth: {
         ...commonSynthParams, 
         vibratoAmount: null, 
-        vibratoRate: null
+        vibratoRate: null,
+        trigger: null
       }, 
       Synth: {
-        ...commonSynthParams
+        ...commonSynthParams,
+        trigger: null
       }      
     }, Effect: {
       AutoFilter: {

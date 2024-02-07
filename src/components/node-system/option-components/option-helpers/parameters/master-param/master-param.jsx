@@ -18,7 +18,6 @@ const MasterParam = ({id,
 
 
 
-  console.log(name)
 
   return (
     <>

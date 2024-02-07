@@ -12,7 +12,8 @@ const HorizontalSlider = ({
                             type,
                             parameterValue,
                             param,
-                            getParameter
+                            getParameter, 
+                            isParamCentered
                           }) => {
 
   
@@ -98,15 +99,26 @@ const HorizontalSlider = ({
     <div 
       className='frequency-wrapper'
       >
-      <div className='header' 
+      <div 
+        className='header'
+        style={{
+          justifyContent: isParamCentered ? "center" : "left"
+        }} 
         >
           {`< ${name} >`}
       </div>
       <div 
         className='frequency-slider'
         onMouseDown={handleMouseDown}
+        style={{
+          justifyContent: isParamCentered ? "center" : "left"
+        }}
         >
-      <div className='value'> 
+      <div 
+        className='value'
+        style={{
+        }}
+        > 
         {param.float ? (value).toFixed(3) : parseInt(value/unit)} {param.unit}
       </div>
       </div>
