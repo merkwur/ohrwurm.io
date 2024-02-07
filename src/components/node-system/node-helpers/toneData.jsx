@@ -35,7 +35,7 @@ export const invokeTriggerEvent = (triggerData, tones, nodes) => {
       if (instruments.length > 1) {
         for (let i = 0; i < triggerData.notes.length; i++) {
           setTimeout(() => {
-            if (!triggerData.probabilities[i] < Math.random()) {
+            if (triggerData.probabilities[i] > Math.random()) {
               instruments.forEach(instrument => {
                 tones[instrument].tone.triggerAttackRelease(triggerData.notes[i], noteDuration * triggerData.durations[i]);
               })
@@ -45,7 +45,8 @@ export const invokeTriggerEvent = (triggerData, tones, nodes) => {
       } else {
         for (let i = 0; i < triggerData.notes.length; i++) {
           setTimeout(() => {
-            if (!triggerData.probabilities[i] < Math.random()) {
+            if (triggerData.probabilities[i] > Math.random()) {
+              console.log(triggerData.probabilities[0], Math.random())
               tones[instruments[0]].tone.triggerAttackRelease(triggerData.notes[i], noteDuration * triggerData.durations[i]);
             }
           }, i * noteDuration * 1000); 
