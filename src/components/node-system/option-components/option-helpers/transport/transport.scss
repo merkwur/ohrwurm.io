@@ -74,7 +74,7 @@
         // border: 1px solid #77777777;
   
         .key-slider{
-          
+          background-color: transparent;
           display: flex;
           height: 80%;
   
@@ -133,9 +133,9 @@
       }
     }
     .durations{
-      width: 50%;
+      width: 30%;
       height: 100%;
-      border: #77777777 1px solid;
+      //border: #77777777 1px solid;
       .duration-space{
         width: 100%;
         height: 10%;
@@ -149,6 +149,7 @@
         font-weight: 600;
         display: flex;
         align-items: center;
+        justify-content: center;
       }
       .duration-params{
         position: relative;
@@ -165,7 +166,7 @@
           padding-right: .5rem;
 
           .ts{
-            border: #77777777 1px solid;
+           // border: #77777777 1px solid;
             display: flex;
             align-items: center;
           }

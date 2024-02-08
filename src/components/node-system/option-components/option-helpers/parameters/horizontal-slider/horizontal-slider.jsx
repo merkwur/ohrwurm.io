@@ -35,22 +35,29 @@ const HorizontalSlider = ({
 
   const handleMouseMove = (event) => {
     if (isDragging && event.clientX > 0) {
+      let newVal
       if (achilles) {
-        const val = value + ((event.clientX - initialX) * unit * 10)
-        setValue(clamp(val, param.min, param.max))
+        newVal = value + ((event.clientX - initialX) * unit * 10)
+       
       } else if (tortoise) {
-        const val = value + Math.floor(((event.clientX - initialX) * unit) / 20)
-        setValue(clamp( val, param.min, param.max))
+        newVal = value + Math.floor(((event.clientX - initialX) * unit) / 20)
+       
       } else{
-        const val = value + (event.clientX - initialX) * unit
-        setValue(clamp(val, param.min, param.max))
+        newVal = value + (event.clientX - initialX) * unit
+      }
+      newVal = clamp(newVal, param.min, param.max)
+      if(newVal !== value) {
+        setValue(newVal)
       }
     }
   }
 
 
   useEffect(() => {
-    getParameter(value, name)
+    const handler = setTimeout(() => {
+      getParameter(value, name) 
+    }, 100)
+    return () => clearTimeout(handler)
   }, [value])
 
   const handleMouseUp = () => {

@@ -4,11 +4,16 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  flex-direction: column;
+  font-weight: 600;
+  font-size: 6.5pt;
+
   .keys {
+    background-color: transparent;
     display: flex;
     align-items: center;
     justify-content: center;
     width: 100%;
-    background-color: #ccc;
+    
   }
 }

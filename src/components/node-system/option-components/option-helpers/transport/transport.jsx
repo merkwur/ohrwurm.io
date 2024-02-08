@@ -2,9 +2,10 @@ import React, { useEffect, useRef, useState } from 'react'
 import "./transport.scss"
 import { initialStates } from '../../../node-helpers/toneData'
 import HorizontalSlider from '../parameters/horizontal-slider/horizontal-slider'
-import KeySlider from './transport-helpers/key-slider'
 import { Scale } from 'tonal'
 import LengthAdjust from './transport-helpers/length-adjust'
+import KeySelector from './transport-helpers/key-selector'
+import OctavePicker from './transport-helpers/octave-picker'
 
 
 // finished up the transport object !!!
@@ -20,7 +21,6 @@ const Transport = ({id, name, type, notesToTrigger, getGlobalTime}) => {
   const [time, setTime] = useState(0)
   const [intervalId, setIntervalId] = useState(0)
   const [length, setLength] = useState(8)
-  const [sliderValues, setSliderValues] = useState(Array(length).fill(0))
   const [sequenceKeys, setSeqeunceKeys] = useState(Array(length).fill("C"))
   const [sequenceLength, setSeqeunceLength] = useState(Array(length).fill(1))
   const [probabilities, setProbabilities] = useState(sequenceLength)
@@ -81,13 +81,10 @@ const Transport = ({id, name, type, notesToTrigger, getGlobalTime}) => {
   }, [length])
 
   const handleSliderValue = (value, index) => {
-    const arr = [...sliderValues]
+    console.log(value)
+    const arr = [...sequenceKeys]
     arr[index] = value 
-    
-    const seqArr = [...sequenceKeys]
-    seqArr[index] = chroma[Math.floor(value/9.09)]
-    setSliderValues(arr)
-    setSeqeunceKeys(seqArr)
+    setSeqeunceKeys(arr)
   }
 
   const handleSequenceLength = (value, index) => {
@@ -210,17 +207,16 @@ const Transport = ({id, name, type, notesToTrigger, getGlobalTime}) => {
               </div>
               <div className='transport-main'>
                 <div className='key-slider'>
-                  {sliderValues.map((value, index) => (
+                  {sequenceKeys.map((value, index) => (
                     <div 
                       key={index+"keys"}
                       className='key-slider-wrapper'
                     >
-                      <KeySlider 
-                        currentHeightValue={value}
-                        currentWidthValue={sequenceOctaves[index]}
-                        index={index}
+                      <KeySelector 
+                        currentKey={value}
+                        chromaKeys={chroma}
                         getParameter={(val) => handleSliderValue(val, index)}
-                        getWidthParameter={(val) => handleOctaves(val, index)}
+                        onLine={index}
                         />
                     </div>
                   ))}
@@ -245,12 +241,13 @@ const Transport = ({id, name, type, notesToTrigger, getGlobalTime}) => {
                 <div className='transport-bottom'>
                   <div className='keys-screen'>
                     {sequenceKeys.map((value, index) => (
-                      <div 
-                        className='chroma-keys'
-                        key={index+"chroma"}
-                        >
-                        {value+sequenceOctaves[index]}
-                      </div>
+                      <React.Fragment key={index+value+"as"}> 
+                        <OctavePicker 
+                          currentKey={sequenceKeys[index]}
+                          currentValue={sequenceOctaves[index]}
+                          getParameter={(octave) => handleOctaves(octave, index)}
+                        />
+                      </React.Fragment>
                     ))}
                   </div>
                   <div className='probabilities'>
