@@ -37,7 +37,11 @@ export const invokeTriggerEvent = (triggerData, tones, nodes) => {
           setTimeout(() => {
             if (triggerData.probabilities[i] > Math.random()) {
               instruments.forEach(instrument => {
-                tones[instrument].tone.triggerAttackRelease(triggerData.notes[i], noteDuration * triggerData.durations[i]);
+                if (instrument.includes("Oscillator")) {
+                  tones[instrument].tone.frequency.rampTo(triggerData.notes[i], noteDuration * triggerData.durations[i])
+                } else {
+                  tones[instrument].tone.triggerAttackRelease(triggerData.notes[i], noteDuration * triggerData.durations[i]);
+                }
               })
             }
           }, i * noteDuration * 1000); 
@@ -46,8 +50,11 @@ export const invokeTriggerEvent = (triggerData, tones, nodes) => {
         for (let i = 0; i < triggerData.notes.length; i++) {
           setTimeout(() => {
             if (triggerData.probabilities[i] > Math.random()) {
-      
-              tones[instruments[0]].tone.triggerAttackRelease(triggerData.notes[i], noteDuration * triggerData.durations[i]);
+              if (instruments[0].includes("Oscillator")) {
+                tones[instruments[0]].tone.frequency.rampTo(triggerData.notes[i], noteDuration * triggerData.durations[i])
+              } else {
+                tones[instruments[0]].tone.triggerAttackRelease(triggerData.notes[i], noteDuration * triggerData.durations[i]);
+              }
             }
           }, i * noteDuration * 1000); 
         }
@@ -538,7 +545,7 @@ export const initialStates = {
     sustain:            {type: "slider",  min: 0,      max: 1,      multiplier: .001 ,  float: true ,  unit: null   },
     detune:             {type: "slider",  min: -1200,  max: 1200,   multiplier:  1   ,  float: false,  unit: "cents"   },
     portamento:         {type: "slider",  min: 0,      max: 1,      multiplier: .001 ,  float: true ,  unit: null   },
-    frequency:          {type: "slider",  min: 20,     max: 8192,   multiplier: 1    ,  float: false,  unit: "Hz"   },
+    frequency:          {type: "slider",  min: 1,     max: 8192,   multiplier: 1    ,  float: false,  unit: "Hz"   },
     phase:              {type: "slider",  min: 0,      max: 360,    multiplier: 1    ,  float: false,  unit: "\u00b0"   },
     modulationFrequency:{type: "slider",  min: .1,     max: 440,    multiplier: .1   ,  float: true ,  unit: "Hz"   },
     pitchDecay:         {type: "slider",  min: 0,      max: 1,      multiplier: .001 ,  float: true ,  unit: null   },

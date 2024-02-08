@@ -70,12 +70,14 @@ const Transport = ({id, name, type, notesToTrigger, getGlobalTime}) => {
   useEffect(() => {
     let arr = [...sequenceLength]
     if (length > arr.length) {
-      for (let i = 0; i < length - arr.length; i++) {
+      for (let i = 0; i < 1 + length - arr.length; i++) {
         arr.push(1)
       }
     } else {
       arr = arr.slice(0, length)
     }
+
+    console.log(arr)
 
     setSeqeunceLength(arr)    
   }, [length])
@@ -260,6 +262,7 @@ const Transport = ({id, name, type, notesToTrigger, getGlobalTime}) => {
                             id={id} 
                             name={"p"} 
                             type={type}
+                            reduced={true}
                             parameterValue={probabilities[index]}
                             param={initialStates["p"]}
                             getParameter={(value) => handleProbabilities(value, index)}
@@ -302,6 +305,7 @@ const Transport = ({id, name, type, notesToTrigger, getGlobalTime}) => {
                           id={id} 
                           name={"d"} 
                           type={type}
+                          reduced={true}
                           parameterValue={durations[index][i] ? durations[index][i] : 1}
                           param={initialStates["d"]}
                           getParameter={(value) => handleDurations(value, index, i)}

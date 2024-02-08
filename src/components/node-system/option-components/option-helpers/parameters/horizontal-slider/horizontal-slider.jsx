@@ -10,6 +10,7 @@ const HorizontalSlider = ({
                             id, 
                             name, 
                             type,
+                            reduced,
                             parameterValue,
                             param,
                             getParameter, 
@@ -27,6 +28,7 @@ const HorizontalSlider = ({
   const centered = false
   const height = 25
   const width = 80
+  const handlerWait = name !== "length" ? 20 : 5
 
   const handleMouseDown = (event) => {
     setIsDragging(true)
@@ -43,7 +45,12 @@ const HorizontalSlider = ({
         newVal = value + Math.floor(((event.clientX - initialX) * unit) / 20)
        
       } else{
-        newVal = value + (event.clientX - initialX) * unit
+        if (name === "length") {
+          newVal = value + Math.floor(((event.clientX - initialX) * unit) / 20)
+
+        } else {
+          newVal = value + (event.clientX - initialX) * unit
+        }
       }
       newVal = clamp(newVal, param.min, param.max)
       if(newVal !== value) {
@@ -56,7 +63,7 @@ const HorizontalSlider = ({
   useEffect(() => {
     const handler = setTimeout(() => {
       getParameter(value, name) 
-    }, 100)
+    }, 20)
     return () => clearTimeout(handler)
   }, [value])
 
@@ -125,7 +132,7 @@ const HorizontalSlider = ({
         style={{
         }}
         > 
-        {param.float ? (value).toFixed(3) : parseInt(value/unit)} {param.unit}
+        {reduced ? (value).toFixed(2) : param.float ? value.toFixed(3) : parseInt(value/unit)} {param.unit}
       </div>
       </div>
     </div>

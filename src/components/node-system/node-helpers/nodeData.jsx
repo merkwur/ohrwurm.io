@@ -283,7 +283,7 @@ const getSize = (name, type, snap) => {
     Effect: {
       AutoFilter: {...single},
       AutoPanner: {...single},
-      AutoWah: {...single},
+      AutoWah: {...double},
       BitCrusher: {...single},
       Chebyshev: {...single},
       Chorus: {...single},
@@ -479,7 +479,6 @@ const getInputs = (name, type) => {
         node: null,
       }, 
       AutoPanner: {
-        baseFrequency: null,
         frequency: null, 
         wet: null, 
         node: null,
@@ -548,7 +547,6 @@ const getInputs = (name, type) => {
       },
       PitchShift: {
         feedback: null, 
-        pitch: null, 
         wet: null,
         node: null,
       },
@@ -564,8 +562,7 @@ const getInputs = (name, type) => {
       Tremolo: {
         depth: null, 
         wet: null,
-        frequency: null,
-        spread: null,  
+        frequency: null, 
         node: null,
       },
       Vibrato: {
