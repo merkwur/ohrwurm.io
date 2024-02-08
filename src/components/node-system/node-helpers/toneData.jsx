@@ -391,7 +391,7 @@ export const getNodeParameters = (name, type) => {
       Chebyshev: {order: 1, wet:1},
       Chorus: {delayTime: .2, depth: 0, feedback: .2, frequency: 440, sperad: 0, wet:1 }, 
       Distortion: {distortoin: 1, wet:1},
-      FeedbackDelay: {delayTime: .2, feedback: .2, wet:1},
+      FeedbackDelay: {delayTime: .25, feedback: .5, wet:1},
       Freeverb:{dampening: .2, roomSize: .5, wet: 1},
       FrequencyShifter: {frequency: 440, wet: 1}, 
       JCReverb: {roomSize: .5, wet: 1},
