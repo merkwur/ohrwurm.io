@@ -333,7 +333,7 @@ export const getNodeParameters = (name, type) => {
   const InstrumentParams = {
       AMSynth: {
         ...commonSynthParams,
-        envelope: {...envelope},
+        harmonicity: 1,
         modulationEnvelope: {...envelope},
         modulation: {...OmniOscillator},
       }, 
@@ -540,12 +540,13 @@ export const getNodeParameters = (name, type) => {
 
 
 export const initialStates = { 
-    attack:             {type: "slider",  min: 0,      max: 1,      multiplier: .001 ,  float: true ,  unit: null   },
-    decay:              {type: "slider",  min: 0,      max: 1,      multiplier: .001 ,  float: true ,  unit: null   },
-    sustain:            {type: "slider",  min: 0,      max: 1,      multiplier: .001 ,  float: true ,  unit: null   },
+    attack:             {type: "knob",  min: 0,        max: 1,      multiplier: .01 ,   float: true ,  unit: null   },
+    decay:              {type: "knob",  min: 0,        max: 1,      multiplier: .01 ,   float: true ,  unit: null   },
+    sustain:            {type: "knob",  min: 0,        max: 1,      multiplier: .01 ,   float: true ,  unit: null   },
+    release:            {type: "knob",  min: 0,        max: Infinity, multiplier: .01,  float: true ,  unit: null   },
     detune:             {type: "slider",  min: -1200,  max: 1200,   multiplier:  1   ,  float: false,  unit: "cents"   },
     portamento:         {type: "slider",  min: 0,      max: 1,      multiplier: .001 ,  float: true ,  unit: null   },
-    frequency:          {type: "slider",  min: 1,     max: 8192,   multiplier: 1    ,  float: false,  unit: "Hz"   },
+    frequency:          {type: "slider",  min: 1,      max: 8192,   multiplier: 1    ,  float: false,  unit: "Hz"   },
     phase:              {type: "slider",  min: 0,      max: 360,    multiplier: 1    ,  float: false,  unit: "\u00b0"   },
     modulationFrequency:{type: "slider",  min: .1,     max: 440,    multiplier: .1   ,  float: true ,  unit: "Hz"   },
     pitchDecay:         {type: "slider",  min: 0,      max: 1,      multiplier: .001 ,  float: true ,  unit: null   },

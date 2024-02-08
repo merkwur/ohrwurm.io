@@ -5,6 +5,7 @@ import './master-param.scss'
 import { LFOStates, initialStates } from '../../../../node-helpers/toneData'
 import Switcheroo from '../switcheroo/switcheroo'
 import StartButton from '../start-button/start-button'
+import Knob from '../knob/knob'
 
 const MasterParam = ({id, 
                       name, 
@@ -13,6 +14,7 @@ const MasterParam = ({id,
                       parent,
                       getOscillatorState, 
                       getParameter,
+                      getWaveType
                       
                     }) => {
 
@@ -26,7 +28,7 @@ const MasterParam = ({id,
           <Switcheroo 
             elements={["sine", "square", "sawtooth", "triangle"]}
             type={type}
-            getWaveType={(whichElement) => handleSelection(whichElement)}
+            getWaveType={getWaveType}
             />
           ) : name === "start" ? (
 
@@ -44,7 +46,17 @@ const MasterParam = ({id,
                   parameterValue={value}
                   param={initialStates[name]}
                   getParameter={getParameter}
-                  />) : null }
+                  /> 
+              ) : initialStates[name] && initialStates[name].type === "knob"  ? (
+                <Knob 
+                  id={id} 
+                  name={name} 
+                  type={type} 
+                  parameterValue={value}
+                  param={initialStates[name]}
+                  getParameter={getParameter}
+                />
+              ) : null }
               
             </>
           ) : parent === "LFO" ? (
@@ -59,8 +71,7 @@ const MasterParam = ({id,
                   getParameter={getParameter}
                   />) : null }
             </>
-          ) : null}
-        
+          ) : null}  
       </div>
     </>
   )
