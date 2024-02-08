@@ -1,9 +1,8 @@
-
 # Browser-Based Digital Audio Workstation (Modulation)
 
 ## Description
 This project is a browser-based Digital Audio Workstation (DAW) that leverages the Tone.js library for audio synthesis and processing. It introduces an intuitive, gesture-based interface for creating, deleting, and connecting audio nodes, streamlining the music production process directly within your web browser.
-
+<img src="../presentation.png" alt="Current looks" style="height: 460px; width:250px;"/>
 ## Features
 - **Gesture-Based Controls:** Create and delete nodes, and establish connections between them using simple gestures (drag and drop) for an intuitive user experience.
 - **Tone.js Integration:** Built on top of the Tone.js library, offering a wide range of audio synthesis and processing capabilities.
@@ -28,10 +27,3 @@ npm run dev
 
 ## Contribution
 Contributions are welcome! If you're interested in enhancing the functionality of this DAW, please fork the repository and submit a pull request with your proposed changes.
-
-
-
-
-
-
-
