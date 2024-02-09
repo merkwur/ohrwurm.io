@@ -1,6 +1,11 @@
 import React, { useState } from 'react'
 import "./source-options.scss"
 import MasterParam from '../option-helpers/parameters/master-param/master-param'
+import StartButton from '../option-helpers/parameters/start-button/start-button'
+import { initialStates } from '../../node-helpers/toneData'
+import HorizontalSlider from '../option-helpers/parameters/horizontal-slider/horizontal-slider'
+import Switcheroo from '../option-helpers/parameters/switcheroo/switcheroo'
+import Oscillator from '../option-helpers/oscillator/oscillator'
 
 
 const SourceOptions = ({
@@ -9,10 +14,9 @@ const SourceOptions = ({
                         type, 
                         parameters, 
                         getOscillatorState,
-                        getParameter
+                        getParameter, getWaveType
                       }) => {
   const [openProperties, setOpenProperties] = useState(false)
-
 
   return (
     <div className='source-options-wrapper'>
@@ -28,22 +32,43 @@ const SourceOptions = ({
         { openProperties ? (
           <div className='parameters'
             >
-            {Object.keys(parameters).map((param, index) => (
-              <div 
-                className='params'
-                key={param + index}
-                > 
-                <MasterParam 
-                  id={id} 
-                  name={param} 
-                  type={type}
-                  parent={name}
-                  getParameter={getParameter}
-                  value={parameters[param]}
-                  getOscillatorState={getOscillatorState}
+            <div>
+              {Object.keys(parameters).map((param, index) => (
+                <React.Fragment key={param+index} >
+                  <Oscillator 
+                    value={parameters[param]}
+                    parameterName={param}
+                    state={initialStates[param]}
+                    type={type}
+                    id={id}
+                    getOscillatorState={getOscillatorState}
+                    getParameter={getParameter}
+                    getWaveType={getWaveType}
+
                   />
-              </div>
-            ))}      
+                </React.Fragment>       
+              ))}      
+            </div>
+            <div className='seperator'>
+
+            </div>
+            <div>
+              {Object.keys(parameters).map((param, index) => (
+                <React.Fragment key={param+index} >
+                  <Oscillator 
+                    value={parameters[param]}
+                    parameterName={param}
+                    state={initialStates[param]}
+                    type={type}
+                    id={id}
+                    getOscillatorState={getOscillatorState}
+                    getParameter={getParameter}
+                    getWaveType={getWaveType}
+
+                  />
+                </React.Fragment>       
+              ))}      
+            </div>
           </div>
         ) : null }
 

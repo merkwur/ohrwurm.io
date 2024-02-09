@@ -32,10 +32,22 @@ const MasterOptions = ({tone, notesToTrigger, getGlobalTime}) => {
           tone.parameters[type] = value
         }
       }
-
     }
   }
 
+
+  const handleWaveTypes = (type, parent) => {
+    
+    if (type) {
+      if (parent === "Source") {
+        tone.parameters.type = type
+        tone.tone.type = type
+      } else {
+        tone.parameters.type = type
+        tone.tone.oscillator.type = type
+      }
+    }
+  } 
 
   return (
     <div 
@@ -49,6 +61,7 @@ const MasterOptions = ({tone, notesToTrigger, getGlobalTime}) => {
           parameters={tone.parameters}
           getOscillatorState={(id) => handleStartOscillator(id)}
           getParameter={(value, type) => handleParameterChange(value, type)}
+          getWaveType={(type, parent) => handleWaveTypes(type, parent)}
           setParameter={null}
         />
       ): tone.name === "Transport" ? (

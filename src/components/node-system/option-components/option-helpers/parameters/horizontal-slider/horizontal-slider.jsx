@@ -12,7 +12,7 @@ const HorizontalSlider = ({
                             type,
                             reduced,
                             parameterValue,
-                            param,
+                            state,
                             getParameter, 
                             isParamCentered
                           }) => {
@@ -24,7 +24,7 @@ const HorizontalSlider = ({
   const [initialY, setInitialY] = useState(0)
   const [achilles, setAchilles] = useState(false)
   const [tortoise, setTortoise] = useState(false)
-  const [unit, setUnit] = useState(param.multiplier)
+  const [unit, setUnit] = useState(state.multiplier)
   const centered = false
   const height = 25
   const width = 80
@@ -52,7 +52,7 @@ const HorizontalSlider = ({
           newVal = value + (event.clientX - initialX) * unit
         }
       }
-      newVal = clamp(newVal, param.min, param.max)
+      newVal = clamp(newVal, state.min, state.max)
       if(newVal !== value) {
         setValue(newVal)
       }
@@ -113,7 +113,7 @@ const HorizontalSlider = ({
       className='frequency-wrapper'
       >
       <div 
-        className='header'
+        className='slider-header'
         style={{
           justifyContent: isParamCentered ? "center" : "left"
         }} 
@@ -132,7 +132,7 @@ const HorizontalSlider = ({
         style={{
         }}
         > 
-        {reduced ? (value).toFixed(2) : param.float ? value.toFixed(3) : parseInt(value/unit)} {param.unit}
+        {parseInt(value/unit)} {state.unit}
       </div>
       </div>
     </div>

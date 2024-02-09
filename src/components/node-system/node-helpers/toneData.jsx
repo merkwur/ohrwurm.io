@@ -312,6 +312,7 @@ export const getNodeParameters = (name, type) => {
   }
 
   const commonSynthParams = {
+    type: "sine",
     frequency: 440, 
     detune: 0, 
     envelope: {...envelope},
@@ -569,7 +570,6 @@ export const initialStates = {
     ratio:              {type: "slider",  min: .1,     max: 20,     multiplier:  .01 ,  float: true ,  unit: null   },
     threshold:          {type: "slider",  min: .1,     max: 20,     multiplier:  .01 ,  float: true ,  unit: null   },
     volume:             {type: "slider",  min: .1,     max: 20,     multiplier:  .01 ,  float: true ,  unit: null   },
-    release:            {type: "slider",  min: .1,     max: 20,     multiplier:  .01 ,  float: true ,  unit: null   },
     Q:                  {type: "slider",  min: .1,     max: 20,     multiplier:  .01 ,  float: true ,  unit: null   },
     low:                {type: "slider",  min: .1,     max: 20,     multiplier:  .01 ,  float: true ,  unit: null   },
     lowFrequency:       {type: "slider",  min: .1,     max: 20,     multiplier:  .01 ,  float: true ,  unit: null   },
@@ -581,7 +581,7 @@ export const initialStates = {
     normalize:          {type: "boolean", min: .1,     max: 20,     multiplier:  .01 ,  float: true ,  unit: null   },
     fade:               {type: "slider",  min: .1,     max: 20,     multiplier:  .01 ,  float: true ,  unit: null   },
     smoothing:          {type: "slider",  min: .1,     max: 20,     multiplier:  .01 ,  float: true ,  unit: null   },
-    type:               {type: "slider",  min: .1,     max: 20,     multiplier:  .01 ,  float: true ,  unit: null   },
+    type:               {type: "select",  value: ["sine", "square", "sawtooth", "triangle"]},
     coneInnerAngle:     {type: "slider",  min: .1,     max: 20,     multiplier:  .01 ,  float: true ,  unit: null   },
     coneOuterAngle:     {type: "slider",  min: .1,     max: 20,     multiplier:  .01 ,  float: true ,  unit: null   },
     coneOuterGain:      {type: "slider",  min: .1,     max: 20,     multiplier:  .01 ,  float: true ,  unit: null   },

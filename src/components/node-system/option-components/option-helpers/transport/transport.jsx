@@ -189,7 +189,7 @@ const Transport = ({id, name, type, notesToTrigger, getGlobalTime}) => {
                   name={"bpm"} 
                   type={type}
                   parameterValue={bpm}
-                  param={initialStates["bpm"]}
+                  state={initialStates["bpm"]}
                   getParameter={(value) => handleBPMValue(value)}
                   />
                 <HorizontalSlider 
@@ -197,7 +197,7 @@ const Transport = ({id, name, type, notesToTrigger, getGlobalTime}) => {
                   name={"length"} 
                   type={type}
                   parameterValue={length}
-                  param={initialStates["length"]}
+                  state={initialStates["length"]}
                   getParameter={(value) => handleLength(value)}
                   />
                 <div 
@@ -264,7 +264,7 @@ const Transport = ({id, name, type, notesToTrigger, getGlobalTime}) => {
                             type={type}
                             reduced={true}
                             parameterValue={probabilities[index]}
-                            param={initialStates["p"]}
+                            state={initialStates["p"]}
                             getParameter={(value) => handleProbabilities(value, index)}
                             isParamCentered={true}
                           />
@@ -307,7 +307,7 @@ const Transport = ({id, name, type, notesToTrigger, getGlobalTime}) => {
                           type={type}
                           reduced={true}
                           parameterValue={durations[index][i] ? durations[index][i] : 1}
-                          param={initialStates["d"]}
+                          state={initialStates["d"]}
                           getParameter={(value) => handleDurations(value, index, i)}
                           isParamCentered={true}
                         />
