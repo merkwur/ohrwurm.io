@@ -387,7 +387,8 @@ const getInputs = (name, type) => {
     Source: {
       AMOscillator: {
         harmonicity: null,
-        ...commonOscillatorParams
+        ...commonOscillatorParams, 
+        "modulator_detune": null
       }, 
       Oscillator: {
         ...commonOscillatorParams
@@ -395,7 +396,8 @@ const getInputs = (name, type) => {
       FMOscillator: {
         ...commonOscillatorParams,
         harmonicity: null, 
-        modulationIndex: null
+        modulationIndex: null,
+        "modulator_detune": null
       }, 
       FatOscillator: {
         ...commonOscillatorParams, 
@@ -409,6 +411,7 @@ const getInputs = (name, type) => {
       PWMOscillator: {
         ...commonOscillatorParams, 
         modulationFrquency: null,
+        "modulator_detune": null
       }, 
       PulseOscillator: {
         ...commonOscillatorParams, 

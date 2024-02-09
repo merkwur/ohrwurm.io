@@ -14,11 +14,13 @@ export const addToneObject = (id, name, type, tones) => {
     name, 
     type,
     tone: getToneObject(name),
-    parameters: getNodeParameters(name, type)
+    parameters: getNodeParameters(name, type),
   }  
 
   return {...tones, [id]: newToneObject}
 }
+
+
 
 export const invokeTriggerEvent = (triggerData, tones, nodes) => {
   if (!triggerData.instruments || triggerData.instruments.length <= 0) {
@@ -66,6 +68,7 @@ export const invokeTriggerEvent = (triggerData, tones, nodes) => {
 export const connectToneObjects = (from, to, which, nodes) => {
   if (from.includes("Transport")) return
 
+  
   if (which === "node") {
     if (nodes[to].name !== "Destination") {
       nodes[from].tone.connect(nodes[to].tone)
@@ -75,7 +78,11 @@ export const connectToneObjects = (from, to, which, nodes) => {
   } else if (which === "trigger") {
     
   } else {
-    nodes[from].tone.connect(nodes[to].tone[which])
+    if (which.includes("modulator")) {
+      nodes[from].tone.connect(nodes[to].tone._modulator[which.split("_")[1]])
+    } else {
+      nodes[from].tone.connect(nodes[to].tone[which])
+    }
   }
 }
 
@@ -238,6 +245,7 @@ export const getNodeParameters = (name, type) => {
     
   }
 
+  const {frequency, ...commonModulatorParams} = commonOscParams
 
   const nodeParams = {
 
@@ -257,11 +265,19 @@ export const getNodeParameters = (name, type) => {
         count: 1
       },
       PWMOscillator: {
-        ...commonOscParams, 
+        start: false,
+        detune: 0,
+        frequency: 440, 
+        phase: 0, 
         modulationFrequency: 220, 
+        modulator: {detune: 0, phase: 0, partialCount: 0}
       },
       PulseOscillator: {
-        ...commonOscParams, 
+        start: false,
+        
+        detune: 0,
+        frequency: 440,
+        phase: 0,
         width: 0
       },
       Noise: {
@@ -271,12 +287,14 @@ export const getNodeParameters = (name, type) => {
         ...commonOscParams,
         harmonicity: 1,
         modulationType: "square", 
+        modulator: {...commonModulatorParams}
       },
       FMOscillator: {
         ...commonOscParams, 
         harmonicity: 1,
         modulationIndex: 1,
-        modulationType: "sine"
+        modulationType: "sine",
+        modulator: {...commonModulatorParams}
       }, 
 
       LFO: {
@@ -612,3 +630,4 @@ export const LFOStates = {
                   amplitude:          {type: "slider",   min: .001,      max: 1,      multiplier: .001    , float: true   },
                   
 }
+

@@ -13,6 +13,7 @@ const HorizontalSlider = ({
                             reduced,
                             parameterValue,
                             state,
+                            whichOscillator,
                             getParameter, 
                             isParamCentered
                           }) => {
@@ -21,19 +22,16 @@ const HorizontalSlider = ({
   const [isDragging, setIsDragging] = useState(false)
   const [value, setValue] = useState(parameterValue)
   const [initialX, setInitialX] = useState(0)
-  const [initialY, setInitialY] = useState(0)
   const [achilles, setAchilles] = useState(false)
   const [tortoise, setTortoise] = useState(false)
-  const [unit, setUnit] = useState(state.multiplier)
-  const centered = false
-  const height = 25
-  const width = 80
-  const handlerWait = name !== "length" ? 20 : 5
+  const unit = state.multiplier
 
   const handleMouseDown = (event) => {
     setIsDragging(true)
     setInitialX(event.clientX)  
   }
+
+  
 
   const handleMouseMove = (event) => {
     if (isDragging && event.clientX > 0) {
@@ -62,7 +60,7 @@ const HorizontalSlider = ({
 
   useEffect(() => {
     const handler = setTimeout(() => {
-      getParameter(value, name) 
+      getParameter(value, name, whichOscillator) 
     }, 20)
     return () => clearTimeout(handler)
   }, [value])
@@ -132,7 +130,7 @@ const HorizontalSlider = ({
         style={{
         }}
         > 
-        {parseInt(value/unit)} {state.unit}
+        {state.float ? value.toFixed(2) : parseInt(value/unit)} {state.unit}
       </div>
       </div>
     </div>

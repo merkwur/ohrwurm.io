@@ -7,6 +7,7 @@ const Oscillator = ({ value,
                       parameterName,
                       state,
                       type,
+                      whichOscillator,
                       id, 
                       getOscillatorState, 
                       getParameter, 
@@ -17,10 +18,11 @@ const Oscillator = ({ value,
       <div 
         className='params'
         > 
-        {parameterName === "start" ? (
+        {parameterName === "start" && whichOscillator === "main" ? (
           <StartButton 
             value={value}
             getOscillatorState={getOscillatorState}
+            whichOscillator={whichOscillator}
           /> 
         ) 
         : state && state.type === "slider" ? (
@@ -31,6 +33,7 @@ const Oscillator = ({ value,
             parameterValue={value}
             state={state}
             getParameter={getParameter}
+            whichOscillator={whichOscillator}
           /> 
         )  
         : parameterName === "type" ? (
@@ -39,6 +42,7 @@ const Oscillator = ({ value,
             value={value}
             parentType={type}
             getWaveType={getWaveType}
+            whichOscillator={whichOscillator}
           />
         ) : null }
       </div>

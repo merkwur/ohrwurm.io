@@ -18,30 +18,51 @@ const MasterOptions = ({tone, notesToTrigger, getGlobalTime}) => {
     }
   }
 
-  const handleParameterChange = (value, type) => {
+  const handleParameterChange = (value, type, which) => {
     if (type) {
       if (type === "detune" || type === " width") {
-        tone.parameters[type] = value
-        tone.tone[type].set({value: value})
+        if (which === "main") {
+          tone.parameters[type] = value
+          tone.tone[type].set({value: value})
+        } else {
+          tone.parameters.modulator[type] = value
+          tone.tone._modulator[type].set({value: value})
+        }
       } else {
         if (typeof tone.tone[type] === "object") {
-          tone.tone[type].value = value
-          tone.parameters[type] = value
+          if (which === "main") {
+            tone.tone[type].value = value
+            tone.parameters[type] = value
+          } else {
+            console.log(tone.tone._modulator)
+            tone.tone._modulator[type].value = value
+            tone.parameters.modulator[type] = value
+          }
         } else {
-          tone.tone[type] = value
-          tone.parameters[type] = value
+          if (which === "main") {
+            tone.tone[type] = value
+            tone.parameters[type] = value 
+          } else {
+            tone.tone._modulator[type] = value
+            tone.parameters.modulator[type] = value
+          }
+
         }
       }
     }
   }
 
 
-  const handleWaveTypes = (type, parent) => {
+  const handleWaveTypes = (type, parent, which) => {
     
     if (type) {
       if (parent === "Source") {
-        tone.parameters.type = type
-        tone.tone.type = type
+        if (which === "main"){
+          tone.parameters.type = type
+          tone.tone.type = type
+        } else {
+          tone.tone.modulationType = type
+        }
       } else {
         tone.parameters.type = type
         tone.tone.oscillator.type = type
@@ -58,10 +79,11 @@ const MasterOptions = ({tone, notesToTrigger, getGlobalTime}) => {
           id={tone.id}
           name={tone.name}
           type={tone.type}
+          size={tone.size}
           parameters={tone.parameters}
           getOscillatorState={(id) => handleStartOscillator(id)}
-          getParameter={(value, type) => handleParameterChange(value, type)}
-          getWaveType={(type, parent) => handleWaveTypes(type, parent)}
+          getParameter={(value, type, which) => handleParameterChange(value, type, which)}
+          getWaveType={(type, parent, which) => handleWaveTypes(type, parent, which)}
           setParameter={null}
         />
       ): tone.name === "Transport" ? (
