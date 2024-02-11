@@ -1,6 +1,16 @@
   .start-button{
-    width: 20px;
-    height: 10px;
+    position: relative;
+    width: 8px;
+    height: 8px;
     background-color: #77777777;
     border-radius: 5px;
+    margin-bottom: .55rem;
+
+    .button-text{
+      font-size: 7pt;
+      font-weight: 600;
+      position: absolute;
+      left: 1rem;
+      top: -.05rem;
+    }
   }

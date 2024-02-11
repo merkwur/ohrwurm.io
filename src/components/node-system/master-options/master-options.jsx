@@ -74,7 +74,7 @@ const MasterOptions = ({tone, notesToTrigger, getGlobalTime}) => {
     <div 
       className='master-options-wrapper'
     > 
-      {tone.name !== "Destination" && tone.name !== "Transport" && tone.type !== "Signal"? (
+      {tone.type === "Source" ? (
         <SourceOptions 
           id={tone.id}
           name={tone.name}
@@ -84,9 +84,10 @@ const MasterOptions = ({tone, notesToTrigger, getGlobalTime}) => {
           getOscillatorState={(id) => handleStartOscillator(id)}
           getParameter={(value, type, which) => handleParameterChange(value, type, which)}
           getWaveType={(type, parent, which) => handleWaveTypes(type, parent, which)}
-          setParameter={null}
         />
-      ): tone.name === "Transport" ? (
+      ): tone.type === "Instrument" ? (
+        <></>
+      ) : tone.name === "Transport" ? (
         <Transport 
           id={tone.id} 
           name={tone.name} 

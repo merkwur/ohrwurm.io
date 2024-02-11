@@ -32,27 +32,20 @@ console.log(oneSide)
       <>
         { openProperties ? (
           <div className='parameters'
-              style={{flexDirection: oneSide ? "column" : "row", borderRight: `2px solid ${colorScheme[type]}`}}
+              style={{flexDirection: oneSide ? "column" : "row", borderRight: `1px solid ${colorScheme[type]}`}}
             >
               {name.includes("Oscillator") ? (
                 <React.Fragment>
                   <div>
-                    {Object.keys(parameters).map((param, index) => (
-                      <React.Fragment key={param+index} >
-                        <Oscillator 
-                          whichOscillator={"main"}
-                          value={parameters[param]}
-                          parameterName={param}
-                          state={initialStates[param]}
-                          type={type}
-                          id={id}
-                          getOscillatorState={getOscillatorState}
-                          getParameter={getParameter}
-                          getWaveType={getWaveType}
-
-                        />
-                      </React.Fragment>       
-                    ))}      
+                    <Oscillator 
+                      whichOscillator={"main"}
+                      parameters={parameters}
+                      type={type}
+                      id={id}
+                      getOscillatorState={getOscillatorState}
+                      getParameter={getParameter}
+                      getWaveType={getWaveType}
+                    />
                   </div>
                   {parameters.hasOwnProperty("modulator") ? (
                     <div className='oscillator-addition'
@@ -66,22 +59,17 @@ console.log(oneSide)
                         </div>
                       </div>
                       <div>
-                        {Object.keys(parameters.modulator).map((param, index) => (
-                          <React.Fragment key={param+index} >
-                            <Oscillator
-                              whichOscillator={"modulator"} 
-                              value={parameters.modulator[param]}
-                              parameterName={param}
-                              state={initialStates[param]}
-                              type={type}
-                              id={id}
-                              getOscillatorState={getOscillatorState}
-                              getParameter={getParameter}
-                              getWaveType={getWaveType}
-
-                            />
-                          </React.Fragment>       
-                        ))}      
+      
+                        <Oscillator
+                          whichOscillator={"modulator"} 
+                          parameters={parameters.modulator}
+                          type={type}
+                          id={id}
+                          getOscillatorState={getOscillatorState}
+                          getParameter={getParameter}
+                          getWaveType={getWaveType}
+                        />
+                             
                       </div>
                     </div>              
                   ) : null}

@@ -2,10 +2,10 @@ import React from 'react'
 import StartButton from '../parameters/start-button/start-button'
 import HorizontalSlider from '../parameters/horizontal-slider/horizontal-slider'
 import Switcheroo from '../parameters/switcheroo/switcheroo'
+import { initialStates } from '../../../node-helpers/toneData'
 
-const Oscillator = ({ value, 
-                      parameterName,
-                      state,
+const Oscillator = ({  
+                      parameters,
                       type,
                       whichOscillator,
                       id, 
@@ -18,33 +18,38 @@ const Oscillator = ({ value,
       <div 
         className='params'
         > 
-        {parameterName === "start" && whichOscillator === "main" ? (
-          <StartButton 
-            value={value}
-            getOscillatorState={getOscillatorState}
-            whichOscillator={whichOscillator}
-          /> 
-        ) 
-        : state && state.type === "slider" ? (
-          <HorizontalSlider 
-            id={id}
-            name={parameterName}
-            type={type}
-            parameterValue={value}
-            state={state}
-            getParameter={getParameter}
-            whichOscillator={whichOscillator}
-          /> 
-        )  
-        : parameterName === "type" ? (
-          <Switcheroo 
-            elements={state.value}          
-            value={value}
-            parentType={type}
-            getWaveType={getWaveType}
-            whichOscillator={whichOscillator}
-          />
-        ) : null }
+        {Object.keys(parameters).map((parameter, index) => (
+          <React.Fragment key={parameter+index}>
+
+            {parameter === "start" && whichOscillator === "main" ? (
+              <StartButton 
+                value={parameters[parameter]}
+                getOscillatorState={getOscillatorState}
+                whichOscillator={whichOscillator}
+              /> 
+            ) 
+            : initialStates[parameter] && initialStates[parameter].type === "slider" ? (
+              <HorizontalSlider 
+                id={id}
+                name={parameter}
+                type={type}
+                parameterValue={parameters[parameter]}
+                state={initialStates[parameter]}
+                getParameter={getParameter}
+                whichOscillator={whichOscillator}
+              /> 
+            )  
+            : parameter === "type" ? (
+              <Switcheroo 
+                elements={initialStates[parameter].value}          
+                value={parameters[parameter]}
+                parentType={type}
+                getWaveType={getWaveType}
+                whichOscillator={whichOscillator}
+              />
+            ) : null }
+          </React.Fragment>
+        ))}
       </div>
     </div>
   )

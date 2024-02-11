@@ -9,6 +9,8 @@
   .left-stander{
     border-right: 1px solid #77777777;
     padding-top: 2rem;
+    font-weight: 500;
+    font-size: 12pt;
 
     .header{
       writing-mode: vertical-rl;
@@ -18,9 +20,9 @@
   .parameters{
     display: flex;
     font-size: 8pt;
-    padding-left: 1rem;
+    padding-left: .75rem;
     padding-right: 1rem;
-    padding-top: .5rem;
+    padding-top: .15rem;
 
     .separator {
       height: 100%;

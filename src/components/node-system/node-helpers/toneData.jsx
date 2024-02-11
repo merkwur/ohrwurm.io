@@ -101,6 +101,7 @@ export const disconnectToneNode = (from, to, which, nodes) => {
   } else if (which === "trigger"){
 
   } else {
+    console.log("shoot")
     nodes[from].tone.disconnect(nodes[to].tone[which])
   }
 }
