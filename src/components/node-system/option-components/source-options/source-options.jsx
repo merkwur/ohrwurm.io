@@ -18,7 +18,7 @@ const SourceOptions = ({
   const [openProperties, setOpenProperties] = useState(false)
   const oneSide = parameters.modulator ? Object.keys(parameters).length + Object.keys(parameters.modulator).length - 1 <= 8 : false
 
-console.log(oneSide)
+
   return (
     <div className='source-options-wrapper'>
       <div 

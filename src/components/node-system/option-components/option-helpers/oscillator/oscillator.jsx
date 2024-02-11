@@ -3,6 +3,8 @@ import StartButton from '../parameters/start-button/start-button'
 import HorizontalSlider from '../parameters/horizontal-slider/horizontal-slider'
 import Switcheroo from '../parameters/switcheroo/switcheroo'
 import { initialStates } from '../../../node-helpers/toneData'
+import "./oscillator.scss"
+
 
 const Oscillator = ({  
                       parameters,

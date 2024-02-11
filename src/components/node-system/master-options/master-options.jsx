@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react'
 import SourceOptions from '../option-components/source-options/source-options'
 import './master-options.scss'
 import Transport from '../option-components/option-helpers/transport/transport'
+import InstrumentOptions from '../option-components/option-helpers/instrument-options/instrument-options'
+
 
 
 
@@ -18,8 +20,8 @@ const MasterOptions = ({tone, notesToTrigger, getGlobalTime}) => {
     }
   }
 
-  const handleParameterChange = (value, type, which) => {
-    if (type) {
+  const handleParameterChange = (value, type, which, parent) => {
+    if (type) { 
       if (type === "detune" || type === " width") {
         if (which === "main") {
           tone.parameters[type] = value
@@ -34,7 +36,7 @@ const MasterOptions = ({tone, notesToTrigger, getGlobalTime}) => {
             tone.tone[type].value = value
             tone.parameters[type] = value
           } else {
-            console.log(tone.tone._modulator)
+            
             tone.tone._modulator[type].value = value
             tone.parameters.modulator[type] = value
           }
@@ -53,8 +55,28 @@ const MasterOptions = ({tone, notesToTrigger, getGlobalTime}) => {
   }
 
 
-  const handleWaveTypes = (type, parent, which) => {
-    
+  const handleInstrumentParameters = (value, type, which, parent, oscTyp) => {
+
+    if(type) {
+      if (type === "detune" || type === " width") {
+        tone.parameters.oscillator[oscTyp][type] = value
+        
+        tone.tone.oscillator[type].set({value: value})
+      } else {
+        if (typeof tone.tone[type] === "object") {
+          tone.tone.oscillator[type].value = value
+          tone.parameters.oscillator[oscTyp][type] = value 
+        } else {
+          tone.tone.oscillator[type] = value
+          tone.parameters.oscillator[oscTyp][type] = value 
+        }
+      }
+    }
+  }
+  
+
+  const handleWaveTypes = (type, parent, which, oscTyp) => {
+
     if (type) {
       if (parent === "Source") {
         if (which === "main"){
@@ -64,11 +86,21 @@ const MasterOptions = ({tone, notesToTrigger, getGlobalTime}) => {
           tone.tone.modulationType = type
         }
       } else {
-        tone.parameters.type = type
+        tone.parameters.oscillator[oscTyp].type = type
         tone.tone.oscillator.type = type
+        console.log("from tone obj", tone.parameters.oscillator[oscTyp].type)
       }
     }
   } 
+
+  const handleOscillatorTypes = (type, parent, which) => {
+    if (type){
+      if (which === "main") {      
+        tone.tone.oscillator.sourceType = type
+        tone.oscillatorType = type
+      }
+    }
+  }
 
   return (
     <div 
@@ -86,7 +118,17 @@ const MasterOptions = ({tone, notesToTrigger, getGlobalTime}) => {
           getWaveType={(type, parent, which) => handleWaveTypes(type, parent, which)}
         />
       ): tone.type === "Instrument" ? (
-        <></>
+        <InstrumentOptions 
+          id={tone.id}
+          type={tone.type}
+          size={tone.size}
+          name={tone.name}
+          oscillatorType={tone.parameters.oscillatorType}
+          parameters={tone.parameters}
+          getParameter={(value, type, which, parent, oscTyp) => handleInstrumentParameters(value, type, which, parent, oscTyp)}
+          getWaveType={(type, parent, which, oscTyp) => handleWaveTypes(type, parent, which, oscTyp)}
+          getOscillatorType={(type, parent, which) => handleOscillatorTypes(type, parent, which)}
+        />
       ) : tone.name === "Transport" ? (
         <Transport 
           id={tone.id} 

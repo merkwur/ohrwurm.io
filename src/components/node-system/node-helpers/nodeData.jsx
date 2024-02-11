@@ -279,6 +279,7 @@ const getSize = (name, type, snap) => {
       NoiseSynth: {...double},
       PluckSynth: {...double},
       PolySynth: {...double},
+      Synth: {...single}
     },
     Effect: {
       AutoFilter: {...single},

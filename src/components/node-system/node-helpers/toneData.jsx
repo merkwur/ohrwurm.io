@@ -230,7 +230,6 @@ export const getToneObject = ( nodeName ) => {
 }
 
 export const getNodeParameters = (name, type) => {
-  console.log(name)
   if (name === "Destiantion") {
     return null
   }
@@ -355,26 +354,34 @@ export const getNodeParameters = (name, type) => {
         ...commonSynthParams,
         harmonicity: 1,
         modulationEnvelope: {...envelope},
-        modulation: {...OmniOscillator},
+        modulator: {...OmniOscillator},
+        carrierOscillatorType: "osc",
+        modulatorOscillatorType: "osc"
       }, 
       Synth: {
-        ...commonSynthParams
+        ...commonSynthParams,
+        oscillatorType: "osc"
       }, 
       DuoSynth: {
         voice0: {...monoSynthParams},
-        voice1: {...monoSynthParams}
+        voice1: {...monoSynthParams},
+        oscillatorType0: "osc",
+        oscillatorType1: "osc"
       }, 
       FMSynth: {
         ...commonSynthParams, 
         modulationIndex: 1, 
         envelope: {...envelope},
         modulationEnvelope: {...envelope},  
-        modulation: {...commonOscParams}
+        modulator: {...commonOscParams}, 
+        carrierOscillatorType: "osc",
+        modulatorOscillatorType: "osc"
       }, 
       MembraneSynth: {
         ...commonSynthParams, 
         octaves: 1, 
         pitchDecay: 0, 
+
       }, 
       MetalSynth:{
         ...commonSynthParams, 
@@ -383,7 +390,9 @@ export const getNodeParameters = (name, type) => {
         harmonicity: 1, 
       },
       MonoSynth: {
-        ...monoSynthParams
+        ...monoSynthParams,
+        oscillatorType: "osc"
+
       }, 
       NoiseSynth: {
         noise: "brown",
@@ -398,7 +407,8 @@ export const getNodeParameters = (name, type) => {
       }, 
       PolySynth: {
         maxPolyphony: 1, 
-        volume: 0
+        volume: 0, 
+        oscillatorType: "osc"
       }, 
      
     }
