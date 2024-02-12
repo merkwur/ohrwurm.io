@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import "./node-configuration-hub.scss"
 import SourceOptions from '../option-components/source-options/source-options'
 import Transport from '../option-components/transport/transport'
+import InstrumentOptions from '../option-components/instrument-options/instrument-options'
 
 const NodeConfigurationHub = ({tone, notesToTrigger, getGlobalTime}) => {
 
@@ -19,12 +20,14 @@ const NodeConfigurationHub = ({tone, notesToTrigger, getGlobalTime}) => {
                 <></>
               ) : tone[toneObj].name === "Transport" ? (
                 <Transport 
-                  id={toneObj.id} 
-                  name={toneObj.name} 
-                  type={toneObj.type}
+                  id={tone[toneObj].id} 
+                  name={tone[toneObj].name} 
+                  type={tone[toneObj].type}
                   notesToTrigger={notesToTrigger}
                   getGlobalTime={getGlobalTime}
                   />
+              ) : tone[toneObj].type === "Instrument" ? (
+                <InstrumentOptions toneObj={tone[toneObj]}/> 
               ) : null}
           </React.Fragment>
         ))}

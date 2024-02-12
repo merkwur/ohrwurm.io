@@ -41,7 +41,8 @@ const Switch = ({
         marginTop: whichOscillator !== "main" ? ".75rem" : "",
         flexDirection: orientation === "vertical" ? "column" : "row",
         justifyContent: "space-around",
-        width: orientation === "horizontal" ? "100%" : "20px"
+        width: orientation === "horizontal" ? "100%" : "20px",
+        height: orientation === "horizontal" ? "20px" : "100$"
       }}
     
     > 

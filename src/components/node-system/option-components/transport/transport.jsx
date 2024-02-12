@@ -6,6 +6,7 @@ import { Scale } from 'tonal'
 import LengthAdjust from './transport-helpers/length-adjust'
 import KeySelector from './transport-helpers/key-selector'
 import OctavePicker from './transport-helpers/octave-picker'
+import { colorScheme } from '../../node-helpers/helperFunctions'
 
 
 // There should be better way to manage all the states
@@ -34,6 +35,8 @@ const Transport = ({id, name, type, notesToTrigger, getGlobalTime}) => {
   const handleBPMValue = (value) => {
     setBpm(value)
   }
+
+  
 
   const handleClock = () => {
     if(!isClockRunning) {
@@ -164,6 +167,7 @@ const Transport = ({id, name, type, notesToTrigger, getGlobalTime}) => {
       <>
         { openProperties ? (
           <div className='parameters'
+               style={{borderRight: `1px solid ${colorScheme["Core"]}`}}
             >
             <div className='parameter-params'>
               <div className='transport-top'>

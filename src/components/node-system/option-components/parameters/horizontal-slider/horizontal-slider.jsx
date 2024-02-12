@@ -9,6 +9,7 @@ import { initialStates } from '../../../node-helpers/toneData'
 const HorizontalSlider = ({
                             name, 
                             type,
+                            abbreviate,
                             parameterValue,
                             state,
                             whichOscillator,
@@ -108,6 +109,9 @@ const HorizontalSlider = ({
   return (
     <div 
       className='frequency-wrapper'
+      style={{width: abbreviate ? "30px" : "", 
+              flexDirection: abbreviate ? "row" : ""
+            }}
       >
       <div 
         className='slider-header'
@@ -115,7 +119,7 @@ const HorizontalSlider = ({
           justifyContent: isParamCentered ? "center" : "left"
         }} 
         >
-          {`< ${name} >`}
+          {`< ${abbreviate ? name.slice(0,1) : name} >`}
       </div>
       <div 
         className='frequency-slider'

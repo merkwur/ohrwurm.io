@@ -1,0 +1,16 @@
+.omni-oscillator-wrapper{
+  display: flex;
+  height: 100%;
+
+  .osc-left-panel{
+    padding-left: .5rem;
+    padding-right: .5rem;
+  }
+
+  .osc-right-panel{
+    border-top: 1px dotted #77777777;
+    margin-top: .5rem;
+    padding-top: .25rem;
+    width: 100%;
+  }
+}

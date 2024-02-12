@@ -1,0 +1,46 @@
+.instrument-options-wrapper{
+  height: 100%;
+  background-color: #17171777;
+  color: bisque;
+  display: flex;
+  flex-direction: row;
+
+  .left-stander{
+    border-right: 1px solid #77777777;
+    padding-top: 2rem;
+    font-weight: 500;
+    font-size: 12pt;
+
+    .header{
+      writing-mode: vertical-rl;
+    }
+  }
+
+  .parameters{
+    width: 160px;
+    overflow-y: scroll;
+
+    .omni-oscillators{
+
+      .carrier-oscillator{
+
+      }
+      .modulator-parameters{
+        display: flex;
+        flex-direction: row;
+  
+        .separator{
+          font-size: 7pt;
+          font-weight: 200;
+          writing-mode: vertical-lr;
+          margin-left: .75rem;
+          border-left: 1px solid #77777777;
+          
+        }
+        .modulator-oscillator{
+        }
+      }
+    }
+
+  }
+}

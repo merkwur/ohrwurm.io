@@ -4,13 +4,15 @@
   color: bisque;
   display: flex;
   flex-direction: row;
-  width: 100%;
+  
   
   .left-stander{
     border-right: 1px solid #77777777;
     padding-top: 2rem;
+    width: 30px;
 
     .header{
+      width: 100%;
       writing-mode: vertical-rl;
     }
   }

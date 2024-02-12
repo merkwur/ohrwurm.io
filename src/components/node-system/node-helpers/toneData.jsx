@@ -303,8 +303,6 @@ export const getNodeParameters = (name, type) => {
         max: 1,
         amplitude: 1,
         type: "sine"
-        
-
       },      
     }, 
   }
@@ -570,10 +568,10 @@ export const getNodeParameters = (name, type) => {
 
 
 export const initialStates = { 
-    attack:             {type: "knob",  min: 0,        max: 1,      multiplier: .01 ,   float: true ,  unit: null   },
-    decay:              {type: "knob",  min: 0,        max: 1,      multiplier: .01 ,   float: true ,  unit: null   },
-    sustain:            {type: "knob",  min: 0,        max: 1,      multiplier: .01 ,   float: true ,  unit: null   },
-    release:            {type: "knob",  min: 0,        max: Infinity, multiplier: .01,  float: true ,  unit: null   },
+    attack:             {type: "slider",  min: 0,        max: 1,      multiplier: .01 ,   float: true ,  unit: null   },
+    decay:              {type: "slider",  min: 0,        max: 1,      multiplier: .01 ,   float: true ,  unit: null   },
+    sustain:            {type: "slider",  min: 0,        max: 1,      multiplier: .01 ,   float: true ,  unit: null   },
+    release:            {type: "slider",  min: 0,        max: Infinity, multiplier: .01,  float: true ,  unit: null   },
     detune:             {type: "slider",  min: -1200,  max: 1200,   multiplier:  1   ,  float: false,  unit: "cents"   },
     portamento:         {type: "slider",  min: 0,      max: 1,      multiplier: .001 ,  float: true ,  unit: null   },
     frequency:          {type: "slider",  min: 1,      max: 8192,   multiplier: 1    ,  float: false,  unit: "Hz"   },
