@@ -18,9 +18,7 @@ const StartButton = ({value, getOscillatorState}) => {
           backgroundColor: state ? "bisque" : "#272727", 
           boxShadow: `0 0 2px 2px ${state ? "bisque" : ""}`
         }}
-      > <div className='button-text'>
-        {state ? "stop" : "start"}
-      </div>
+      > 
     </div>
   )
 }

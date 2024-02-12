@@ -6,7 +6,7 @@ import StartButton from '../../parameters/start-button/start-button'
 import HorizontalSlider from '../../parameters/horizontal-slider/horizontal-slider'
 
 
-const Oscillator = ({parameters, getOscillatorState, getParameter}) => {
+const Oscillator = ({parameters, getOscillatorState, getParameter, getWaveType}) => {
   return (
     <div className='hub-oscillator-wrapper'>
       <div className='osc-left-panel'>
@@ -22,6 +22,7 @@ const Oscillator = ({parameters, getOscillatorState, getParameter}) => {
               value={parameters.type}
               parentType={"Source"}
               whichOscillator={"carrier"}
+              getWaveType={getWaveType}
               orientation={"vertical"}
             /> 
         ): null} 

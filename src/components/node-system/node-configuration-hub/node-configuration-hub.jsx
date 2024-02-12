@@ -5,6 +5,7 @@ import Transport from '../option-components/transport/transport'
 
 const NodeConfigurationHub = ({tone, notesToTrigger, getGlobalTime}) => {
 
+
   return (
     <div className='node-config-hub-container'>
       <div className='node-config-hub'> 
@@ -12,12 +13,7 @@ const NodeConfigurationHub = ({tone, notesToTrigger, getGlobalTime}) => {
           <React.Fragment key={toneObj}>
               {tone[toneObj].type === "Source" ? (
                 <SourceOptions 
-                  name={tone[toneObj].name}
-                  type={tone[toneObj].type}
-                  parameters={tone[toneObj].parameters}
-                  getOscillatorState={(id) => handleStartOscillator(id)}
-                  getParameter={(value, type, which) => handleParameterChange(value, type, which)}
-                  getWaveType={(type, parent, which) => handleWaveTypes(type, parent, which)}
+                  toneObj={tone[toneObj]}
                 />
               ): toneObj.type === "Instrument" ? (
                 <></>

@@ -152,7 +152,6 @@ export const deleteLine = (id, lines, nodes) => {
   updatedNodes[line.to  ].connection = updatedNodes[line.to  ].connection.filter(c => c !== id)
   
   if (line.which === "node")  {
-    console.log(updatedNodes[line.to].input.node, id)
     updatedNodes[line.to].input.node = updatedNodes[line.to].input.node.filter(i => i !== line.from)
   } else {
     updatedNodes[line.to].input[line.which] = null

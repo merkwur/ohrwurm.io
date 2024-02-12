@@ -140,7 +140,6 @@ const MasterNode =  ({node,
 
   useEffect(() => {
     if (isConnectionValid) {
-      console.log(line)
       addLine(line, reversed)
       setIsConnectionValid(false)
 

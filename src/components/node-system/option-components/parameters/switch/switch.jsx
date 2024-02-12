@@ -17,7 +17,6 @@ const Switch = ({
   const switchesRefs = useRef([]);
   const [currentIdx, setCurrentIdx] = useState(null)
   
-  useEffect(() => {console.log(value)} , [value])
 
   const handleMouseEnter = (index) => {
     switchesRefs.current[index].classList.toggle('active');
@@ -27,10 +26,10 @@ const Switch = ({
     switchesRefs.current[index].classList.remove('active');
   };
 
-  const handleWaveSelection = (wave, type, index) => {
+  const handleWaveSelection = (wave, index) => {
     setCurrentIdx(index)
     setWaveType(wave)
-    getWaveType(wave, type, whichOscillator)
+    getWaveType(wave, whichOscillator)
   }
 
   return (
@@ -40,7 +39,7 @@ const Switch = ({
         marginTop: whichOscillator !== "main" ? ".75rem" : "",
         flexDirection: orientation === "vertical" ? "column" : "row",
         justifyContent: "space-around",
-        width: orientation === "horizontal" ? "100%" : "fit-content"
+        width: orientation === "horizontal" ? "100%" : "20px"
       }}
     
     > 
@@ -52,11 +51,11 @@ const Switch = ({
           ref={(el) => (switchesRefs.current[index] = el)}
           onMouseEnter={() => handleMouseEnter(index)}
           onMouseLeave={() => handleMouseLeave(index)}
-          onClick={() => handleWaveSelection(item, parentType, index, oscTyp)}
+          onClick={() => handleWaveSelection(item, parentType, index)}
           style={{
             width: orientation === "horizontal" ? `${100 / elems.length}` : ``,
             height: orientation === "horizontal" ? `${20}px` : `${20}px`,
-            color: index === currentIdx ?`${colorScheme[parentType]}` : `${colorScheme["natural"]}`
+            color: item === waveType ?`${colorScheme[parentType]}` : `${colorScheme["natural"]}`
           }}
         >
           {item.slice(0, 3)}

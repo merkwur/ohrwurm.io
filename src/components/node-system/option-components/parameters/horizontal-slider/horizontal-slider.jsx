@@ -59,7 +59,7 @@ const HorizontalSlider = ({
 
   useEffect(() => {
     const handler = setTimeout(() => {
-      getParameter(value, name, whichOscillator, type) 
+      getParameter(value, name, whichOscillator) 
     }, 20)
     return () => clearTimeout(handler)
   }, [value])
