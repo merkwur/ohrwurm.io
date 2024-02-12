@@ -1,19 +1,16 @@
 import React, { useEffect, useState } from 'react'
 import "./horizontal-slider.scss"
-import { clamp, colorScheme } from '../../../../node-helpers/helperFunctions'
-import { initialStates } from '../../../../node-helpers/toneData'
+import { clamp, colorScheme } from '../../../node-helpers/helperFunctions'
+import { initialStates } from '../../../node-helpers/toneData'
 
 
 
 
 const HorizontalSlider = ({
-                            id, 
                             name, 
                             type,
-                            reduced,
                             parameterValue,
                             state,
-                            oscTyp,
                             whichOscillator,
                             getParameter, 
                             isParamCentered
@@ -62,7 +59,7 @@ const HorizontalSlider = ({
 
   useEffect(() => {
     const handler = setTimeout(() => {
-      getParameter(value, name, whichOscillator, type, oscTyp) 
+      getParameter(value, name, whichOscillator, type) 
     }, 20)
     return () => clearTimeout(handler)
   }, [value])

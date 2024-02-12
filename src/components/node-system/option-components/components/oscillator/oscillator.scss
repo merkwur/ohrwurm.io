@@ -1,0 +1,13 @@
+.hub-oscillator-wrapper{
+  display: flex;
+  height: 100%;
+
+  .osc-left-panel{
+    padding-left: .5rem;
+    padding-right: .5rem;
+  }
+
+  .osc-right-panel{
+    padding-top: 1rem;
+  }
+}

@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import "./transport.scss"
-import { initialStates } from '../../../node-helpers/toneData'
+import { initialStates } from '../../node-helpers/toneData'
 import HorizontalSlider from '../parameters/horizontal-slider/horizontal-slider'
 import { Scale } from 'tonal'
 import LengthAdjust from './transport-helpers/length-adjust'
@@ -8,9 +8,7 @@ import KeySelector from './transport-helpers/key-selector'
 import OctavePicker from './transport-helpers/octave-picker'
 
 
-// finished up the transport object !!!
-// also make some note duration knobs but how? it will be multiplier range normal 
-
+// There should be better way to manage all the states
 
 
 const Transport = ({id, name, type, notesToTrigger, getGlobalTime}) => {
@@ -77,13 +75,11 @@ const Transport = ({id, name, type, notesToTrigger, getGlobalTime}) => {
       arr = arr.slice(0, length)
     }
 
-    console.log(arr)
 
     setSeqeunceLength(arr)    
   }, [length])
 
   const handleSliderValue = (value, index) => {
-    console.log(value)
     const arr = [...sequenceKeys]
     arr[index] = value 
     setSeqeunceKeys(arr)

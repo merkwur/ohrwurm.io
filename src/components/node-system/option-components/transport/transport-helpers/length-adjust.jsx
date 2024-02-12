@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import "./length-adjust.scss"
 import { clamp } from 'three/src/math/MathUtils'
-import { colorScheme } from '../../../../node-helpers/helperFunctions'
+import { colorScheme } from '../../../node-helpers/helperFunctions'
 
 const LengthAdjust = ({ leftPosition, 
                         index,

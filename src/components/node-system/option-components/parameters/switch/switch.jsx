@@ -1,15 +1,23 @@
 import React, { useEffect, useRef, useState } from 'react'
-import "./switcheroo.scss"
-import { colorScheme } from '../../../../node-helpers/helperFunctions'
+import "./switch.scss"
+import { colorScheme } from '../../../node-helpers/helperFunctions'
 
-const Switcheroo = ({elements, value, parentType, oscTyp ,getWaveType, whichOscillator, orientation}) => {
+const Switch = ({
+                elements, 
+                value, 
+                parentType, 
+                getWaveType, 
+                whichOscillator, 
+                orientation
+              }) => {
+
   const [elems, setElems] = useState(elements)
   const [active, setActive] =  useState(false)
   const [waveType, setWaveType] = useState(value)
   const switchesRefs = useRef([]);
   const [currentIdx, setCurrentIdx] = useState(null)
   
-  useEffect(() => {console.log(value, oscTyp)} , [value])
+  useEffect(() => {console.log(value)} , [value])
 
   const handleMouseEnter = (index) => {
     switchesRefs.current[index].classList.toggle('active');
@@ -19,11 +27,10 @@ const Switcheroo = ({elements, value, parentType, oscTyp ,getWaveType, whichOsci
     switchesRefs.current[index].classList.remove('active');
   };
 
-  const handleWaveSelection = (wave, type, index, oscTyp) => {
+  const handleWaveSelection = (wave, type, index) => {
     setCurrentIdx(index)
-    console.log("osc", oscTyp)
     setWaveType(wave)
-    getWaveType(wave, type, whichOscillator, oscTyp)
+    getWaveType(wave, type, whichOscillator)
   }
 
   return (
@@ -32,7 +39,8 @@ const Switcheroo = ({elements, value, parentType, oscTyp ,getWaveType, whichOsci
       style={{
         marginTop: whichOscillator !== "main" ? ".75rem" : "",
         flexDirection: orientation === "vertical" ? "column" : "row",
-        justifyContent: "space-around"
+        justifyContent: "space-around",
+        width: orientation === "horizontal" ? "100%" : "fit-content"
       }}
     
     > 
@@ -46,9 +54,9 @@ const Switcheroo = ({elements, value, parentType, oscTyp ,getWaveType, whichOsci
           onMouseLeave={() => handleMouseLeave(index)}
           onClick={() => handleWaveSelection(item, parentType, index, oscTyp)}
           style={{
-            width: orientation === "horizontal" ? `${100 / elems.length}` : `${100}%`,
+            width: orientation === "horizontal" ? `${100 / elems.length}` : ``,
             height: orientation === "horizontal" ? `${20}px` : `${20}px`,
-            color: item === value ?`${colorScheme[parentType]}` : `${colorScheme["natural"]}`
+            color: index === currentIdx ?`${colorScheme[parentType]}` : `${colorScheme["natural"]}`
           }}
         >
           {item.slice(0, 3)}
@@ -58,4 +66,4 @@ const Switcheroo = ({elements, value, parentType, oscTyp ,getWaveType, whichOsci
   )
 }
 
-export default Switcheroo
+export default Switch

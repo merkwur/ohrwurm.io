@@ -30,7 +30,7 @@ const NodeCanvas = () => {
   const [globalTime, setGlobalTime] = useState(0)
   const [snapSize, setSnapSize] = useState(40)
   const [positionArray, setPositionArray] = useState(Array(cols * rows).fill(0))  
-  const [reducedPositionArray, setReducedPositioniArray] = useState(Array(Math.floor(cols * rows / 4)).fill(0))  
+  const [reducedPositionArray, setReducedPositionArray] = useState(Array(Math.floor(cols * rows / 4)).fill(0))  
   const [zeros, setZeros] = useState(Array(cols * rows).fill(0))
   const [reducedZeros, setReducedZeros] = useState(Array(Math.floor(cols * rows / 4)).fill(0))
   const [positionDebug, setPositionDebug] = useState(false)
@@ -62,7 +62,7 @@ const NodeCanvas = () => {
     })
     
     setPositionArray(arr)
-    setReducedPositioniArray(reducedArr)
+    setReducedPositionArray(reducedArr)
   }, [nodeData])
 
 
@@ -267,9 +267,9 @@ const NodeCanvas = () => {
         notesToTrigger={(notes, probabilities, durations, bpm) => handleNotesToTrigger(notes, probabilities, durations, bpm)}
         getGlobalTime={(time) => handleGlobalTime(time)}
         />
-        <LineCanvas 
-          lines={lineData} 
-          deleteLine={id => handleDeleteLine(id)}
+      <LineCanvas 
+        lines={lineData} 
+        deleteLine={id => handleDeleteLine(id)}
         />
     </div>
   )

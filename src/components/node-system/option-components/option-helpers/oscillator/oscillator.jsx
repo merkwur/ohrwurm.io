@@ -1,7 +1,7 @@
 import React from 'react'
-import StartButton from '../parameters/start-button/start-button'
-import HorizontalSlider from '../parameters/horizontal-slider/horizontal-slider'
-import Switcheroo from '../parameters/switcheroo/switcheroo'
+import StartButton from '../../parameters/start-button/start-button'
+import HorizontalSlider from '../../horizontal-slider/horizontal-slider'
+import Switcheroo from '../../parameters/switch/switch'
 import { initialStates } from '../../../node-helpers/toneData'
 import "./oscillator.scss"
 

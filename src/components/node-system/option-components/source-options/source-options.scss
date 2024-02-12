@@ -4,7 +4,7 @@
   color: bisque;
   display: flex;
   flex-direction: row;
-  width: 100%;
+  
   
   .left-stander{
     border-right: 1px solid #77777777;
@@ -18,29 +18,11 @@
   }
 
   .parameters{
-    display: flex;
-    font-size: 8pt;
-    padding-left: .75rem;
-    padding-right: 1rem;
-    padding-top: .15rem;
-
-    .separator {
+    width: 140px; 
+    height: 100%;
+    
+    .carrier-params{
       height: 100%;
-      width: 20px;
-      border-left: 1px solid #77777742;
-      margin-left: .5rem;
-      
-      .separator-text{  
-        writing-mode: vertical-lr;
-        margin-top: 3rem;
-        font-size: 6pt;
-
-      }
-
     }
-
-    .params{
-      margin-top: .5em;
-    }
-  } 
+  }
 }

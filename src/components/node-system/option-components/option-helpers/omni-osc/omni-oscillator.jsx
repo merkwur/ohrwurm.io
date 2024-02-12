@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
 import "./omni-oscillator.scss"
 import Oscillator from '../oscillator/oscillator'
-import Switcheroo from '../parameters/switcheroo/switcheroo'
+import Switcheroo from '../../parameters/switch/switch'
 import { initialStates } from '../../../node-helpers/toneData'
-import HorizontalSlider from '../parameters/horizontal-slider/horizontal-slider'
+import HorizontalSlider from '../../horizontal-slider/horizontal-slider'
 
 const OmniOscillator = ({id, 
                         name,

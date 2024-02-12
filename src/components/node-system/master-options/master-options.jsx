@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react'
-import SourceOptions from '../option-components/source-options/source-options'
+import SourceOptions from '../source-options/source-options'
 import './master-options.scss'
-import Transport from '../option-components/option-helpers/transport/transport'
-import InstrumentOptions from '../option-components/option-helpers/instrument-options/instrument-options'
+import Transport from '../option-helpers/transport/transport'
+import InstrumentOptions from '../option-helpers/instrument-options/instrument-options'
 
 
 
