@@ -18,11 +18,26 @@
   }
 
   .parameters{
-    width: 140px; 
-    height: 100%;
-    
-    .carrier-params{
-      height: 100%;
+    width: 160px;
+    overflow-y: scroll;
+    .carrier-oscillator{
+
+    }
+    .modulator-parameters{
+      display: flex;
+      flex-direction: row;
+
+      .separator{
+        font-size: 7pt;
+        font-weight: 200;
+        writing-mode: vertical-lr;
+        margin-left: .75rem;
+        border-left: 1px solid #77777777;
+        
+      }
+      .modulator-oscillator{
+  
+      }
     }
   }
 }

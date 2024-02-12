@@ -11,6 +11,8 @@ const Switch = ({
                 orientation
               }) => {
 
+
+
   const [elems, setElems] = useState(elements)
   const [active, setActive] =  useState(false)
   const [waveType, setWaveType] = useState(value)

@@ -108,7 +108,7 @@ const NodeCanvas = () => {
   
   // useEffect(() => {console.log(nodeData)}, [nodeData])
   // useEffect(() => {console.log(lineData)}, [lineData])
-  // useEffect(() => {console.log(toneData)}, [toneData])
+   useEffect(() => {console.log(toneData)}, [toneData])
 
 
   

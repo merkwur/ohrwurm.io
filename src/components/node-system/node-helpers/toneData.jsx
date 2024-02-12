@@ -245,8 +245,8 @@ export const getNodeParameters = (name, type) => {
     
   }
 
-  const {frequency, ...commonModulatorParams} = commonOscParams
-
+  const {frequency, start, ...commonModulatorParams} = commonOscParams
+  const {detune, ...forfm} = commonModulatorParams
   const nodeParams = {
 
     Core: {
@@ -274,7 +274,6 @@ export const getNodeParameters = (name, type) => {
       },
       PulseOscillator: {
         start: false,
-        
         detune: 0,
         frequency: 440,
         phase: 0,
@@ -294,7 +293,7 @@ export const getNodeParameters = (name, type) => {
         harmonicity: 1,
         modulationIndex: 1,
         modulationType: "sine",
-        modulator: {...commonModulatorParams}
+        modulator: {...forfm}
       }, 
 
       LFO: {
@@ -303,6 +302,7 @@ export const getNodeParameters = (name, type) => {
         min: -1,
         max: 1,
         amplitude: 1,
+        type: "sine"
         
 
       },      
@@ -639,6 +639,6 @@ export const LFOStates = {
                   min:                {type: "slider",   min: -10000,    max: 10000,  multiplier: 1       , float: false  },
                   max:                {type: "slider",   min: -10000,    max: 10000,  multiplier: 1       , float: false  },
                   amplitude:          {type: "slider",   min: .001,      max: 1,      multiplier: .001    , float: true   },
-                  
+                  type:               {type: "select",   value: ["sine", "square", "sawtooth", "triangle"]},
 }
 

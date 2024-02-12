@@ -6,7 +6,12 @@ import StartButton from '../../parameters/start-button/start-button'
 import HorizontalSlider from '../../parameters/horizontal-slider/horizontal-slider'
 
 
-const Oscillator = ({parameters, getOscillatorState, getParameter, getWaveType}) => {
+const Oscillator = ({ parameters, 
+                      getOscillatorState, 
+                      getParameter, 
+                      getWaveType, 
+                      which
+                    }) => {
   return (
     <div className='hub-oscillator-wrapper'>
       <div className='osc-left-panel'>
@@ -21,7 +26,7 @@ const Oscillator = ({parameters, getOscillatorState, getParameter, getWaveType})
               elements={initialStates.type.value}
               value={parameters.type}
               parentType={"Source"}
-              whichOscillator={"carrier"}
+              whichOscillator={which}
               getWaveType={getWaveType}
               orientation={"vertical"}
             /> 
@@ -31,7 +36,7 @@ const Oscillator = ({parameters, getOscillatorState, getParameter, getWaveType})
         {Object.keys(parameters).map((param, index) => (
           <div 
             className='hub-oscillator-sliders'
-            key={param+index+"carrier"}
+            key={param+index+which}
           >
             {initialStates[param] && initialStates[param].type === "slider" ? (
               <HorizontalSlider 
@@ -39,7 +44,7 @@ const Oscillator = ({parameters, getOscillatorState, getParameter, getWaveType})
                 type={"Source"}
                 state={initialStates[param]}
                 parameterValue={parameters[param]}
-                whichOscillator={"carrier"}
+                whichOscillator={which}
                 getParameter={getParameter}
               />
               )  : null}

@@ -1,0 +1,13 @@
+.hub-lfo-wrapper{
+  display: flex;
+  height: 100%;
+
+  .lfo-left-panel{
+    padding-left: .5rem;
+    padding-right: .5rem;
+  }
+
+  .lfo-right-panel{
+    padding-top: 1.5rem;
+  }
+}
