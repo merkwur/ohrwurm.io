@@ -247,8 +247,8 @@ export const getNodeParameters = (name, type) => {
 
   const {frequency, start, ...commonModulatorParams} = commonOscParams
   const {detune, ...forfm} = commonModulatorParams
-  const nodeParams = {
 
+  const nodeParams = {
     Core: {
       Destination: null,
       Transport: {bpm: 120, notes: null, time: 0},
@@ -270,7 +270,6 @@ export const getNodeParameters = (name, type) => {
         frequency: 440, 
         phase: 0, 
         modulationFrequency: 220, 
-        modulator: {detune: 0, phase: 0, partialCount: 0}
       },
       PulseOscillator: {
         start: false,
@@ -306,6 +305,44 @@ export const getNodeParameters = (name, type) => {
       },      
     }, 
   }
+
+  const omniModNodeParams = {
+      Oscillator: {
+        ...commonModulatorParams
+      }, 
+      FatOscillator: {
+        ...commonModulatorParams,
+        spread: 0,
+        count: 1
+      },
+      PWMOscillator: {
+        detune: 0,
+        phase: 0, 
+        
+      },
+      PulseOscillator: {
+        detune: 0,
+        phase: 0,
+
+      },
+      AMOscillator: {
+        type: "sine",
+        partialCount: 0,
+        phase: 0,
+        modulationType: "square", 
+        modulator: {partialCount: 0, phase: 0}
+      },
+      FMOscillator: {
+        type: "sine",
+        partialCount: 0, 
+        phase: 0,
+        modulationType: "square",
+        modulator: {partialCount: 0, phase:0}
+
+      },       
+  }
+    
+  
   
   const OmniOscillator = {
     osc: {...nodeParams.Source.Oscillator}, 
@@ -314,6 +351,15 @@ export const getNodeParameters = (name, type) => {
     pulse: {...nodeParams.Source.PulseOscillator}, 
     am: {...nodeParams.Source.AMOscillator}, 
     fm: {...nodeParams.Source.FMOscillator},
+  }
+
+  const omniModOscillator = {
+    osc: {...omniModNodeParams.Oscillator},
+    fat: {...omniModNodeParams.FatOscillator},
+    am: {...omniModNodeParams.AMOscillator},
+    fm: {...omniModNodeParams.FMOscillator},
+    pwm: {...omniModNodeParams.PWMOscillator},
+    pulse: {...omniModNodeParams.PulseOscillator},
   }
 
   const envelope = {
@@ -352,7 +398,7 @@ export const getNodeParameters = (name, type) => {
         ...commonSynthParams,
         harmonicity: 1,
         modulationEnvelope: {...envelope},
-        modulator: {...OmniOscillator},
+        modulator: {...omniModOscillator},
         carrierOscillatorType: "osc",
         modulatorOscillatorType: "osc"
       }, 
@@ -371,7 +417,7 @@ export const getNodeParameters = (name, type) => {
         modulationIndex: 1, 
         envelope: {...envelope},
         modulationEnvelope: {...envelope},  
-        modulator: {...commonOscParams}, 
+        modulator: {...omniModOscillator}, 
         carrierOscillatorType: "osc",
         modulatorOscillatorType: "osc"
       }, 

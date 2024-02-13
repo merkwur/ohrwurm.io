@@ -16,7 +16,7 @@ const NodeConfigurationHub = ({tone, notesToTrigger, getGlobalTime}) => {
                 <SourceOptions 
                   toneObj={tone[toneObj]}
                 />
-              ): toneObj.type === "Instrument" ? (
+              ): toneObj.type === "Instrument" ?"Destination" && tone.name !== "Transport" && tone.type !== "Signal" (
                 <></>
               ) : tone[toneObj].name === "Transport" ? (
                 <Transport 

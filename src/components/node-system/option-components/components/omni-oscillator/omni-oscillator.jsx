@@ -7,45 +7,20 @@ import "./omni-oscillator.scss"
 const OmniOscillator = ({ parameters,  
                           getParameter, 
                           getWaveType, 
-                          which,
-                          oscillatorType 
+                          which, wave
                         }) => {
 
-  console.log(oscillatorType)
+  
 
   return (
     <div 
       className='omni-oscillator-wrapper'
+        style={{marginTop: which === "modulator" ? "40px" : ""
+
+        }}
       > 
-      <div className='osc-left-panel'>
-        <Switch 
-          elements={initialStates.type.value}
-          value={parameters.type}
-          parentType={"Instrument"}
-          whichOscillator={which}
-          getWaveType={getWaveType}
-          orientation={"vertical"}
-        /> 
+      <div>
         
-      </div>
-      <div className='osc-right-panel'> 
-        {Object.keys(parameters).map((param, index) => (
-          <div 
-            className='hub-oscillator-sliders'
-            key={param+index+which}
-          >
-            {initialStates[param] && initialStates[param].type === "slider" ? (
-              <HorizontalSlider 
-                name={param}
-                type={"Source"}
-                state={initialStates[param]}
-                parameterValue={parameters[param]}
-                whichOscillator={which}
-                getParameter={getParameter}
-              />
-              )  : null}
-          </div>
-        ))}
       </div>
     </div>
   )

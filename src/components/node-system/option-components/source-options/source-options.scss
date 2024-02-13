@@ -20,23 +20,16 @@
   .parameters{
     width: 160px;
     overflow-y: scroll;
-    .carrier-oscillator{
 
-    }
-    .modulator-parameters{
+    .modulator-parameters {
       display: flex;
-      flex-direction: row;
 
       .separator{
+        border-left: #77777777 1px solid;
+        margin-left: .5rem;
         font-size: 7pt;
-        font-weight: 200;
+        font-weight: 300;
         writing-mode: vertical-lr;
-        margin-left: .75rem;
-        border-left: 1px solid #77777777;
-        
-      }
-      .modulator-oscillator{
-  
       }
     }
   }

@@ -1,16 +1,46 @@
 .omni-oscillator-wrapper{
   display: flex;
+  flex-direction: column;
   height: 100%;
+  width: 100%;
 
-  .osc-left-panel{
-    padding-left: .5rem;
-    padding-right: .5rem;
-  }
+  .carrier {
+    display: flex;
+    .osc-left-panel{
 
-  .osc-right-panel{
-    border-top: 1px dotted #77777777;
-    margin-top: .5rem;
-    padding-top: .25rem;
-    width: 100%;
+      height: fit-content;
+      width: 20%;
+    }
+  
+    .osc-right-panel{
+      border-top: 1px dotted #77777777;
+      margin-top: .15rem;
+      padding-top: .15rem;
+      width: 100%;
+      border-left: 1px solid #77777777;
+      padding-left: .25rem;
+    }
+
   }
+    .modulator{
+      width: 100%;
+      display: flex;
+      padding-left: .5rem;
+      margin-left: 0;
+
+      .separator{
+        padding-top: .75rem;
+        border-left: 1px solid #77777777;
+        writing-mode: vertical-lr;
+        font-size: 7pt;
+        font-weight: 300;
+        
+      }
+
+      .mods {
+        padding-left: .5rem;
+        
+      }
+      
+    }
 }

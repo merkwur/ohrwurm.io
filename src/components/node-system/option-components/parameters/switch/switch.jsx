@@ -20,6 +20,8 @@ const Switch = ({
   const [currentIdx, setCurrentIdx] = useState(null)
   
 
+  useEffect(() => {console.log(waveType)}, [waveType])
+    
   const handleMouseEnter = (index) => {
     switchesRefs.current[index].classList.toggle('active');
   };
@@ -38,11 +40,11 @@ const Switch = ({
     <div 
       className='switcheroo-container'
       style={{
-        marginTop: whichOscillator !== "main" ? ".75rem" : "",
+        marginTop: whichOscillator !== "main" ? ".25rem" : "",
         flexDirection: orientation === "vertical" ? "column" : "row",
         justifyContent: "space-around",
-        width: orientation === "horizontal" ? "100%" : "20px",
-        height: orientation === "horizontal" ? "20px" : "100$"
+        width: orientation === "horizontal" ? "100%" : "100%",
+        height: orientation === "horizontal" ? "20px" : ""
       }}
     
     > 
@@ -56,7 +58,7 @@ const Switch = ({
           onMouseLeave={() => handleMouseLeave(index)}
           onClick={() => handleWaveSelection(item, parentType, index)}
           style={{
-            width: orientation === "horizontal" ? `${100 / elems.length}` : ``,
+            width: orientation === "horizontal" ? `${100}%` : `100%`,
             height: orientation === "horizontal" ? `${20}px` : `${20}px`,
             color: item === waveType ?`${colorScheme[parentType]}` : `${colorScheme["natural"]}`
           }}

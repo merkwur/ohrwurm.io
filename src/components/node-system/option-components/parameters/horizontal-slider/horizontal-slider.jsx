@@ -109,9 +109,7 @@ const HorizontalSlider = ({
   return (
     <div 
       className='frequency-wrapper'
-      style={{width: abbreviate ? "30px" : "", 
-              flexDirection: abbreviate ? "row" : ""
-            }}
+      style={{width: abbreviate ? "30px" : "",  }}
       >
       <div 
         className='slider-header'

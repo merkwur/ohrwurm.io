@@ -6,6 +6,7 @@ import HorizontalSlider from '../../parameters/horizontal-slider/horizontal-slid
 
 const Envelope = ({parameters, which, getParameter}) => {
 
+  
   return (
     <div className='envelope'>
       {Object.keys(parameters).map((item, index) => (
@@ -21,11 +22,12 @@ const Envelope = ({parameters, which, getParameter}) => {
               whichOscillator={which}
               parameterValue={parameters[item]}
               abbreviate={true}
+              isParamCentered={true}
               
             />
-          ) : initialStates[item].type === "selevy" ? (
+          ) : initialStates[item].type === "select" ? (
             <div className='dropdown'>
-              {item}
+              <></>
             </div>
           ) : null}
         </React.Fragment>
