@@ -8,6 +8,7 @@ const Switch = ({
                 parentType, 
                 getWaveType, 
                 whichOscillator, 
+                parentOscillator,
                 orientation
               }) => {
 
@@ -33,7 +34,11 @@ const Switch = ({
   const handleWaveSelection = (wave, index) => {
     setCurrentIdx(index)
     setWaveType(wave)
-    getWaveType(wave, whichOscillator)
+    if (parentOscillator) {
+      getWaveType(wave, parentOscillator, whichOscillator)
+    } else{
+      getWaveType(wave, whichOscillator)
+    }
   }
 
   return (

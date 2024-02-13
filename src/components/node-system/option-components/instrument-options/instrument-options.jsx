@@ -11,7 +11,7 @@ import { initialStates } from '../../node-helpers/toneData'
 
 const InstrumentOptions = ({toneObj}) => {
 
-  const [openProperties, setOpenProperties] = useState(false)
+  const [openProperties, setOpenProperties] = useState(true)
   const [_parameters, setParameters] = useState(toneObj.parameters) 
   const [_carrierParameters, setCarrierParameters] = useState(_parameters.oscillator.osc)
   const [_modulatorParameters, setModulatorParameters] = useState(_parameters.hasOwnProperty("modulator") ? _parameters.modulator.osc : null)
@@ -20,12 +20,12 @@ const InstrumentOptions = ({toneObj}) => {
   const [portamentoValue, setPortamentoValue] = useState(0)
   const [_envelope, setEnvelope] = useState(_parameters.envelope)
   const [_modulationEnvelope, setModulationEnvelope] = useState(_parameters.modulationEnvelope)
-  const [carrierWaveType, setCarrierWaveType] = useState(_carrierParameters.type)
-  const [modalatorWaveType, setModulatorWaveType] = useState(_modulatorParameters.type)
 
 
-  const handleParameterChange = (value, type, which) => {
-    if (type && which) {
+
+  const handleParameterChange = (value, type, which, parent) => {
+    
+    if (type && parent) {
       if (which === "carrier") {
         if (type === "detune") {
           toneObj.tone.detune.set({value: value})
@@ -34,10 +34,12 @@ const InstrumentOptions = ({toneObj}) => {
         } else {
           toneObj.tone.oscillator[type] = value
         }
-        setCarrierParameters(previousParamters => ({
-          ...previousParamters, 
-          [type]: type
-        }))
+        if (parent === "carrier") {
+          setCarrierParameters(previousParameters => ({
+            ...previousParameters, 
+            [type]: value
+          }))
+        }
       } else {
         if (type === "detune") {
           toneObj.tone.modulation.detune.set({value: value})
@@ -46,31 +48,53 @@ const InstrumentOptions = ({toneObj}) => {
         } else {
           toneObj.tone.modulation[type] = value
         }
-        setCarrierParameters(previousParamters => ({
-          ...previousParamters, 
-          [type]: type
+        setModulatorParameters(previousParameters => ({
+          ...previousParameters, 
+          [type]: value
         }))
       }
     }
   }
 
-  const handleWaveTypes = (type, which) => {
-    if (type && which) {
-      if (which === "carrier") {
-        toneObj.tone.oscillator.baseType = type
-        setCarrierWaveType(type)
+  const handleWaveTypes = (wave, parent, which) => {
+    if (parent && which) {
+      if (parent === "carrier") {
+        if (which === "carrier") {
+          toneObj.tone.oscillator.baseType = wave
+          setCarrierParameters(previousParameters => ({
+            ...previousParameters, 
+            type: wave
+          }))
+        } else {
+          toneObj.tone.oscillator.modulationType = wave
+          setCarrierParameters(previousParameters => ({
+            ...previousParameters, 
+            modulationType: wave
+          }))
+        }
       } else {
-        toneObj.tone.modulation.baseType = type
-        setModulatorWaveType(type)
+        if (which === "carrier") {
+          toneObj.tone.modulation.type = wave
+          setModulatorParameters(previousParameters => ({
+            ...previousParameters, 
+            type: wave
+          }))
+        } else {
+          console.log("kajshd")
+          toneObj.tone.modulation.modulationType = wave
+          setModulatorParameters(previousParameters => ({
+            ...previousParameters, 
+            modulationType: wave
+          }))
+        }
       }
     }
   }
 
   useEffect(() => {
-      console.log(_carrierParameters)
-      console.log(carrierOscillatorType)
-      
-    }, [_carrierParameters])
+      //console.log("carrier: ", _carrierParameters)
+      //console.log("modulator: ", _modulatorParameters)
+    }, [_carrierParameters, _modulatorParameters])
 
   const handleOscillatorType = (type, which) => {
     const oscType = type === "osc" ? "oscillator" : type 
@@ -164,7 +188,14 @@ const InstrumentOptions = ({toneObj}) => {
                       getParameter={(value) => handlePortamentoValue(value)}
                     />
                   </div>
- 
+                      <div>
+                        <OmniOscillator 
+                          parameters={_carrierParameters}
+                          getParameter={(value, type, which, parent) => handleParameterChange(value, type, which, parent)}
+                          getWaveType={(wave, parent, type) => handleWaveTypes(wave, parent, type)}
+                          parent={"carrier"}
+                        />
+                      </div>
                   </div>
                 </div>
                 {_parameters.modulator ? (
@@ -190,8 +221,14 @@ const InstrumentOptions = ({toneObj}) => {
                           />
                         </>
                       ) : null}          
-                      <div>
 
+                      <div>
+                        <OmniOscillator 
+                          parameters={_modulatorParameters}
+                          getParameter={(value, type, which, parent) => handleParameterChange(value, type, which, parent)}
+                          getWaveType={(wave, parent, type) => handleWaveTypes(wave, parent, type)}
+                          parent={"modulator"}
+                        />
                       </div>
                     </div>
                   </div>

@@ -13,6 +13,7 @@ const HorizontalSlider = ({
                             parameterValue,
                             state,
                             whichOscillator,
+                            parentOscillator,
                             getParameter, 
                             isParamCentered
                           }) => {
@@ -59,8 +60,9 @@ const HorizontalSlider = ({
 
 
   useEffect(() => {
+    
     const handler = setTimeout(() => {
-      getParameter(value, name, whichOscillator) 
+      getParameter(value, name, whichOscillator, parentOscillator) 
     }, 20)
     return () => clearTimeout(handler)
   }, [value])
@@ -114,10 +116,11 @@ const HorizontalSlider = ({
       <div 
         className='slider-header'
         style={{
-          justifyContent: isParamCentered ? "center" : "left"
+          justifyContent: isParamCentered ? "center" : "left",
+          fontSize: abbreviate ? "6.2pt" : ""
         }} 
         >
-          {`< ${abbreviate ? name.slice(0,1) : name} >`}
+          {`< ${abbreviate ? name.slice(0,1) : name === "modulationFrequency" ? "modFrequency" : name} >`}
       </div>
       <div 
         className='frequency-slider'
@@ -128,7 +131,7 @@ const HorizontalSlider = ({
         >
       <div 
         className='value'
-        style={{
+        style={{ fontSize: abbreviate ? "6.2pt" : ""
         }}
         > 
         {state.float ? value.toFixed(2) : parseInt(value/unit)} {state.unit}

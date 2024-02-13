@@ -246,6 +246,7 @@ export const getNodeParameters = (name, type) => {
   }
 
   const {frequency, start, ...commonModulatorParams} = commonOscParams
+  commonModulatorParams.type = "square"
   const {detune, ...forfm} = commonModulatorParams
 
   const nodeParams = {
@@ -291,7 +292,7 @@ export const getNodeParameters = (name, type) => {
         ...commonOscParams, 
         harmonicity: 1,
         modulationIndex: 1,
-        modulationType: "sine",
+        modulationType: "square",
         modulator: {...forfm}
       }, 
 
@@ -329,15 +330,17 @@ export const getNodeParameters = (name, type) => {
         type: "sine",
         partialCount: 0,
         phase: 0,
+        detune: 0,
         modulationType: "square", 
-        modulator: {partialCount: 0, phase: 0}
+        modulator: true
       },
       FMOscillator: {
         type: "sine",
         partialCount: 0, 
         phase: 0,
+        detune: 0,
         modulationType: "square",
-        modulator: {partialCount: 0, phase:0}
+        modulator: true
 
       },       
   }
@@ -349,8 +352,19 @@ export const getNodeParameters = (name, type) => {
     fat: {...nodeParams.Source.FatOscillator},
     pwm: {...nodeParams.Source.PWMOscillator}, 
     pulse: {...nodeParams.Source.PulseOscillator}, 
-    am: {...nodeParams.Source.AMOscillator}, 
-    fm: {...nodeParams.Source.FMOscillator},
+    am: {...commonOscParams, 
+      harmonicity: 1, 
+      modulationType: "square",
+      modulator: true,
+
+    }, 
+    fm: {
+      ...commonOscParams, 
+      harmonicity: 1, 
+      modulationIndex: 1,
+      modulationType: "square",
+      modulator: true
+    },
   }
 
   const omniModOscillator = {
@@ -395,12 +409,15 @@ export const getNodeParameters = (name, type) => {
 
   const InstrumentParams = {
       AMSynth: {
-        ...commonSynthParams,
-        harmonicity: 1,
+        portamento: 0,
+        oscillator:{...OmniOscillator},
+        envelope: {...envelope},
         modulationEnvelope: {...envelope},
         modulator: {...omniModOscillator},
         carrierOscillatorType: "osc",
-        modulatorOscillatorType: "osc"
+        modulatorOscillatorType: "osc",
+        type: "sine",
+        modulationType: "square"
       }, 
       Synth: {
         ...commonSynthParams,
