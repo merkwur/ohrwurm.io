@@ -1,0 +1,25 @@
+.synth-wrapper{
+  .synth-carrier{
+    .carrier-oscillator{
+
+      .synth-parameters{
+        display: flex;
+        margin-top: .5rem;
+        .synth-wave-select{
+          width: 20%;
+        }
+        .synth-sliders{
+          padding-top: .25rem;
+          border-left: 1px solid #77777777;
+          padding-left: .5rem;
+        }
+      }
+      .oscillator-adjustable-parameters{
+        margin-top: .25rem;
+        .oscillator-modulator-sliders{
+          padding-left: .5rem;
+        }
+      }
+    }
+  }
+}

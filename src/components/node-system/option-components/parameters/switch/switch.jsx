@@ -7,8 +7,8 @@ const Switch = ({
                 value, 
                 parentType, 
                 getWaveType, 
-                whichOscillator, 
-                parentOscillator,
+                whichSource, 
+                parentSource,
                 orientation
               }) => {
 
@@ -20,9 +20,7 @@ const Switch = ({
   const switchesRefs = useRef([]);
   const [currentIdx, setCurrentIdx] = useState(null)
   
-
-  useEffect(() => {console.log(waveType)}, [waveType])
-    
+  
   const handleMouseEnter = (index) => {
     switchesRefs.current[index].classList.toggle('active');
   };
@@ -34,10 +32,12 @@ const Switch = ({
   const handleWaveSelection = (wave, index) => {
     setCurrentIdx(index)
     setWaveType(wave)
-    if (parentOscillator) {
-      getWaveType(wave, parentOscillator, whichOscillator)
+    console.log(parentSource,whichSource)
+    if (parentSource) {
+      console.log(parentSource)
+      getWaveType(wave, whichSource, parentSource)
     } else{
-      getWaveType(wave, whichOscillator)
+      getWaveType(wave, whichSource)
     }
   }
 
@@ -45,7 +45,7 @@ const Switch = ({
     <div 
       className='switcheroo-container'
       style={{
-        marginTop: whichOscillator !== "main" ? ".25rem" : "",
+        marginTop: whichSource !== "main" ? ".25rem" : "",
         flexDirection: orientation === "vertical" ? "column" : "row",
         justifyContent: "space-around",
         width: orientation === "horizontal" ? "100%" : "100%",

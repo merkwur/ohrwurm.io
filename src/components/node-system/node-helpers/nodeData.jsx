@@ -401,7 +401,6 @@ const getInputs = (name, type) => {
       }, 
       FatOscillator: {
         ...commonOscillatorParams, 
-        spread: null
       }, 
       LFO: {
         frequency: null, 

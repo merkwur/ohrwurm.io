@@ -8,7 +8,7 @@ import LFO from '../components/lfo/lfo'
 
 const SourceOptions = ({toneObj}) => {
 
-  const [openProperties, setOpenProperties] = useState(false)
+  const [openProperties, setOpenProperties] = useState(true)
   const [_parameters, setParameters] = useState(toneObj.parameters)    
   const [_modulatorParameters, setModulatorParameters] = useState(_parameters.hasOwnProperty("modulator") ? _parameters.modulator : null)
   

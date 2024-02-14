@@ -134,6 +134,10 @@ export const getToneObject = ( nodeName ) => {
       return new Tone.AMSynth()
     case "Synth":
       return  new Tone.Synth()
+    case "FMSynth":   
+      return new Tone.FMSynth()
+    case "DuoSynth":
+      return new Tone.DuoSynth()
     case "AutoFilter":
       return  new Tone.AutoFilter(1, 263.61, 1) 
     case "AutoPanner":
@@ -391,9 +395,7 @@ export const getNodeParameters = (name, type) => {
     type: "sine",
     frequency: 440, 
     detune: 0, 
-    envelope: {...envelope},
     portamento: 0,
-    oscillator: {...OmniOscillator},
     
   }
 
@@ -420,8 +422,10 @@ export const getNodeParameters = (name, type) => {
         modulationType: "square"
       }, 
       Synth: {
-        ...commonSynthParams,
-        oscillatorType: "osc"
+        synth: {...commonSynthParams},
+        oscillatorType: "osc",
+        oscillator: {...OmniOscillator},
+        envelope: {...envelope},
       }, 
       DuoSynth: {
         voice0: {...monoSynthParams},
@@ -431,12 +435,15 @@ export const getNodeParameters = (name, type) => {
       }, 
       FMSynth: {
         ...commonSynthParams, 
-        modulationIndex: 1, 
+        modulationIndex: 1,
+        portamento: 0,  
         envelope: {...envelope},
         modulationEnvelope: {...envelope},  
         modulator: {...omniModOscillator}, 
         carrierOscillatorType: "osc",
-        modulatorOscillatorType: "osc"
+        modulatorOscillatorType: "osc", 
+        type: "sine",
+        modulationType: "square"
       }, 
       MembraneSynth: {
         ...commonSynthParams, 
