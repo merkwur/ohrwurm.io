@@ -1,0 +1,27 @@
+.dropdown-wrapper{
+  width: 100%;
+  font-size: 7pt;
+  font-weight: 300;
+  border-bottom: 1px solid #77777777;
+  background-color: #272727;
+  z-index: 999;
+  position: relative;
+  
+  .dropdown-selected{
+    border-bottom: 1px solid #77777777;
+    padding-left: .25rem;  
+    display: flex;
+  }
+  .dropdown-menu{
+    position: absolute;
+    z-index: 999;
+    background-color: #272727;
+
+    .option{
+      width: 120px;
+      background-color: #272727;
+      padding-left: .25rem;
+  
+    }
+  }
+}

@@ -5,6 +5,7 @@ import OmniOscillator from '../omni-oscillator/omni-oscillator'
 import "./synth.scss"
 import { initialStates } from '../../../node-helpers/toneData'
 import HorizontalSlider from '../../parameters/horizontal-slider/horizontal-slider'
+import Dropdown from '../dropdown/dropdown'
 
 const Synth = ({
                 parentSource, 
@@ -12,13 +13,12 @@ const Synth = ({
                 getWaveType,
                 getOscillatorType,
                 getEnvelopeParameter,
+                getCurveType,
                 _envelope, 
                 _oscillator,
                 _synth,
                 _oscillatorType
 }) => {
-
-  console.log(_oscillator, parentSource)
 
 
   return (
@@ -41,6 +41,15 @@ const Synth = ({
               getParameter={getEnvelopeParameter}
             />
           </>
+          <div className='attack-curve-type'>
+            <Dropdown 
+              options={initialStates.attackCurve.value}
+              selectFilterType={getCurveType}
+              value={_envelope.attackCurve}
+              header={"aCurve"}
+              type={"Instrument"}
+            />
+          </div>
           <div className='synth-parameters'>
             {_oscillator.type ? (
               <div className='synth-wave-select'>
@@ -65,8 +74,8 @@ const Synth = ({
                       state={initialStates[parameter]}
                       parameterValue={_synth[parameter]}
                       getParameter={getParameter}
-                      whichOscillator={parentSource}
-                      parentOscillator={null}
+                      whichOscillator={"carrier"}
+                      parentOscillator={parentSource}
                     />
                   ) : null}
                 </React.Fragment>
@@ -84,8 +93,8 @@ const Synth = ({
                       state={initialStates[parameter]}
                       parameterValue={_oscillator[parameter]}
                       getParameter={getParameter}
-                      whichOscillator={parentSource}
-                      parentOscillator={null}
+                      whichOscillator={"carrier"}
+                      parentOscillator={parentSource}
                     />
                   ) : null}
                 </React.Fragment>

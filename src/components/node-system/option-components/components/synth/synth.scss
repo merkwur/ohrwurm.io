@@ -1,6 +1,9 @@
 .synth-wrapper{
   .synth-carrier{
     .carrier-oscillator{
+      .attack-curve-type{
+        margin-top: .5rem;
+      }
 
       .synth-parameters{
         display: flex;

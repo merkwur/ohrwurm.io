@@ -228,6 +228,8 @@ export const getToneObject = ( nodeName ) => {
       return  new Tone.NoiseSynth()
     case "PluckSynth": 
       return  new Tone.PluckSynth()
+    case "MonoSynth":
+      return new Tone.MonoSynth()
     default:
       return null; // Return null for unknown node types or if no tone object is provided
   }
@@ -243,7 +245,6 @@ export const getNodeParameters = (name, type) => {
       type: "sine",
       detune: 0,
       frequency: 440,
-      phase: 0,
       partialCount: 0,
       partials: 0,
     
@@ -273,14 +274,12 @@ export const getNodeParameters = (name, type) => {
         start: false,
         detune: 0,
         frequency: 440, 
-        phase: 0, 
         modulationFrequency: 220, 
       },
       PulseOscillator: {
         start: false,
         detune: 0,
         frequency: 440,
-        phase: 0,
         width: 0
       },
       Noise: {
@@ -322,18 +321,15 @@ export const getNodeParameters = (name, type) => {
       },
       PWMOscillator: {
         detune: 0,
-        phase: 0, 
         
       },
       PulseOscillator: {
         detune: 0,
-        phase: 0,
 
       },
       AMOscillator: {
         type: "sine",
         partialCount: 0,
-        phase: 0,
         detune: 0,
         modulationType: "square", 
         modulator: true
@@ -341,7 +337,6 @@ export const getNodeParameters = (name, type) => {
       FMOscillator: {
         type: "sine",
         partialCount: 0, 
-        phase: 0,
         detune: 0,
         modulationType: "square",
         modulator: true
@@ -427,6 +422,12 @@ export const getNodeParameters = (name, type) => {
         oscillator: {...OmniOscillator},
         envelope: {...envelope},
       }, 
+      MonoSynth: {
+        synth: {...monoSynthParams},
+        envelope: {...envelope},
+        oscillator: {...OmniOscillator},
+        oscillatorType: "osc"
+      }, 
       DuoSynth: {
         voice0: {...monoSynthParams},
         voice1: {...monoSynthParams},
@@ -457,11 +458,7 @@ export const getNodeParameters = (name, type) => {
         octaves: 1, 
         harmonicity: 1, 
       },
-      MonoSynth: {
-        ...monoSynthParams,
-        oscillatorType: "osc"
 
-      }, 
       NoiseSynth: {
         noise: "brown",
         ...envelope, 
@@ -699,7 +696,7 @@ export const initialStates = {
     positionX:          {type: "slider",  min: -Infinity, max: Infinity,     multiplier:  1 ,  float: false ,  unit: "cm"   },
     positionY:          {type: "slider",  min: -Infinity, max: Infinity,     multiplier:  1 ,  float: false ,  unit: "cm"   },
     positionZ:          {type: "slider",  min: -Infinity, max: Infinity,     multiplier:  1 ,  float: false ,  unit: "cm"   },
-
+    filterTypes:        {type: "select",  value: ["lowpass", "highpass", "bandpass", "lowshelf", "highshelf", "notch", "allpass", "peaking"]},
 }
 
 export const LFOStates = {

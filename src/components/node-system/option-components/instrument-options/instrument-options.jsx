@@ -1,12 +1,8 @@
 import React, { useEffect, useState } from 'react'
-import OmniOscillator from '../components/omni-oscillator/omni-oscillator'
 import { colorScheme } from '../../node-helpers/helperFunctions'
 import "./instrument-options.scss"
-import Switch from '../parameters/switch/switch'
-import Envelope from '../components/envelope/envelope'
-import HorizontalSlider from '../parameters/horizontal-slider/horizontal-slider'
-import { initialStates } from '../../node-helpers/toneData'
 import Synth from '../components/synth/synth'
+import Mono from '../components/mono/mono'
 
 
 const InstrumentOptions = ({toneObj}) => {
@@ -18,7 +14,8 @@ const InstrumentOptions = ({toneObj}) => {
   const [_oscillatorType, setOscillatorType] = useState(_parameters.oscillatorType)
   const [_carrierBaseType, setCarrierBaseType] = useState(_parameters.type)
   const [_synthParameters, setSynthParameters] = useState(_parameters.synth)
-
+  const [_filterParameters, setFilterParameters] = useState(_synthParameters.hasOwnProperty("filter") ? _synthParameters.filter : null)
+  const [_filterEnvelopeParameters, setFilterEnvelopeParameters] = useState(_synthParameters.hasOwnProperty("filter") ? _synthParameters.filterEnvelope : null)
   
 
   useEffect(() => {
@@ -27,7 +24,34 @@ const InstrumentOptions = ({toneObj}) => {
   }, [_synthParameters, _carrierParameters])
   
   const handleParameterChange = (value, type, which, parent) => {
-    
+    if (type && which && parent) {
+      if (parent === "carrier") {
+        if (which === "carrier") {
+          if (type === "portamento") {
+            toneObj.tone[type] = value
+          }
+          if (type === "detune") {
+            toneObj.tone.oscillator.detune.set({value: value})
+          } else if (typeof toneObj.tone.oscillator[type] === "object") {
+            toneObj.tone.oscillator[type].value = value
+          } else {
+            toneObj.tone.oscillator[type] = value
+          }
+
+          if (type in _carrierParameters){
+            setCarrierParameters(previousParameters => ({
+              ...previousParameters, 
+              [type]: value
+            }))
+          } else {
+            setSynthParameters(previousParameters => ({
+              ...previousParameters, 
+              [type]: value
+            }))
+          }
+        }
+      }
+    }
   }
 
   const handleWaveTypes = (wave, which, parent) => {
@@ -65,7 +89,6 @@ const InstrumentOptions = ({toneObj}) => {
 
 
   const handleEnvelopeParameters = (value, type, which) => {
-    
     if (type && which) {
       if (which === "carrier") {
         toneObj.tone.envelope[type] = value
@@ -77,7 +100,51 @@ const InstrumentOptions = ({toneObj}) => {
     }
   }
 
+  const handleFilterEnvelope = (value, type, which) => {
+    if (type) {
+      toneObj.tone.filterEnvelope[type] = value
+      setFilterEnvelopeParameters(previousParameters => ({
+        ...previousParameters,
+        [type]: value
+      }))
+    }
+  } 
 
+  const handleFilterParameters = (value, type, which) => {
+    if (type) {
+      if (typeof toneObj.tone.filter[type] === "object") {
+        console.log(toneObj.tone.filter[type].value)
+        toneObj.tone.filter[type].set({value: value}) 
+      } else {
+        toneObj.tone.filter[type] = value
+      }
+      setFilterParameters(previousParameters => ({
+        ...previousParameters, 
+        [type]: value
+      }))
+    }
+  }
+
+  const handleFilterType = (filterType) => {
+    if (filterType) {
+      toneObj.tone.filter.type = filterType
+      setFilterParameters(previousParameters => ({
+        ...previousParameters, 
+        type: filterType
+      }))
+    }
+  }
+
+  const handleCurveType = (curveType) => {
+    console.log(curveType)
+    if (curveType) {
+      toneObj.tone.envelope.attackCurve = curveType
+      setEnvelope(previousParameters => ({
+        ...previousParameters, 
+        attackCurve: curveType
+      }))
+    }
+  }
 
   return (
     <div className='instrument-options-wrapper'>
@@ -96,17 +163,29 @@ const InstrumentOptions = ({toneObj}) => {
               borderRight: `1px solid ${colorScheme["Instrument"]}` 
             }}
               > 
-              <Synth 
-                parentSource={"carrier"}
-                getParameter={(value, type, which, parent) => handleParameterChange(value, type, which, parent)}
-                getWaveType={(wave, type, parent) => handleWaveTypes(wave, type, parent)}
-                getEnvelopeParameter={(value, type, which) => handleEnvelopeParameters(value, type, which)}
-                getOscillatorType={(value, which) => handleOscillatorType(value, which)}
-                _oscillator={_carrierParameters}
-                _synth={_synthParameters}
-                _envelope={_envelope}
-                _oscillatorType={_oscillatorType}
-              />
+              <div className='parameters-left-side'>
+                <Synth 
+                  parentSource={"carrier"}
+                  getParameter={(value, type, which, parent) => handleParameterChange(value, type, which, parent)}
+                  getWaveType={(wave, type, parent) => handleWaveTypes(wave, type, parent)}
+                  getEnvelopeParameter={(value, type, which) => handleEnvelopeParameters(value, type, which)}
+                  getOscillatorType={(value, which) => handleOscillatorType(value, which)}
+                  getCurveType={(value) => handleCurveType(value)}
+                  _oscillator={_carrierParameters}
+                  _synth={_synthParameters}
+                  _envelope={_envelope}
+                  _oscillatorType={_oscillatorType}
+                />
+                {_synthParameters.filter ? (
+                  <Mono 
+                    filter={_filterParameters}
+                    filterEnvelope={_filterEnvelopeParameters}
+                    getEnvelopeParameter={(value, type, which) => handleFilterEnvelope(value, type, which)}
+                    getParameter={(value, type, which) => handleFilterParameters(value, type, which)}
+                    getFilterType={(value) => handleFilterType(value)}
+                  />
+                ) : null }
+              </div>
 
           </div>
         ) : null }

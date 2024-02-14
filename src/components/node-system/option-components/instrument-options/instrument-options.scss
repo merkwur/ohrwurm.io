@@ -19,17 +19,11 @@
   .parameters{
     display: flex;
     
-    .synth-carrier{
-      width: 100%;
-      height: 100%;
-        
-      .carrier-oscillator{
+    .parameters-left-side{
+      padding-left: .25rem;
+      padding-right: .45rem;
+      overflow-y: scroll;
       
-        width: 100%;
-        overflow-y: scroll;
-
-    
-      }
     }
   }
 }
