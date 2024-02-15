@@ -18,16 +18,13 @@ const InstrumentOptions = ({toneObj}) => {
   const [_filterEnvelopeParameters, setFilterEnvelopeParameters] = useState(_synthParameters.hasOwnProperty("filter") ? _synthParameters.filterEnvelope : null)
   
 
-  useEffect(() => {
-    console.log(_synthParameters)
-    console.log(_carrierParameters)
-  }, [_synthParameters, _carrierParameters])
+
   
   const handleParameterChange = (value, type, which, parent) => {
     if (type && which && parent) {
-      if (parent === "carrier") {
+      if (parent === "carrier" && toneObj.name !== "MetalSynth" && toneObj.name !== "PluckSynth") {
         if (which === "carrier") {
-          if (type === "portamento") {
+          if (type === "portamento" || type === "octaves" || type === "pitchDecay") {
             toneObj.tone[type] = value
           }
           if (type === "detune") {
@@ -35,7 +32,8 @@ const InstrumentOptions = ({toneObj}) => {
           } else if (typeof toneObj.tone.oscillator[type] === "object") {
             toneObj.tone.oscillator[type].value = value
           } else {
-            toneObj.tone.oscillator[type] = value
+            console.log("triggered", type, value, which, parent)
+            toneObj.tone.oscillator.set({[type]: value})
           }
 
           if (type in _carrierParameters){
@@ -49,6 +47,14 @@ const InstrumentOptions = ({toneObj}) => {
               [type]: value
             }))
           }
+        }
+      } else {
+        if (type === "detune") {
+          toneObj.tone.detune.set({value: value})
+        } else if (typeof toneObj.tone[type] === "object") {
+          toneObj.tone[type].value = value
+        } else {
+          toneObj.tone[type] = value
         }
       }
     }
@@ -113,7 +119,7 @@ const InstrumentOptions = ({toneObj}) => {
   const handleFilterParameters = (value, type, which) => {
     if (type) {
       if (typeof toneObj.tone.filter[type] === "object") {
-        console.log(toneObj.tone.filter[type].value)
+        console.log(toneObj.tone.filter[type])
         toneObj.tone.filter[type].set({value: value}) 
       } else {
         toneObj.tone.filter[type] = value

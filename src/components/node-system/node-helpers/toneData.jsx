@@ -221,7 +221,7 @@ export const getToneObject = ( nodeName ) => {
     case "Vibrato": 
       return  new Tone.Vibrato(5, 1)
     case "MembraneSynth": 
-      return  new Tone.MembraneSynth({pitchDecay: 0})
+      return  new Tone.MembraneSynth()
     case "MetalSynth": 
       return  new Tone.MetalSynth()
     case "NoiseSynth": 
@@ -395,7 +395,7 @@ export const getNodeParameters = (name, type) => {
   }
 
   const filterParams = {
-    gain: .5, Q: 10,frequency: 440, rolloff: 0, type: "lowpass"
+    gain: .5, Q: 1,frequency: 440, rolloff: 0, type: "lowpass"
   }
   
   const monoSynthParams = {
@@ -405,22 +405,11 @@ export const getNodeParameters = (name, type) => {
   }
 
   const InstrumentParams = {
-      AMSynth: {
-        portamento: 0,
-        oscillator:{...OmniOscillator},
-        envelope: {...envelope},
-        modulationEnvelope: {...envelope},
-        modulator: {...omniModOscillator},
-        carrierOscillatorType: "osc",
-        modulatorOscillatorType: "osc",
-        type: "sine",
-        modulationType: "square"
-      }, 
-      Synth: {
-        synth: {...commonSynthParams},
-        oscillatorType: "osc",
-        oscillator: {...OmniOscillator},
-        envelope: {...envelope},
+    Synth: {
+      synth: {...commonSynthParams},
+      oscillatorType: "osc",
+      oscillator: {...OmniOscillator},
+      envelope: {...envelope},
       }, 
       MonoSynth: {
         synth: {...monoSynthParams},
@@ -428,11 +417,23 @@ export const getNodeParameters = (name, type) => {
         oscillator: {...OmniOscillator},
         oscillatorType: "osc"
       }, 
+      MembraneSynth: {
+        synth: {...commonSynthParams, octaves: 1, pitchDecay: .05}, 
+        envelope: {...envelope},
+        oscillator: {...OmniOscillator}
+      }, 
       DuoSynth: {
         voice0: {...monoSynthParams},
         voice1: {...monoSynthParams},
         oscillatorType0: "osc",
         oscillatorType1: "osc"
+      }, 
+      PluckSynth: {
+        synth: {
+          attackNoise: .1, 
+          dampening: 1000, 
+          resonance: .5
+       }
       }, 
       FMSynth: {
         ...commonSynthParams, 
@@ -446,29 +447,27 @@ export const getNodeParameters = (name, type) => {
         type: "sine",
         modulationType: "square"
       }, 
-      MembraneSynth: {
-        ...commonSynthParams, 
-        octaves: 1, 
-        pitchDecay: 0, 
-
+      
+      AMSynth: {
+        portamento: 0,
+        oscillator:{...OmniOscillator},
+        envelope: {...envelope},
+        modulationEnvelope: {...envelope},
+        modulator: {...omniModOscillator},
+        carrierOscillatorType: "osc",
+        modulatorOscillatorType: "osc",
+        type: "sine",
+        modulationType: "square"
       }, 
       MetalSynth:{
-        ...commonSynthParams, 
-        modulationIndex: 1, 
-        octaves: 1, 
-        harmonicity: 1, 
+        synth: {...commonSynthParams, modulationIndex: 1, octaves: 1, harmonicity: 1}, 
+        envelope: {...envelope},
       },
 
       NoiseSynth: {
         noise: "brown",
         ...envelope, 
         volume: 0, 
-      }, 
-      PluckSynth: {
-        attackNoise: .1, 
-        dampening: 0, 
-        resonance: 0, 
-        volume: 0,
       }, 
       PolySynth: {
         maxPolyphony: 1, 
@@ -644,15 +643,15 @@ export const initialStates = {
     frequency:          {type: "slider",  min: 1,      max: 8192,   multiplier: 1    ,  float: false,  unit: "Hz"   },
     phase:              {type: "slider",  min: 0,      max: 360,    multiplier: 1    ,  float: false,  unit: "\u00b0"   },
     modulationFrequency:{type: "slider",  min: .1,     max: 440,    multiplier: .1   ,  float: true ,  unit: "Hz"   },
-    pitchDecay:         {type: "slider",  min: 0,      max: 1,      multiplier: .001 ,  float: true ,  unit: null   },
+    pitchDecay:         {type: "slider",  min: 0,      max: .5,      multiplier: .001 ,  float: true ,  unit: null   },
     harmonicity:        {type: "slider",  min: .1,     max: 10,     multiplier: .001 ,  float: true ,  unit: "mf/cf"   },
-    octaves:            {type: "slider",  min: 0,      max: 8,      multiplier: .001 ,  float: true ,  unit: null   },
+    octaves:            {type: "slider",  min: 0.5,      max: 8,      multiplier: .001 ,  float: true ,  unit: null   },
     width:              {type: "slider",  min: -1,     max: 1,      multiplier: .01  ,  float: true ,  unit: null   },
     spread:             {type: "slider",  min: -1200,  max: 100,    multiplier: 1    ,  float: false,  unit: null   },
     partialCount:       {type: "slider",  min: 0,      max: 24,     multiplier: 1    ,  float: false,  unit: null   },
     gain:               {type: "slider",  min: 0.01,      max: 1,      multiplier: 0.01 ,  float: true ,  unit: null   },
     count:              {type: "slider",  min: 1,      max: 12,     multiplier: 1    ,  float: false,  unit: null   },
-    resonance:          {type: "slider",  min: 0,      max: 7000,   multiplier:  1   ,  float: false,  unit: null   },
+    resonance:          {type: "slider",  min: 0,      max: .99,      multiplier:  .01   ,  float: true,  unit: null   },
     modulationIndex:    {type: "slider",  min: 1,      max: 100,    multiplier:  1   ,  float: false,  unit: null   },
     dampening:          {type: "slider",  min: 1,      max: 7000,   multiplier:  1   ,  float: false,  unit: null   },
     baseFrequency:      {type: "slider",  min: 20,     max: 8192,   multiplier: 1    ,  float: false,  unit: "Hz"   },

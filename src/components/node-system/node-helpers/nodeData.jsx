@@ -260,9 +260,9 @@ const getSize = (name, type, snap) => {
     },
     Source: {
       Oscillator: {...single },
-      FatOscillator: {...double },
+      FatOscillator: {...single },
       PulseOscillator: {...double },
-      PWMOscillator: {...double },
+      PWMOscillator: {...single },
       Noise: {...single },
       AMOscillator:{...double },
       FMOscillator: {...double },
@@ -271,10 +271,10 @@ const getSize = (name, type, snap) => {
     Instrument: {
       AMSynth: {...double},
       FMSynth: {...double},
-      DuoSynth: {...quads},
-      MembraneSynth: {...double},
+      DuoSynth: {...double},
+      MembraneSynth: {...single},
       MetalSynth: {...double},
-      MonoSynth: {...double},
+      MonoSynth: {...single},
       NoiseSynth: {...double},
       PluckSynth: {...double},
       PolySynth: {...double},
@@ -444,8 +444,6 @@ const getInputs = (name, type) => {
       }, 
       MonoSynth: {
         ...commonSynthParams,
-        filterFrequency: null,
-        filterGain: null, 
         trigger: null
       }, 
       NoiseSynth: {

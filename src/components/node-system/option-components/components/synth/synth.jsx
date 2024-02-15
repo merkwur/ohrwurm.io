@@ -24,34 +24,38 @@ const Synth = ({
   return (
     <div className='synth-wrapper'>
       <div className='synth-carrier'>
-        <Switch 
-          elements={["osc", "fm", "am", "fat", "pulse", "pwm" ]}
-          value={_oscillatorType}
-          parentType={"Instrument"}
-          whichSource={"carrier"}
-          parentSource={parentSource}
-          getWaveType={getOscillatorType}
-          orientation={"horizontal"}
-        />
+        {_oscillator ? (
+          <Switch 
+            elements={["osc", "fm", "am", "fat", "pulse", "pwm" ]}
+            value={_oscillatorType}
+            parentType={"Instrument"}
+            whichSource={"carrier"}
+            parentSource={parentSource}
+            getWaveType={getOscillatorType}
+            orientation={"horizontal"}
+          />
+        ) : null}
         <div className='carrier-oscillator'> 
+          {_envelope ? (
           <>
             <Envelope 
               parameters={_envelope}
               which={parentSource}
               getParameter={getEnvelopeParameter}
             />
-          </>
           <div className='attack-curve-type'>
-            <Dropdown 
-              options={initialStates.attackCurve.value}
-              selectFilterType={getCurveType}
-              value={_envelope.attackCurve}
-              header={"aCurve"}
-              type={"Instrument"}
-            />
+              <Dropdown 
+                options={initialStates.attackCurve.value}
+                selectFilterType={getCurveType}
+                value={_envelope.attackCurve}
+                header={"aCurve"}
+                type={"Instrument"}
+                />
           </div>
+            </>
+            ) : null}
           <div className='synth-parameters'>
-            {_oscillator.type ? (
+            {_oscillator && _oscillator.type ? (
               <div className='synth-wave-select'>
                 <Switch
                   elements={initialStates.type.value}
@@ -84,23 +88,27 @@ const Synth = ({
           </div>
           <div className='oscillator-adjustable-parameters'>
             <div className='oscillator-modulator-sliders'>
-              {Object.keys(_oscillator).map((parameter, index) => (
-                <React.Fragment key={parameter+index+parentSource+"oscillator"}>
-                  {!_synth.hasOwnProperty(parameter) && initialStates[parameter] && initialStates[parameter].type === "slider" ? (
-                    <HorizontalSlider 
-                      name={parameter}
-                      type={"Instrument"}
-                      state={initialStates[parameter]}
-                      parameterValue={_oscillator[parameter]}
-                      getParameter={getParameter}
-                      whichOscillator={"carrier"}
-                      parentOscillator={parentSource}
-                    />
-                  ) : null}
-                </React.Fragment>
-              ))}
+              {_oscillator ?  (
+                <>
+                  {Object.keys(_oscillator).map((parameter, index) => (
+                    <React.Fragment key={parameter+index+parentSource+"oscillator"}>
+                      {!_synth.hasOwnProperty(parameter) && initialStates[parameter] && initialStates[parameter].type === "slider" ? (
+                        <HorizontalSlider 
+                          name={parameter}
+                          type={"Instrument"}
+                          state={initialStates[parameter]}
+                          parameterValue={_oscillator[parameter]}
+                          getParameter={getParameter}
+                          whichOscillator={"carrier"}
+                          parentOscillator={parentSource}
+                        />
+                      ) : null}
+                    </React.Fragment>
+                  ))}
+                </>
+              )  : null }
             </div>
-            {_oscillator.modulator ? (
+            {_oscillator && _oscillator.modulator ? (
               <div className='oscillator-modulator-wave-select'>
                 <Switch 
                   elements={initialStates.type.value}
