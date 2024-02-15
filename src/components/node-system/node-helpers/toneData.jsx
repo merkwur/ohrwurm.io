@@ -435,17 +435,18 @@ export const getNodeParameters = (name, type) => {
           resonance: .5
        }
       }, 
+      NoiseSynth: {
+        synth: {noise: "brown"},
+        envelop: {...envelope}, 
+      }, 
       FMSynth: {
-        ...commonSynthParams, 
-        modulationIndex: 1,
-        portamento: 0,  
+        synth: {...commonSynthParams, harmonicity: 1, modulationIndex: 1, modulationType: "square"}, 
         envelope: {...envelope},
-        modulationEnvelope: {...envelope},  
+        modulationEnvelope: {...envelope},
+        oscillator: {...OmniOscillator},  
         modulator: {...omniModOscillator}, 
-        carrierOscillatorType: "osc",
-        modulatorOscillatorType: "osc", 
-        type: "sine",
-        modulationType: "square"
+        oscillatorType: "osc",
+        modulationType: "osc", 
       }, 
       
       AMSynth: {
@@ -464,11 +465,6 @@ export const getNodeParameters = (name, type) => {
         envelope: {...envelope},
       },
 
-      NoiseSynth: {
-        noise: "brown",
-        ...envelope, 
-        volume: 0, 
-      }, 
       PolySynth: {
         maxPolyphony: 1, 
         volume: 0, 

@@ -248,8 +248,8 @@ const getSize = (name, type, snap) => {
   const double = {
     x: snap, y: snap*2+10
   }
-  const quads = {
-    x: snap * 2 + 10, y: snap * 2 + 10
+  const onehalf = {
+    x: snap, y: snap * 1.5 + 10
   }
   const nodeSizeData = {
 
@@ -275,8 +275,8 @@ const getSize = (name, type, snap) => {
       MembraneSynth: {...single},
       MetalSynth: {...double},
       MonoSynth: {...single},
-      NoiseSynth: {...double},
-      PluckSynth: {...double},
+      NoiseSynth: {...single},
+      PluckSynth: {...onehalf},
       PolySynth: {...double},
       Synth: {...single}
     },
@@ -426,7 +426,6 @@ const getInputs = (name, type) => {
       FMSynth: {
         ...commonSynthParams,
         harmonicity: null, 
-        modulation: null, 
         modulationIndex: null, 
         trigger: null
       }, 

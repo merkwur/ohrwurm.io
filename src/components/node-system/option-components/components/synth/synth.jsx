@@ -80,6 +80,7 @@ const Synth = ({
                       getParameter={getParameter}
                       whichOscillator={"carrier"}
                       parentOscillator={parentSource}
+                      from={"synth"}
                     />
                   ) : null}
                 </React.Fragment>
@@ -101,6 +102,7 @@ const Synth = ({
                           getParameter={getParameter}
                           whichOscillator={"carrier"}
                           parentOscillator={parentSource}
+                          from={"oscillator"}
                         />
                       ) : null}
                     </React.Fragment>

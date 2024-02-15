@@ -87,11 +87,13 @@ const MasterNode =  ({node,
 
       // node overlap checker here!
 
-      setSnapsX(sx)
-      setSnapsY(sy)
+      const handler = setTimeout(() => {
+        setSnapsX(sx)
+        setSnapsY(sy)
+      }, 40)
+      return () => clearTimeout(handler)
     }
   }
-
 
 
 

@@ -10,8 +10,11 @@ const InstrumentOptions = ({toneObj}) => {
   const [openProperties, setOpenProperties] = useState(true)
   const [_parameters, setParameters] = useState(toneObj.parameters) 
   const [_envelope, setEnvelope] = useState(_parameters.hasOwnProperty("envelope") ? _parameters.envelope : null)
+  const [_modulationEnvelope, setModulationEnvelope] = useState(_parameters.hasOwnProperty("modulationEnvelope") ? _parameters.modulationEnvelope : null)
   const [_carrierParameters, setCarrierParameters] = useState(_parameters.hasOwnProperty("oscillator") ? _parameters.oscillator.osc : null)
+  const [_modulatorParameters, setModulatorParameters] = useState(_parameters.hasOwnProperty("modulator") ? _parameters.modulator.osc : null)
   const [_oscillatorType, setOscillatorType] = useState(_parameters.oscillatorType)
+  const [_modulationType, setModulationType]  =useState(_parameters.modulationType)
   const [_carrierBaseType, setCarrierBaseType] = useState(_parameters.type)
   const [_synthParameters, setSynthParameters] = useState(_parameters.synth)
   const [_filterParameters, setFilterParameters] = useState(_synthParameters.hasOwnProperty("filter") ? _synthParameters.filter : null)
@@ -20,41 +23,33 @@ const InstrumentOptions = ({toneObj}) => {
 
 
   
-  const handleParameterChange = (value, type, which, parent) => {
-    if (type && which && parent) {
-      if (parent === "carrier" && toneObj.name !== "MetalSynth" && toneObj.name !== "PluckSynth") {
-        if (which === "carrier") {
-          if (type === "portamento" || type === "octaves" || type === "pitchDecay") {
+  const handleParameterChange = (value, type, which, parent, from) => {
+    if (type && which && parent && from) {
+      if (parent === "carrier") {
+        if (from === "synth") {
+          if (type === "detune") {
+            toneObj.tone.detune.set({value: value})
+          } else if (typeof toneObj.tone[type] === "object") {
+            toneObj.tone[type].value = value
+          } else {
             toneObj.tone[type] = value
           }
+          setSynthParameters(previousParameters => ({
+            ...previousParameters, 
+            [type]: value
+          }))
+        } else {
           if (type === "detune") {
             toneObj.tone.oscillator.detune.set({value: value})
           } else if (typeof toneObj.tone.oscillator[type] === "object") {
             toneObj.tone.oscillator[type].value = value
           } else {
-            console.log("triggered", type, value, which, parent)
-            toneObj.tone.oscillator.set({[type]: value})
+            toneObj.tone.oscillator[type] = value
           }
-
-          if (type in _carrierParameters){
-            setCarrierParameters(previousParameters => ({
-              ...previousParameters, 
-              [type]: value
-            }))
-          } else {
-            setSynthParameters(previousParameters => ({
-              ...previousParameters, 
-              [type]: value
-            }))
-          }
-        }
-      } else {
-        if (type === "detune") {
-          toneObj.tone.detune.set({value: value})
-        } else if (typeof toneObj.tone[type] === "object") {
-          toneObj.tone[type].value = value
-        } else {
-          toneObj.tone[type] = value
+          setCarrierParameters(previousParameters => ({
+            ...previousParameters, 
+            [type]: value
+          }))
         }
       }
     }
@@ -82,7 +77,7 @@ const InstrumentOptions = ({toneObj}) => {
 
 
   const handleOscillatorType = (type, which) => {
-    console.log("this", type, which)
+    
     const oscType = type === "osc" ? "oscillator" : type
     if (type && which) {
       if (which === "carrier") {
@@ -119,7 +114,7 @@ const InstrumentOptions = ({toneObj}) => {
   const handleFilterParameters = (value, type, which) => {
     if (type) {
       if (typeof toneObj.tone.filter[type] === "object") {
-        console.log(toneObj.tone.filter[type])
+        
         toneObj.tone.filter[type].set({value: value}) 
       } else {
         toneObj.tone.filter[type] = value
@@ -142,7 +137,7 @@ const InstrumentOptions = ({toneObj}) => {
   }
 
   const handleCurveType = (curveType) => {
-    console.log(curveType)
+    
     if (curveType) {
       toneObj.tone.envelope.attackCurve = curveType
       setEnvelope(previousParameters => ({
@@ -172,7 +167,7 @@ const InstrumentOptions = ({toneObj}) => {
               <div className='parameters-left-side'>
                 <Synth 
                   parentSource={"carrier"}
-                  getParameter={(value, type, which, parent) => handleParameterChange(value, type, which, parent)}
+                  getParameter={(value, type, which, parent, from) => handleParameterChange(value, type, which, parent, from)}
                   getWaveType={(wave, type, parent) => handleWaveTypes(wave, type, parent)}
                   getEnvelopeParameter={(value, type, which) => handleEnvelopeParameters(value, type, which)}
                   getOscillatorType={(value, which) => handleOscillatorType(value, which)}
@@ -192,7 +187,31 @@ const InstrumentOptions = ({toneObj}) => {
                   />
                 ) : null }
               </div>
-
+              {_modulatorParameters ? (
+                <div className='parameters-right-side'>
+                  <Synth 
+                    parentSource={"modulator"}
+                    getParameter={(value, type, which, parent, from) => handleParameterChange(value, type, which, parent, from)}
+                    getWaveType={(wave, type, parent) => handleWaveTypes(wave, type, parent)}
+                    getEnvelopeParameter={(value, type, which) => handleEnvelopeParameters(value, type, which)}
+                    getOscillatorType={(value, which) => handleOscillatorType(value, which)}
+                    getCurveType={(value) => handleCurveType(value)}
+                    _oscillator={_modulatorParameters}
+                    _synth={_synthParameters}
+                    _envelope={_modulationEnvelope}
+                    _oscillatorType={_modulationType}
+                  />
+                  {_synthParameters.filter ? (
+                    <Mono 
+                      filter={_filterParameters}
+                      filterEnvelope={_filterEnvelopeParameters}
+                      getEnvelopeParameter={(value, type, which) => handleFilterEnvelope(value, type, which)}
+                      getParameter={(value, type, which) => handleFilterParameters(value, type, which)}
+                      getFilterType={(value) => handleFilterType(value)}
+                    />
+                  ) : null }
+                </div>
+              ) : null}
           </div>
         ) : null }
       </>

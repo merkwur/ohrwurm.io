@@ -15,7 +15,8 @@ const HorizontalSlider = ({
                             whichOscillator,
                             parentOscillator,
                             getParameter, 
-                            isParamCentered
+                            isParamCentered,
+                            from
                           }) => {
 
   
@@ -62,7 +63,7 @@ const HorizontalSlider = ({
   useEffect(() => {
     
     const handler = setTimeout(() => {
-      getParameter(value, name, whichOscillator, parentOscillator) 
+      getParameter(value, name, whichOscillator, parentOscillator, from) 
     }, 20)
     return () => clearTimeout(handler)
   }, [value])

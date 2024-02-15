@@ -180,11 +180,12 @@ const NodeCanvas = () => {
                 position: "absolute",
                 right: "0",
                 bottom: "40%",
-                backgroundColor: "#171717",
+                backgroundColor: "#17171717",
                 backgroundSize: "10px",
                 backgroundImage: 
                     `radial-gradient(to right, #22dbc027 1px, transparent 1px),
-                      radial-gradient(to bottom, #77777717 1px, transparent 1px)`
+                      radial-gradient(to bottom, #77777717 1px, transparent 1px)`,
+                zIndex: 99999
             }}
             >
             {
@@ -196,7 +197,7 @@ const NodeCanvas = () => {
                     position: "absolute",
                     left: `${(index % 48) * 8}px`, // Assuming each cell + border is 9px wide
                     top: `${Math.floor(index / 48) * 8}px`, // Assuming each cell + border is 9px high
-                    backgroundColor: item === 0 ? "#171717" : "#ff4242", // Corrected hex color codes
+                    backgroundColor: item === 0 ? "#17171742" : "#ff4242", // Corrected hex color codes
                     width: "8px",
                     height: "8px",
                     border: ".01rem solid #77777717" // Corrected border color
@@ -213,11 +214,12 @@ const NodeCanvas = () => {
                 position: "absolute",
                 right: "0",
                 bottom: "60%",
-                backgroundColor: "#171717",
+                backgroundColor: "#17171742",
                 backgroundSize: "10px",
                 backgroundImage: 
                     `radial-gradient(to right, #22dbc027 1px, transparent 1px),
-                      radial-gradient(to bottom, #77777717 1px, transparent 1px)`
+                      radial-gradient(to bottom, #77777717 1px, transparent 1px)`,
+                zIndex: 99999
             }}
             >
             {
@@ -229,7 +231,7 @@ const NodeCanvas = () => {
                     position: "absolute",
                     left: `${(index % 24) * 16}px`, // Assuming each cell + border is 9px wide
                     top: `${Math.floor(index / 24) * 16}px`, // Assuming each cell + border is 9px high
-                    backgroundColor: item === 0 ? "#171717" : "#ff4242", // Corrected hex color codes
+                    backgroundColor: item === 0 ? "#17171727" : "#ff4242", // Corrected hex color codes
                     width: "16px",
                     height: "16px",
                     border: ".01rem solid #77777717" // Corrected border color

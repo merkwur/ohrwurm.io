@@ -18,12 +18,16 @@
 
   .parameters{
     display: flex;
-    
     .parameters-left-side{
-      padding-left: .25rem;
-      padding-right: .45rem;
-      overflow-y: scroll;
+      width: 160px;
+      margin-left: .25rem;
       
+      overflow-y: scroll; 
+    }
+
+    .parameters-right-side{
+      width: 160px;
+      border-left: 1px solid #77777777;
     }
   }
 }

@@ -25,10 +25,10 @@ const Dropdown = ({
         onClick={() => setDrop(!drop)}
       >
         <div style={{color: `${colorScheme[type]}`}}>
-          {`${header} >`}
+          {`${header} >>`}
         </div>
         
-        <div>{` ${value}`}</div>
+        <div>{"\u00A0"}{value}</div>
       </div>
       <div 
         className='dropdown-menu'
