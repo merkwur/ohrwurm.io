@@ -1,0 +1,33 @@
+
+.effect-options-wrapper{
+  height: 100%;
+  
+  background-color: #17171777;
+  color: bisque;
+  display: flex;
+  flex-direction: row;
+  border-bottom: #77777777 1px solid;
+
+  .left-stander{
+    border-right: 1px solid #77777777;
+    padding-top: 2rem;
+    font-weight: 500;
+    font-size: 12pt;
+
+    .header{
+      writing-mode: vertical-rl;
+    }
+  }
+
+  .parameters{
+    
+    width: 140px;
+    overflow-y: scroll;
+    padding-left: .5rem;
+
+    .effect-dropdown-type{
+      padding-bottom: .5rem;
+    }
+
+  }
+}

@@ -255,7 +255,7 @@ const InstrumentOptions = memo(({toneObj}) => {
                   />
                 ) : null }
               </div>
-              {_modulatorParameters || voice0 ? (
+              {_modulatorParameters ? (
                 <div className='parameters-right-side'>
                   <div className='synth-header'>
                     modulation

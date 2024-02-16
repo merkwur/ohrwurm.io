@@ -281,7 +281,7 @@ const getSize = (name, type, snap) => {
       Synth: {...single}
     },
     Effect: {
-      AutoFilter: {...single},
+      AutoFilter: {...onehalf},
       AutoPanner: {...single},
       AutoWah: {...double},
       BitCrusher: {...single},
@@ -472,8 +472,8 @@ const getInputs = (name, type) => {
     }, Effect: {
       AutoFilter: {
         frequency: null, 
-        filterFrequency: null,
-        filterGain: null, 
+        baseFrequency: null,
+        gain: null, 
         wet: null,
         node: null,
       }, 
@@ -487,6 +487,7 @@ const getInputs = (name, type) => {
         wet: null, 
         Q: null, 
         node: null,
+        
       }, 
       BitCrusher: {
         bits: null, 

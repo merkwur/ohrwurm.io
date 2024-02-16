@@ -403,7 +403,7 @@ export const getNodeParameters = (name, type) => {
   }
 
   const filterParams = {
-    gain: .5, Q: 1,frequency: 440, rolloff: 0, type: "lowpass"
+    gain: .5, Q: 1,frequency: 440, rolloff: 0, type: "filterTypes"
   }
   
   const monoSynthParams = {
@@ -481,8 +481,8 @@ export const getNodeParameters = (name, type) => {
      
     }
     const EffectParams = {
-      AutoFilter: {depth:0, ...filterParams, baseFrequency: 440, frequency: 220, wet: 1},
-      AutoPanner: {depth: 0, frequency: 440, wet: 1},
+      AutoFilter: {start: false, depth: 0.5, ...filterParams, octaves: 4, baseFrequency: 440, frequency: 220, wet: 1},
+      AutoPanner: {start: false, depth: 0, frequency: 440, wet: 1},
       AutoWah: {
         baseFrequency: 440, 
         follower: 0, 
@@ -666,7 +666,7 @@ export const initialStates = {
     knee:               {type: "slider",  min: .1,     max: 20,     multiplier:  .01 ,  float: true ,  unit: null   },
     ratio:              {type: "slider",  min: .1,     max: 20,     multiplier:  .01 ,  float: true ,  unit: null   },
     threshold:          {type: "slider",  min: .1,     max: 20,     multiplier:  .01 ,  float: true ,  unit: null   },
-    volume:             {type: "slider",  min: .1,     max: 20,     multiplier:  .01 ,  float: true ,  unit: null   },
+    sensitivity:        {type: "slider",  min: -96,    max: 96,     multiplier:   1 ,   float: false , unit: "db"   },
     Q:                  {type: "slider",  min: .1,     max: 20,     multiplier:  .01 ,  float: true ,  unit: null   },
     low:                {type: "slider",  min: .1,     max: 20,     multiplier:  .01 ,  float: true ,  unit: null   },
     lowFrequency:       {type: "slider",  min: .1,     max: 20,     multiplier:  .01 ,  float: true ,  unit: null   },
@@ -691,6 +691,7 @@ export const initialStates = {
     length:             {type: "slider",  min: 1,      max: 8,      multiplier:   1 ,   float: false , unit: null   },
     wet:                {type: "slider",  min: 0,      max: 1,      multiplier:   .01 , float: true  , unit: null   },
     feedback:           {type: "slider",  min: 0,      max: 1,      multiplier:   .01 , float: true  , unit: null   },
+    depth:           {type: "slider",  min: 0,      max: 1,      multiplier:   .01 , float: true  , unit: null   },
     p:                  {type: "slider",  min: 0,      max: 1,      multiplier:   .01 , float: true  , unit: null   },
     d:                  {type: "slider",  min: 0,      max: 1,      multiplier:   .01 , float: true  , unit: null   },
     orientationX:       {type: "slider",  min: -Infinity, max: Infinity,     multiplier:  1 ,  float: false ,  unit: "cm"   },

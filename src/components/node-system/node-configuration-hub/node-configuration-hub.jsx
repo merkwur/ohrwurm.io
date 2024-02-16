@@ -3,6 +3,7 @@ import "./node-configuration-hub.scss"
 import SourceOptions from '../option-components/source-options/source-options'
 import Transport from '../option-components/transport/transport'
 import InstrumentOptions from '../option-components/instrument-options/instrument-options'
+import EffectOptions from '../option-components/effect-options/effect-option'
 
 const NodeConfigurationHub = ({tone, notesToTrigger, getGlobalTime}) => {
 
@@ -28,6 +29,8 @@ const NodeConfigurationHub = ({tone, notesToTrigger, getGlobalTime}) => {
                 <InstrumentOptions 
                   toneObj={tone[toneObj]}
                 /> 
+              ) : tone[toneObj].type === "Effect" ? (
+                <EffectOptions toneObj={tone[toneObj]} />
               ) : null}
           </React.Fragment>
         ))}
