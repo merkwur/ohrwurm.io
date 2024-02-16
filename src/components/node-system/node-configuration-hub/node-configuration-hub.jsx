@@ -16,8 +16,6 @@ const NodeConfigurationHub = ({tone, notesToTrigger, getGlobalTime}) => {
                 <SourceOptions 
                   toneObj={tone[toneObj]}
                 />
-              ): toneObj.type === "Instrument" ?"Destination" && tone.name !== "Transport" && tone.type !== "Signal" (
-                <></>
               ) : tone[toneObj].name === "Transport" ? (
                 <Transport 
                   id={tone[toneObj].id} 
@@ -27,7 +25,9 @@ const NodeConfigurationHub = ({tone, notesToTrigger, getGlobalTime}) => {
                   getGlobalTime={getGlobalTime}
                   />
               ) : tone[toneObj].type === "Instrument" ? (
-                <InstrumentOptions toneObj={tone[toneObj]}/> 
+                <InstrumentOptions 
+                  toneObj={tone[toneObj]}
+                /> 
               ) : null}
           </React.Fragment>
         ))}

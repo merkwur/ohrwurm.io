@@ -7,14 +7,14 @@ const Dropdown = ({
                   selectFilterType, 
                   value, 
                   type, 
-                  header
+                  header, which
                 }) => {
 
 
   const [drop, setDrop] = useState(false)
 
   const handlefilterSelection = (item) => {
-    selectFilterType(item)
+    selectFilterType(item, which)
     
   }
 

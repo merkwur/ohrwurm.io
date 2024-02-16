@@ -8,12 +8,21 @@
       .synth-parameters{
         display: flex;
         margin-top: .5rem;
+        width: 100%;
+        
+          .carrier-image{
+            padding-left: .25rem;
+            padding-top: .25rem;
+            padding-right: .5rem;
+            border-right: 1px dotted #77777727;
+            font-size: 10pt;
+            
+          }
         .synth-wave-select{
           width: 20%;
         }
         .synth-sliders{
           padding-top: .25rem;
-          border-left: 1px solid #77777777;
           padding-left: .5rem;
         }
       }
@@ -22,6 +31,27 @@
         .oscillator-modulator-sliders{
           padding-left: .5rem;
         }
+
+        .omni-oscillator-modulation{
+          
+          display: flex;
+          width: 100%;
+          border-top: 1px solid #77777777;
+          
+          .modulation-image{
+            padding-left: .25rem;
+            padding-top: .25rem;
+            padding-right: .25rem;
+            border-right: 1px dotted #77777727;
+            font-size: 10pt;
+            
+          }
+          .oscillator-modulator-wave-select{
+            width: 100%;
+           
+          }
+        }
+
       }
     }
   }

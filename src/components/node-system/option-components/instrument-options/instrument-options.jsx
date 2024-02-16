@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from 'react'
+import React, { memo, useEffect, useState } from 'react'
 import { colorScheme } from '../../node-helpers/helperFunctions'
 import "./instrument-options.scss"
 import Synth from '../components/synth/synth'
 import Mono from '../components/mono/mono'
 
 
-const InstrumentOptions = ({toneObj}) => {
+const InstrumentOptions = memo(({toneObj}) => {
 
   const [openProperties, setOpenProperties] = useState(true)
   const [_parameters, setParameters] = useState(toneObj.parameters) 
@@ -17,13 +17,16 @@ const InstrumentOptions = ({toneObj}) => {
   const [_modulationType, setModulationType]  =useState(_parameters.modulationType)
   const [_carrierBaseType, setCarrierBaseType] = useState(_parameters.type)
   const [_synthParameters, setSynthParameters] = useState(_parameters.synth)
+  const [_modulatorSynthParameters, setModulatorSynthParameters] = useState(_parameters.modulatorSynth)
   const [_filterParameters, setFilterParameters] = useState(_synthParameters.hasOwnProperty("filter") ? _synthParameters.filter : null)
   const [_filterEnvelopeParameters, setFilterEnvelopeParameters] = useState(_synthParameters.hasOwnProperty("filter") ? _synthParameters.filterEnvelope : null)
-  
+  const [_isSynthConnected, setIsSynthConnected] = useState(toneObj.isTriggerConnected)
 
 
-  
+  useEffect(() => {console.log("aaaaaaaaaaa")}, [toneObj])
+
   const handleParameterChange = (value, type, which, parent, from) => {
+    
     if (type && which && parent && from) {
       if (parent === "carrier") {
         if (from === "synth") {
@@ -51,17 +54,43 @@ const InstrumentOptions = ({toneObj}) => {
             [type]: value
           }))
         }
+      } else {
+        
+        if (from === "synth") {
+          if (type === "detune") {
+            console.log("type: ", type)
+            toneObj.tone.modulation.detune.set({value: value})
+            toneObj.tone.modulation.frequency.value = 1200
+          } else if (toneObj.tone.modulation[type] === "object") {
+            toneObj.tone.modulation[type].value = value
+          } else {
+            toneObj.tone.modulation[type] = value
+          }
+          setModulatorSynthParameters(previousParameters => ({
+            ...previousParameters, 
+            [type]: value
+          }))
+        } else {
+          console.log("form oisc")
+          toneObj.tone.modulation[type] = value
+          setModulatorParameters(previousParameters => ({
+            ...previousParameters, 
+            [type]: value
+          }))
+        }
       }
     }
   }
 
+
+
   const handleWaveTypes = (wave, which, parent) => {
-    console.log(wave, which, parent)
+    console.log(which, parent)
     if (wave && which, parent) {
       if (parent === "carrier") {
         if (which === "carrier") {
           toneObj.tone.oscillator.baseType = wave
-          setSynthParameters(previousParameters => ({
+          setCarrierParameters(previousParameters => ({
             ...previousParameters, 
             type: wave
           }))
@@ -71,19 +100,39 @@ const InstrumentOptions = ({toneObj}) => {
             ...previousParameters, 
             modulationType: wave
           }))
+      } else {
+        if (which === "carrier") {
+          toneObj.tone.modulation.baseType = wave
+          console.log("synth: mod && osc: carrier", wave)
+          setModulatorParameters(previousParameters => ({
+            ...previousParameters, 
+            type: wave
+          }))
+        } else {
+          toneObj.tone.modulation.modulationType = wave
+          setModulatorParameters(previousParameters => ({
+            ...previousParameters, 
+            modulationType: wave
+          }))
+        }
+
       }
     }
   }
 
 
   const handleOscillatorType = (type, which) => {
-    
     const oscType = type === "osc" ? "oscillator" : type
+    
     if (type && which) {
       if (which === "carrier") {
         toneObj.tone.oscillator.sourceType = oscType
         setOscillatorType(type)
         setCarrierParameters(_parameters.oscillator[type])
+      } else {
+        toneObj.tone.modulation.sourceType = oscType
+        setModulationType(type)
+        setModulatorParameters(_parameters.modulator[type])
       }
     }
   }
@@ -97,7 +146,13 @@ const InstrumentOptions = ({toneObj}) => {
           ...previousParameters, 
           [type]: value
         }))
-      } 
+      } else {
+        toneObj.tone.modulationEnvelope[type] = value
+        setModulationEnvelope(previousParameters => ({
+          ...previousParameters, 
+          [type]: value
+        }))
+      }
     }
   }
 
@@ -136,14 +191,22 @@ const InstrumentOptions = ({toneObj}) => {
     }
   }
 
-  const handleCurveType = (curveType) => {
-    
+  const handleCurveType = (curveType, which) => {
+    console.log(which)    
     if (curveType) {
-      toneObj.tone.envelope.attackCurve = curveType
-      setEnvelope(previousParameters => ({
-        ...previousParameters, 
-        attackCurve: curveType
-      }))
+      if (which === "carrier") {
+        toneObj.tone.envelope.attackCurve = curveType
+        setEnvelope(previousParameters => ({
+          ...previousParameters, 
+          attackCurve: curveType
+        }))
+      } else {
+        toneObj.tone.modulationEnvelope.attackCurve = curveType
+        setModulationEnvelope(previousParameters => ({
+          ...previousParameters, 
+          attackCurve: curveType
+        }))
+      }
     }
   }
 
@@ -165,17 +228,22 @@ const InstrumentOptions = ({toneObj}) => {
             }}
               > 
               <div className='parameters-left-side'>
+                <div className='synth-header'>
+                  carrier
+                </div>
                 <Synth 
                   parentSource={"carrier"}
                   getParameter={(value, type, which, parent, from) => handleParameterChange(value, type, which, parent, from)}
                   getWaveType={(wave, type, parent) => handleWaveTypes(wave, type, parent)}
                   getEnvelopeParameter={(value, type, which) => handleEnvelopeParameters(value, type, which)}
                   getOscillatorType={(value, which) => handleOscillatorType(value, which)}
-                  getCurveType={(value) => handleCurveType(value)}
+                  getCurveType={(value, which) => handleCurveType(value, which)}
+                  _connected={_isSynthConnected}
                   _oscillator={_carrierParameters}
                   _synth={_synthParameters}
                   _envelope={_envelope}
                   _oscillatorType={_oscillatorType}
+                  
                 />
                 {_synthParameters.filter ? (
                   <Mono 
@@ -187,8 +255,11 @@ const InstrumentOptions = ({toneObj}) => {
                   />
                 ) : null }
               </div>
-              {_modulatorParameters ? (
+              {_modulatorParameters || voice0 ? (
                 <div className='parameters-right-side'>
+                  <div className='synth-header'>
+                    modulation
+                  </div>
                   <Synth 
                     parentSource={"modulator"}
                     getParameter={(value, type, which, parent, from) => handleParameterChange(value, type, which, parent, from)}
@@ -196,8 +267,9 @@ const InstrumentOptions = ({toneObj}) => {
                     getEnvelopeParameter={(value, type, which) => handleEnvelopeParameters(value, type, which)}
                     getOscillatorType={(value, which) => handleOscillatorType(value, which)}
                     getCurveType={(value) => handleCurveType(value)}
+                    _connected={_isSynthConnected}
                     _oscillator={_modulatorParameters}
-                    _synth={_synthParameters}
+                    _synth={_modulatorSynthParameters}
                     _envelope={_modulationEnvelope}
                     _oscillatorType={_modulationType}
                   />
@@ -217,6 +289,6 @@ const InstrumentOptions = ({toneObj}) => {
       </>
     </div>
   )
-}
+})
 
 export default InstrumentOptions

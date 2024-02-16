@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { memo, useEffect, useState } from 'react'
 import "./source-options.scss"
 import { colorScheme } from '../../node-helpers/helperFunctions'
 import Oscillator from '../components/oscillator/oscillator'
@@ -6,7 +6,7 @@ import LFO from '../components/lfo/lfo'
 
 
 
-const SourceOptions = ({toneObj}) => {
+const SourceOptions = memo(({toneObj}) => {
 
   const [openProperties, setOpenProperties] = useState(true)
   const [_parameters, setParameters] = useState(toneObj.parameters)    
@@ -143,6 +143,6 @@ const SourceOptions = ({toneObj}) => {
        </>
     </div>
   )
-}
+})
 
 export default SourceOptions

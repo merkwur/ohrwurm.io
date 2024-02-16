@@ -77,20 +77,18 @@ const MasterNode =  ({node,
 
   const handleMouseMove = (event) => {
     if (isDragging && !lineMode) {
-      const mx = event.clientX
-      const my = event.clientY
-      const x = mx - initialX
-      const y = my - initialY
-
-      const sx = Math.floor(x/snapSize)*snapSize-snapSize + 5
-      const sy = Math.floor(y/snapSize)*snapSize-snapSize + 5
-
-      // node overlap checker here!
-
       const handler = setTimeout(() => {
+        const mx = event.clientX
+        const my = event.clientY
+        const x = mx - initialX
+        const y = my - initialY
+
+        const sx = Math.floor(x/snapSize)*snapSize-snapSize + 5
+        const sy = Math.floor(y/snapSize)*snapSize-snapSize + 5
+
         setSnapsX(sx)
         setSnapsY(sy)
-      }, 40)
+      }, 20)
       return () => clearTimeout(handler)
     }
   }

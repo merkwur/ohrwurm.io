@@ -78,9 +78,13 @@ const NodeCanvas = () => {
   const handleAddLine = (line) => {
     if (line) {
       const updated = addLine(line, lineData, nodeData)
-      connectToneObjects(line.from, line.to, line.which, toneData)  
+      const connected = connectToneObjects(line.from, line.to, line.which, toneData)  
       setLineData(updated[0])
       setNodeData(updated[1])
+
+      if (connected) {
+        setToneData(connected)
+      }
     }
   }
   
@@ -264,6 +268,7 @@ const NodeCanvas = () => {
             </React.Fragment>
           );  
         })}
+      
       <NodeConfigurationHub 
         tone={toneData} 
         notesToTrigger={(notes, probabilities, durations, bpm) => handleNotesToTrigger(notes, probabilities, durations, bpm)}

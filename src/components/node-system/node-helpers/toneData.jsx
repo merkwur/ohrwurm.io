@@ -13,6 +13,7 @@ export const addToneObject = (id, name, type, tones) => {
     id, 
     name, 
     type,
+    isTriggerConnected: false,
     tone: getToneObject(name),
     parameters: getNodeParameters(name, type),
   }  
@@ -66,7 +67,7 @@ export const invokeTriggerEvent = (triggerData, tones, nodes) => {
 };
 
 export const connectToneObjects = (from, to, which, nodes) => {
-  if (from.includes("Transport")) return
+  // if (from.includes("Transport")) return
 
   
   if (which === "node") {
@@ -83,6 +84,13 @@ export const connectToneObjects = (from, to, which, nodes) => {
     } else {
       nodes[from].tone.connect(nodes[to].tone[which])
     }
+  }
+
+  if (nodes[from].name === "Transport" && nodes[to].name.includes("Synth")) {
+    console.log("lhjasd")
+    const newNodes = {...nodes}
+    newNodes[to].isTriggerConnected = true
+    return newNodes
   }
 }
 
@@ -312,10 +320,10 @@ export const getNodeParameters = (name, type) => {
 
   const omniModNodeParams = {
       Oscillator: {
-        ...commonModulatorParams
+        type: "sine"
       }, 
       FatOscillator: {
-        ...commonModulatorParams,
+        type: "sine",
         spread: 0,
         count: 1
       },
@@ -329,15 +337,11 @@ export const getNodeParameters = (name, type) => {
       },
       AMOscillator: {
         type: "sine",
-        partialCount: 0,
-        detune: 0,
         modulationType: "square", 
         modulator: true
       },
       FMOscillator: {
         type: "sine",
-        partialCount: 0, 
-        detune: 0,
         modulationType: "square",
         modulator: true
 
@@ -394,6 +398,10 @@ export const getNodeParameters = (name, type) => {
     
   }
 
+  const commonModSynthParams = {
+    type: "square", 
+  }
+
   const filterParams = {
     gain: .5, Q: 1,frequency: 440, rolloff: 0, type: "lowpass"
   }
@@ -441,6 +449,7 @@ export const getNodeParameters = (name, type) => {
       }, 
       FMSynth: {
         synth: {...commonSynthParams, harmonicity: 1, modulationIndex: 1, modulationType: "square"}, 
+        modulatorSynth: {...commonModSynthParams},
         envelope: {...envelope},
         modulationEnvelope: {...envelope},
         oscillator: {...OmniOscillator},  
@@ -450,15 +459,14 @@ export const getNodeParameters = (name, type) => {
       }, 
       
       AMSynth: {
-        portamento: 0,
+        synth: {...commonSynthParams, harmonicity: 1},
+        modulatorSynth: {...commonModSynthParams},
         oscillator:{...OmniOscillator},
         envelope: {...envelope},
         modulationEnvelope: {...envelope},
         modulator: {...omniModOscillator},
-        carrierOscillatorType: "osc",
-        modulatorOscillatorType: "osc",
-        type: "sine",
-        modulationType: "square"
+        oscillatorType: "osc",
+        modulationType: "osc",
       }, 
       MetalSynth:{
         synth: {...commonSynthParams, modulationIndex: 1, octaves: 1, harmonicity: 1}, 
@@ -630,9 +638,9 @@ export const getNodeParameters = (name, type) => {
 
 
 export const initialStates = { 
-    attack:             {type: "slider",  min: 0,        max: 1,      multiplier: .01 ,   float: true ,  unit: null   },
+    attack:             {type: "slider",  min: 0.01,        max: 1,      multiplier: .01 ,   float: true ,  unit: null   },
     decay:              {type: "slider",  min: 0,        max: 1,      multiplier: .01 ,   float: true ,  unit: null   },
-    sustain:            {type: "slider",  min: 0,        max: 1,      multiplier: .01 ,   float: true ,  unit: null   },
+    sustain:            {type: "slider",  min: 0.01,        max: 1,      multiplier: .01 ,   float: true ,  unit: null   },
     release:            {type: "slider",  min: 0,        max: Infinity, multiplier: .01,  float: true ,  unit: null   },
     detune:             {type: "slider",  min: -1200,  max: 1200,   multiplier:  1   ,  float: false,  unit: "cents"   },
     portamento:         {type: "slider",  min: 0,      max: 1,      multiplier: .001 ,  float: true ,  unit: null   },
@@ -643,7 +651,7 @@ export const initialStates = {
     harmonicity:        {type: "slider",  min: .1,     max: 10,     multiplier: .001 ,  float: true ,  unit: "mf/cf"   },
     octaves:            {type: "slider",  min: 0.5,      max: 8,      multiplier: .001 ,  float: true ,  unit: null   },
     width:              {type: "slider",  min: -1,     max: 1,      multiplier: .01  ,  float: true ,  unit: null   },
-    spread:             {type: "slider",  min: -1200,  max: 100,    multiplier: 1    ,  float: false,  unit: null   },
+    spread:             {type: "slider",  min: 0,  max: 100,    multiplier: 1    ,  float: false,  unit: null   },
     partialCount:       {type: "slider",  min: 0,      max: 24,     multiplier: 1    ,  float: false,  unit: null   },
     gain:               {type: "slider",  min: 0.01,      max: 1,      multiplier: 0.01 ,  float: true ,  unit: null   },
     count:              {type: "slider",  min: 1,      max: 12,     multiplier: 1    ,  float: false,  unit: null   },
