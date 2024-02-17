@@ -7,6 +7,7 @@ const Component = ({node}) => {
   const inputs = node.input ? Object.keys(node.input) : null 
 
 
+
   return (
     <div 
       className='source-container'
@@ -24,7 +25,7 @@ const Component = ({node}) => {
                 <Input 
                   id={node.id}
                   inputType={input} 
-                  whichParent={input === "node" ? node.type : "natural"}
+                  whichParent={input === "node" && input.x && input.y ? node.type : "natural"}
                   yPosition={node.size.y / (inputs.length + 1)  * (index + 1) - 6}
                 />
               </React.Fragment>
@@ -32,12 +33,14 @@ const Component = ({node}) => {
          </>
         ) : null }
       </>
-        <Output 
-          id={node.id}
-          outputType={"node"} 
-          whichParent={node.type}
-          yPosition={node.size.y / 2 - 6}
-        />
+        {node.name !== "Analyzer" ? (
+          <Output 
+            id={node.id}
+            outputType={"node"} 
+            whichParent={node.type}
+            yPosition={node.size.y / 2 - 6}
+          />
+        ) : null}
     </div>
   )
 }

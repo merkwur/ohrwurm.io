@@ -7,6 +7,7 @@ import { colorScheme } from '../node-helpers/helperFunctions'
 import Effect from '../node-components/effects/effect'
 import Component from '../node-components/component/component'
 import Signal from '../node-components/signal/signal'
+import ComponentAnalyser from '../node-components/component-analyser/component-analyser'
 
 
 
@@ -51,9 +52,9 @@ const MasterNode =  ({node,
     setInitialX(x - parseInt(topElement.parentElement.style.left)-70)
     setInitialY(y - parseInt(topElement.parentElement.style.top)-70)
 
-    setIsDragging(true)      
-    
-    if (topElement.className.includes("container")) {
+    console.log(topElement.class) 
+    if (topElement.className && typeof topElement.className === "string" && topElement.className.includes("container")) {
+      setIsDragging(true)      
       const grabbedNode = nodeRef.current[node.id]
       nodeRef.current[node.id].style.zIndex = 99 
       nodeRef.current[node.id].style.boxShadow = `0 0 3px 2px ${colorScheme[node.type]}42`
@@ -199,7 +200,13 @@ const MasterNode =  ({node,
       ) : node.type === "Effect"? (
         <Effect node={node}/>
       ) : node.type === "Component" ? (
-        <Component node={node}/>
+        <>
+          {node.name === "Analyser" ? (
+            <ComponentAnalyser node={node}/>
+          ) : (
+            <Component node={node}/>
+          )}
+        </>
       ) : node.type === "Signal" ? (
         <Signal node={node} />
       ): null 

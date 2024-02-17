@@ -4,7 +4,11 @@ import { colorScheme } from '../../../node-helpers/helperFunctions'
 
 
 const Input = ({id, inputType, whichParent, yPosition}) => {
-  const type = inputType === "node" || inputType === "trigger" ? whichParent : "natural"
+  const type = inputType === "node" 
+                || inputType === "trigger" 
+                || inputType === "x" 
+                || inputType === "y" ? whichParent : "natural"
+                
   const [focusOn, setFocusOn] = useState(false)
 
   const handleMouseEnter = () => {

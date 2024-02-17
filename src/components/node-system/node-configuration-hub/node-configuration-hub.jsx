@@ -31,7 +31,7 @@ const NodeConfigurationHub = ({tone, notesToTrigger, getGlobalTime}) => {
                 /> 
               ) : tone[toneObj].type === "Effect" ? (
                 <EffectOptions toneObj={tone[toneObj]} />
-              ) : null}
+              ) :  null}
           </React.Fragment>
         ))}
       </div>      

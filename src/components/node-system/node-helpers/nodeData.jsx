@@ -251,8 +251,10 @@ const getSize = (name, type, snap) => {
   const onehalf = {
     x: snap, y: snap * 1.5 + 10
   }
+  const quad = {
+    x: snap * 2 + 10, y: snap * 2 + 10
+  }
   const nodeSizeData = {
-
     Core: {
       Destination: {...single},
       Gain: {...single},
@@ -303,7 +305,7 @@ const getSize = (name, type, snap) => {
     }, 
     Component : {
       AmplitudeEnvelope:{...single},
-      Analyser:{...single},
+      Analyser:{...quad},
       BiquadFilter:{...single},
       Channel:{...single},
       Compressor:{...single},
@@ -574,7 +576,7 @@ const getInputs = (name, type) => {
     }, 
       Component: {
         AmplitudeEnvelope: {trigger: null, node: null},
-        Analyser: {node: null,}, 
+        Analyser: {x: null, y: null}, 
         BiquadFilter: {node: null,}, 
         Channel:{
           pan: null,node: null,

@@ -14,7 +14,7 @@ const EffectOptions = ({toneObj}) => {
   const [_types, setTypes] = useState(_parameters.type ? initialStates[_parameters.type].value : null)
   const [_type, setType] = useState(_types ? _types[0] : null)
   const [_isOscilaltorRunning, setIsOscillatorRunning] = useState(_parameters.start ? false : null)
-  const [_waveType, setWaveType] = useState("sine")
+  const [_waveType, setWaveType] = useState(_parameters.start ? "sine" : null)
 
   const handleParameterChange = (value, type) => {
     
@@ -34,13 +34,17 @@ const EffectOptions = ({toneObj}) => {
   }
 
   const handleDropdown = (option) => {
-    toneObj.tone.filter.type = option
+    if (toneObj.name === "Vibrato") {
+      toneObj.tone.type = option
+    } else {
+      toneObj.tone.filter.type = option
+    }
     setType(option)
   }
 
   const handleOscillatorState = () => {
     if (!_isOscilaltorRunning) {
-      console.log(_isOscilaltorRunning, "and we triggered the filter")
+      
       toneObj.tone.start()
       setIsOscillatorRunning(true)
     } else {

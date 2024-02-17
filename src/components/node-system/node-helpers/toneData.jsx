@@ -494,8 +494,8 @@ export const getNodeParameters = (name, type) => {
       }, 
       BitCrusher: {bits: 1, wet:1},
       Chebyshev: {order: 1, wet:1},
-      Chorus: {delayTime: .2, depth: 0, feedback: .2, frequency: 440, sperad: 0, wet:1 }, 
-      Distortion: {distortoin: 1, wet:1},
+      Chorus: {start: false, delayTime: .2, depth: 0, feedback: .2, frequency: 440, sperad: 0, wet:1 }, 
+      Distortion: {distortion: 1, wet:1},
       FeedbackDelay: {delayTime: .25, feedback: .5, wet:1},
       Freeverb:{dampening: .2, roomSize: .5, wet: 1},
       FrequencyShifter: {frequency: 440, wet: 1}, 
@@ -506,8 +506,8 @@ export const getNodeParameters = (name, type) => {
       PitchShift: {delayTime: .2, feedback: .2, pitch: 0, windowSize: .03},
       Reverb: {decay: .2, preDelay: 0, wet: 1},
       StereoWidener: {width: 0, wet: 1},
-      Tremolo: {depth: .2, frequency: 440, spread: 0, type: "sine", wet: 1},
-      Vibrato: {depth:.2, frequency: 1, type: "sine", wet: 1},
+      Tremolo: {start:false, depth: .2, frequency: 440, spread: 0, wet: 1},
+      Vibrato: {depth:.2, frequency: 1, type: "type", wet: 1},
 
     }
     const ComponentParams = {
@@ -647,6 +647,7 @@ export const initialStates = {
     frequency:          {type: "slider",  min: 1,      max: 8192,   multiplier: 1    ,  float: false,  unit: "Hz"   },
     phase:              {type: "slider",  min: 0,      max: 360,    multiplier: 1    ,  float: false,  unit: "\u00b0"   },
     modulationFrequency:{type: "slider",  min: .1,     max: 440,    multiplier: .1   ,  float: true ,  unit: "Hz"   },
+    distortion:            {type: "slider",  min: 0.01,        max: 1,      multiplier: .01 ,   float: true ,  unit: null   },
     pitchDecay:         {type: "slider",  min: 0,      max: .5,      multiplier: .001 ,  float: true ,  unit: null   },
     harmonicity:        {type: "slider",  min: .1,     max: 10,     multiplier: .001 ,  float: true ,  unit: "mf/cf"   },
     octaves:            {type: "slider",  min: 0.5,      max: 8,      multiplier: .001 ,  float: true ,  unit: null   },
@@ -667,6 +668,8 @@ export const initialStates = {
     ratio:              {type: "slider",  min: .1,     max: 20,     multiplier:  .01 ,  float: true ,  unit: null   },
     threshold:          {type: "slider",  min: .1,     max: 20,     multiplier:  .01 ,  float: true ,  unit: null   },
     sensitivity:        {type: "slider",  min: -96,    max: 96,     multiplier:   1 ,   float: false , unit: "db"   },
+    pitch:        {type: "slider",  min: -96,    max: 96,     multiplier:   1 ,   float: false , unit: null   },
+    order:              {type: "slider",  min:  1,    max: 100,     multiplier:   1 ,   float: false , unit: null   },
     Q:                  {type: "slider",  min: .1,     max: 20,     multiplier:  .01 ,  float: true ,  unit: null   },
     low:                {type: "slider",  min: .1,     max: 20,     multiplier:  .01 ,  float: true ,  unit: null   },
     lowFrequency:       {type: "slider",  min: .1,     max: 20,     multiplier:  .01 ,  float: true ,  unit: null   },
