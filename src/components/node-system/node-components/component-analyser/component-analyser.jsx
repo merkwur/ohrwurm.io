@@ -12,82 +12,84 @@ const ComponentAnalyser = ({node, tone}) => {
   const [intervalId, setIntervalId] = useState(0)
   const [fps, setFps] = useState(60)
   const [points, setPoints] = useState("")
+  const [secondPoints, setSecondPoints] = useState("")
   const [type, setType] = useState("waveform")
+  const [isAnalyserRunning, setIsAnalyserRunning] = useState(false)
+  const [lissajous, setLissajous] = useState(false)
 
   const handleClock = () => {
     if(!isClockRunning) {
       clearInterval(intervalId)
-      
+
       const id = setInterval(() => setTime(p => p + 1), 1000 / fps)
       setIntervalId(id)
       setIsClockRunning(true)
+      setIsAnalyserRunning(true)
     } else {
       clearInterval(intervalId)
       setIntervalId(null)
       setTime(0)
       setIsClockRunning(false)
+      setIsAnalyserRunning(false)
+     
     }
   }
 
-  useEffect(() => {
-    let s = ""
-    if (node.input.x && !node.input.y) {
-      if (type === "waveform") {
-        const xWaveform = tone.tone.x.getValue()
-        xWaveform.forEach((value, index) => {
-          const x = ((index / 127) * 150).toFixed(3)
-          const y = (((1 - value) * 22.5) + 20 ).toFixed(3)
-          s += `${x}, ${y} `
-        })  
-        setPoints(s)
-      } else {
-        const xWaveform = tone.tone.x.getValue()
-        
-        xWaveform.forEach((value, index) => {
-          const x = ((index / 127) * 150).toFixed(3)
-          const y = (1 - value).toFixed(3)
-          if (y < Infinity){
-            s += `${x}, ${y} `
-          }
-        })  
-        setPoints(s)
-      }
-    }
-    if (node.input.x && node.input.y) {
-      const xWaveform = tone.tone.x.getValue()
-      const yWaveform = tone.tone.y.getValue()
 
-      xWaveform.forEach((value, index) => {
-        const x = (20+(1 - value) * 55).toFixed(3)
-        const y = ((1 - yWaveform[index]) * 40).toFixed(3)
-        s += `${x}, ${y} `
-      })  
-      setPoints(s)
-    }
-    if (!node.input.x && node.input.y) {
-      const yWaveform = tone.tone.y.getValue()
-      yWaveform.forEach((value, index) => {
+  useEffect(() => {
+    if (node.input.x && !node.input.y) {
+      const xWaveform = tone.tone.x.getValue()
+      const pointsArray = Array.from(xWaveform).map((value, index) => {
         const x = ((index / 127) * 150).toFixed(3)
         const y = (((1 - value) * 22.5) + 20 ).toFixed(3)
-        s += `${x}, ${y} `
-      })  
-      setPoints(s)
+        return `${x}, ${y}`
+      }).join(" ") || ""
+      setPoints(pointsArray)
+    }
+
+    if (node.input.x && node.input.y) {
+      if (lissajous) {
+        const xWaveform = tone.tone.x.getValue()
+        const yWaveform = tone.tone.y.getValue()
+  
+        const pointsArray = Array.from(xWaveform).map((value, index) => {
+          const x = (20+(1 - value) * 55).toFixed(3)
+          const y = ((1 - yWaveform[index]) * 40).toFixed(3)
+          return `${x}, ${y}`
+        }).join(" ") || ""  
+        setPoints(pointsArray)
+
+      } else {
+        
+        const yWaveform = tone.tone.y.getValue()
+        const secondPointsArray = Array.from(yWaveform).map((value, index) => {
+          const x = ((index / 127) * 150).toFixed(3)
+          const y = (((1 - value) * 22.5) + 20 ).toFixed(3)
+          return `${x}, ${y}`
+        }).join(" ") || ""
+        setSecondPoints(secondPointsArray)
+
+        const xWaveform = tone.tone.x.getValue()
+        const pointsArray = Array.from(xWaveform).map((value, index) => {
+          const x = ((index / 127) * 150).toFixed(3)
+          const y = (((1 - value) * 22.5) + 20 ).toFixed(3)
+          return `${x}, ${y}`
+        }).join(" ") || ""
+        setPoints(pointsArray)
+      }
+    }
+
+    if (!node.input.x && node.input.y) {
+      const yWaveform = tone.tone.y.getValue()
+      const pointsArray = Array.from(yWaveform).map((value, index) => {
+        const x = ((index / 127) * 150).toFixed(3)
+        const y = (((1 - value) * 22.5) + 20 ).toFixed(3)
+        return `${x}, ${y}`
+      }).join(" ") || ""
+      setPoints(pointsArray)
     }
   }, [time])  
 
-  const handleScopeType = () => {
-    if (node.input.x && !node.input.y) {
-      console.log("we are here", type)
-      if (type === "waveform") {
-        console.log("change type")
-        tone.tone.x.type = "fft"
-        setType("fft")
-      } else {
-        tone.tone.x.type = "waveform"
-        setType("waveform")
-      }
-    }
-  }
 
   useEffect(() => {
     if (intervalId) {
@@ -98,6 +100,18 @@ const ComponentAnalyser = ({node, tone}) => {
   }, [fps]);
 
   useEffect(() => {console.log(node, tone)}, [])
+
+  const handleScopeType = () => {
+    if (type === "waveform") {
+      tone.tone.x.type === "fft"
+      tone.tone.y.type === "fft"
+      setType("fft") 
+    } else {
+      tone.tone.x.type === "waveform"
+      tone.tone.y.type === "waveform"
+      setType("waveform")
+    }
+  }
 
   return (
     <div 
@@ -152,25 +166,73 @@ const ComponentAnalyser = ({node, tone}) => {
             >
             <polyline 
               fill='none'
-              stroke={`${colorScheme[node.type]}`}
+              stroke={`${colorScheme[node.type]}77`}
               strokeWidth={1}
               points={points}
             />
+            {!lissajous ? (
+              <polyline 
+                fill='none'
+                stroke="#ff424277"
+                strokeWidth={1}
+                points={secondPoints}
+              />
+            ) : null}
           </svg>
         </div>
         <div 
-          className='button'
-          style={{border: "1px solid", position: 'absolute', bottom: 0, right: 0}}
-          onClick={handleClock}
-          >
-            start
-        </div>
-        <div 
           className='analyser-parameters'
-          onClick={handleScopeType}
-          style={{border: "1px solid", position: 'absolute', bottom: 20, right: 0}}
+          
+          style={{    
+            position: 'absolute', 
+            bottom: 5, right: 0,      
+          }}
           >
-           change
+          <div 
+            className='button'
+            style={{
+                    position: 'absolute', 
+                    bottom: 5, right: 5, 
+                    borderRadius: "50%",
+                    backgroundColor: isAnalyserRunning ? "bisque" : "#272727", 
+                    boxShadow: `0 0 2px 2px ${isAnalyserRunning ? "bisque" : ""}`,
+                    width: "10px", height: "10px"
+                  }}
+            onClick={handleClock}
+            > 
+          </div>
+          <div 
+            className='lissajous'
+            onClick={() => setLissajous(!lissajous)}
+            style={{
+              position: 'absolute', 
+              bottom: 2.5, right: 25, 
+              width: "15px", height: "15px",
+              border: "1px solid", 
+              fontSize: "7pt",
+              display: "flex", justifyContent: 'center',
+              fontWeight: "600"
+
+            }}
+            > 
+            2x      
+          </div>
+          <div 
+            className='waveform-fft-switch'
+            onClick={handleScopeType}
+            style={{
+              position: 'absolute', 
+              bottom: 2.5, right: 25, 
+              width: "15px", height: "15px",
+              border: "1px solid", 
+              fontSize: "7pt",
+              display: "flex", justifyContent: 'center',
+              fontWeight: "600"
+
+            }}
+            > 
+            2x      
+          </div>
         </div>
 
     </div>
