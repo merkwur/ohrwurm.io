@@ -19,11 +19,12 @@ const MasterNode =  ({node,
                       addLine, 
                       updateLinePosition,                     
                       getValidMoves,
-                      validMoves
+                      validMoves,
+                      tone
                     }) => {
 
   const [isDragging, setIsDragging] = useState(false)
-  const [offset, setOffset] = useState({x: 0, y: 0})
+  const [isNodeDragging, setIsNodeDragging] = useState(false)
   const [draggedNode, setDraggedNode] = useState()
   const nodeRef = useRef({})
   const [lineMode, setLineMode] = useState(false)
@@ -36,7 +37,7 @@ const MasterNode =  ({node,
   const [snapX, setSnapsX] = useState(0)
   const [snapY, setSnapsY] = useState(0)
   const [isNodeSelected, setIsNodeSelected] = useState(false)
-
+    
 
   
 
@@ -52,9 +53,10 @@ const MasterNode =  ({node,
     setInitialX(x - parseInt(topElement.parentElement.style.left)-70)
     setInitialY(y - parseInt(topElement.parentElement.style.top)-70)
 
+    setIsDragging(true)      
     console.log(topElement.class) 
     if (topElement.className && typeof topElement.className === "string" && topElement.className.includes("container")) {
-      setIsDragging(true)      
+      setIsNodeDragging(true)
       const grabbedNode = nodeRef.current[node.id]
       nodeRef.current[node.id].style.zIndex = 99 
       nodeRef.current[node.id].style.boxShadow = `0 0 3px 2px ${colorScheme[node.type]}42`
@@ -77,7 +79,7 @@ const MasterNode =  ({node,
 
 
   const handleMouseMove = (event) => {
-    if (isDragging && !lineMode) {
+    if (isDragging && !lineMode && isNodeDragging) {
       const handler = setTimeout(() => {
         const mx = event.clientX
         const my = event.clientY
@@ -97,7 +99,7 @@ const MasterNode =  ({node,
 
 
   useEffect(() => {
-    if (isDragging && !lineMode) {
+    if (isDragging && !lineMode && isNodeDragging) {
       const currentNode = nodeRef.current[node.id]
       const diffX = (parseInt(currentNode.style.left) - snapX)
       const diffY = (parseInt(currentNode.style.top) - snapY) 
@@ -115,7 +117,7 @@ const MasterNode =  ({node,
   
   const handleMouseUp = (event) => {
     setIsDragging(false)
-
+    setIsNodeDragging(false)
     if (lineMode) {
       const dragEndElement = document.elementFromPoint( event.clientX, event.clientY)
       
@@ -131,6 +133,7 @@ const MasterNode =  ({node,
   
                                 }))
         setIsConnectionValid(true)                            
+        console.log("ladhs")
         }
       }
     }
@@ -202,7 +205,7 @@ const MasterNode =  ({node,
       ) : node.type === "Component" ? (
         <>
           {node.name === "Analyser" ? (
-            <ComponentAnalyser node={node}/>
+            <ComponentAnalyser node={node} tone={tone}/>
           ) : (
             <Component node={node}/>
           )}

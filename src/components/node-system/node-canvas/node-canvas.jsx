@@ -264,6 +264,7 @@ const NodeCanvas = () => {
                 notesToTrigger={(arr, ids, bpm) => handleNotesToTrigger(arr, ids, bpm)}
                 getValidMoves={(x, y, id) => handleValidMoves(x, y, id)}
                 validMoves={valids}
+                tone={node.name === "Analyser" ? toneData[node.id] : null}
                 />
             </React.Fragment>
           );  

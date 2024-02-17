@@ -25,7 +25,7 @@ const Component = ({node}) => {
                 <Input 
                   id={node.id}
                   inputType={input} 
-                  whichParent={input === "node" && input.x && input.y ? node.type : "natural"}
+                  whichParent={input === "node" || input === "trigger" ? node.type : "natural"}
                   yPosition={node.size.y / (inputs.length + 1)  * (index + 1) - 6}
                 />
               </React.Fragment>

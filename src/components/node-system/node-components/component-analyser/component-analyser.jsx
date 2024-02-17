@@ -1,14 +1,75 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import "./component-analyser.scss"
 import Input from '../component-helpers/input/input'
 import Output from '../component-helpers/output/output'
 import { colorScheme } from '../../node-helpers/helperFunctions'
 
-const ComponentAnalyser = ({node}) => {
+const ComponentAnalyser = ({node, tone}) => {
   const inputs = node.input ? Object.keys(node.input) : null 
 
+  const [isClockRunning, setIsClockRunning] = useState(false)
+  const [time, setTime] = useState(0)
+  const [intervalId, setIntervalId] = useState(0)
+  const [fps, setFps] = useState(60)
+  const [points, setPoints] = useState("")
 
-  useEffect(() => {console.log(node)}, [])
+  const handleClock = () => {
+    if(!isClockRunning) {
+      clearInterval(intervalId)
+      
+      const id = setInterval(() => setTime(p => p + 1), 1000 / fps)
+      setIntervalId(id)
+      setIsClockRunning(true)
+    } else {
+      clearInterval(intervalId)
+      setIntervalId(null)
+      setTime(0)
+      setIsClockRunning(false)
+    }
+  }
+
+  useEffect(() => {
+    let s = ""
+    if (node.input.x && !node.input.y) {
+      const xWaveform = tone.tone.x.getValue()
+      xWaveform.forEach((value, index) => {
+        const x = ((index / 127) * 150).toFixed(3)
+        const y = (((1 - value) * 22.5) + 20 ).toFixed(3)
+        s += `${x}, ${y} `
+      })  
+      setPoints(s)
+    }
+    if (node.input.x && node.input.y) {
+      const xWaveform = tone.tone.x.getValue()
+      const yWaveform = tone.tone.y.getValue()
+
+      xWaveform.forEach((value, index) => {
+        const x = (20+(1 - value) * 55).toFixed(3)
+        const y = ((1 - yWaveform[index]) * 40).toFixed(3)
+        s += `${x}, ${y} `
+      })  
+      setPoints(s)
+    }
+    if (!node.input.x && node.input.y) {
+      const yWaveform = tone.tone.y.getValue()
+      yWaveform.forEach((value, index) => {
+        const x = ((index / 127) * 150).toFixed(3)
+        const y = (((1 - value) * 22.5) + 20 ).toFixed(3)
+        s += `${x}, ${y} `
+      })  
+      setPoints(s)
+    }
+  }, [time])  
+
+  useEffect(() => {
+    if (intervalId) {
+      clearInterval(intervalId);
+      const id = setInterval(() => setTime(p => p + 1), 1000 / fps);
+      setIntervalId(id);
+    }
+  }, [fps]);
+
+  useEffect(() => {console.log(node, tone)}, [])
 
   return (
     <div 
@@ -49,14 +110,26 @@ const ComponentAnalyser = ({node}) => {
         >
           <svg 
             className='scope-view'
-            style={{border: `1px solid ${colorScheme[node.type]}` , position: 'absolute', top: 15}}
+            style={{borderBottom: `1px solid ${colorScheme[node.type]}` , position: 'absolute', top: 15}}
             
-            width="110" 
+            width="150" 
             height="90" 
-            viewBox='0 0 110 90'
+            viewBox='0 0 150 90'
             >
-            <rect className='scope-view-box' width="110" height="90" x="00" y="00" rx="0" ry="0" fill="#070707" />
+            <polyline 
+              fill='none'
+              stroke={`${colorScheme[node.type]}`}
+              strokeWidth={1}
+              points={points}
+            />
           </svg>
+        </div>
+        <div 
+          className='button'
+          style={{border: "1px solid", position: 'absolute', bottom: 0, right: 0}}
+          onClick={handleClock}
+          >
+            start
         </div>
     </div>
   )

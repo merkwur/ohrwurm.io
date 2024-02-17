@@ -26,7 +26,7 @@ const Oscillator = ({ parameters,
               elements={initialStates.type.value}
               value={parameters.type}
               parentType={"Source"}
-              whichOscillator={which}
+              whichSource={which}
               getWaveType={getWaveType}
               orientation={"vertical"}
             /> 

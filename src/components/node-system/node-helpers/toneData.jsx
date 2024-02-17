@@ -9,16 +9,29 @@ export const stopEvents = () => {
   Tone.Transport.stop()
 }
 export const addToneObject = (id, name, type, tones) => {
-  const newToneObject = {
-    id, 
-    name, 
-    type,
-    isTriggerConnected: false,
-    tone: getToneObject(name),
-    parameters: getNodeParameters(name, type),
-  }  
+  if (name === "Analyser") {
+    const newToneObject = { 
+      id, 
+      name, 
+      type,
+      isTriggerConnected: false,
+      tone: {x: getToneObject(name), y: getToneObject(name)},
+      parameters: getNodeParameters(name, type),
+    }  
+    return {...tones, [id]: newToneObject}
+  } else {
 
-  return {...tones, [id]: newToneObject}
+    const newToneObject = { 
+      id, 
+      name, 
+      type,
+      isTriggerConnected: false,
+      tone: getToneObject(name),
+      parameters: getNodeParameters(name, type),
+    }  
+  
+    return {...tones, [id]: newToneObject}
+  }
 }
 
 
@@ -68,7 +81,10 @@ export const invokeTriggerEvent = (triggerData, tones, nodes) => {
 
 export const connectToneObjects = (from, to, which, nodes) => {
   // if (from.includes("Transport")) return
-
+  if (to.includes("Analyser")) {
+    
+    nodes[from].tone.connect(nodes[to].tone[which])
+  }
   
   if (which === "node") {
     if (nodes[to].name !== "Destination") {
@@ -84,10 +100,9 @@ export const connectToneObjects = (from, to, which, nodes) => {
     } else {
       nodes[from].tone.connect(nodes[to].tone[which])
     }
-  }
+  } 
 
   if (nodes[from].name === "Transport" && nodes[to].name.includes("Synth")) {
-    console.log("lhjasd")
     const newNodes = {...nodes}
     newNodes[to].isTriggerConnected = true
     return newNodes
@@ -96,7 +111,10 @@ export const connectToneObjects = (from, to, which, nodes) => {
 
 export const disposeToneNode = (id, tones) => {
   if (tones[id].name === "Transport") return
-  if (tones[id].name !== "Destination") {
+  if (tones[id].name === "Analyser") {
+    tones[id].tone.x.dispose()
+    tones[id].tone.y.dispose()
+  } else if (tones[id].name !== "Destination") {
     tones[id].tone.dispose()
   }
 }
@@ -109,7 +127,6 @@ export const disconnectToneNode = (from, to, which, nodes) => {
   } else if (which === "trigger"){
 
   } else {
-    console.log("shoot")
     nodes[from].tone.disconnect(nodes[to].tone[which])
   }
 }
@@ -639,7 +656,7 @@ export const getNodeParameters = (name, type) => {
 
 export const initialStates = { 
     attack:             {type: "slider",  min: 0.01,        max: 1,      multiplier: .01 ,   float: true ,  unit: null   },
-    decay:              {type: "slider",  min: 0,        max: 1,      multiplier: .01 ,   float: true ,  unit: null   },
+    decay:              {type: "slider",  min: 0.01,        max: 1,      multiplier: .01 ,   float: true ,  unit: null   },
     sustain:            {type: "slider",  min: 0.01,        max: 1,      multiplier: .01 ,   float: true ,  unit: null   },
     release:            {type: "slider",  min: 0,        max: Infinity, multiplier: .01,  float: true ,  unit: null   },
     detune:             {type: "slider",  min: -1200,  max: 1200,   multiplier:  1   ,  float: false,  unit: "cents"   },

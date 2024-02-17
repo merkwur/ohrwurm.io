@@ -32,7 +32,7 @@ const Switch = ({
   const handleWaveSelection = (wave, index) => {
     setCurrentIdx(index)
     setWaveType(wave)
-    console.log(parentSource,whichSource)
+    console.log(parentSource, whichSource)
     if (parentSource) {
       console.log(parentSource)
       getWaveType(wave, whichSource, parentSource)
