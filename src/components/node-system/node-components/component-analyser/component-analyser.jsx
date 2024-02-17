@@ -12,6 +12,7 @@ const ComponentAnalyser = ({node, tone}) => {
   const [intervalId, setIntervalId] = useState(0)
   const [fps, setFps] = useState(60)
   const [points, setPoints] = useState("")
+  const [type, setType] = useState("waveform")
 
   const handleClock = () => {
     if(!isClockRunning) {
@@ -31,13 +32,26 @@ const ComponentAnalyser = ({node, tone}) => {
   useEffect(() => {
     let s = ""
     if (node.input.x && !node.input.y) {
-      const xWaveform = tone.tone.x.getValue()
-      xWaveform.forEach((value, index) => {
-        const x = ((index / 127) * 150).toFixed(3)
-        const y = (((1 - value) * 22.5) + 20 ).toFixed(3)
-        s += `${x}, ${y} `
-      })  
-      setPoints(s)
+      if (type === "waveform") {
+        const xWaveform = tone.tone.x.getValue()
+        xWaveform.forEach((value, index) => {
+          const x = ((index / 127) * 150).toFixed(3)
+          const y = (((1 - value) * 22.5) + 20 ).toFixed(3)
+          s += `${x}, ${y} `
+        })  
+        setPoints(s)
+      } else {
+        const xWaveform = tone.tone.x.getValue()
+        
+        xWaveform.forEach((value, index) => {
+          const x = ((index / 127) * 150).toFixed(3)
+          const y = (1 - value).toFixed(3)
+          if (y < Infinity){
+            s += `${x}, ${y} `
+          }
+        })  
+        setPoints(s)
+      }
     }
     if (node.input.x && node.input.y) {
       const xWaveform = tone.tone.x.getValue()
@@ -60,6 +74,20 @@ const ComponentAnalyser = ({node, tone}) => {
       setPoints(s)
     }
   }, [time])  
+
+  const handleScopeType = () => {
+    if (node.input.x && !node.input.y) {
+      console.log("we are here", type)
+      if (type === "waveform") {
+        console.log("change type")
+        tone.tone.x.type = "fft"
+        setType("fft")
+      } else {
+        tone.tone.x.type = "waveform"
+        setType("waveform")
+      }
+    }
+  }
 
   useEffect(() => {
     if (intervalId) {
@@ -106,7 +134,13 @@ const ComponentAnalyser = ({node, tone}) => {
         ) : null}
 
         <div className='scope'
-          style={{display: "flex", justifyContent: "center", alignItems: "center", position: 'relative'}} 
+          style={{display: "flex", 
+                  justifyContent: "center", 
+                  alignItems: "center", 
+                  position: 'relative', 
+                  
+                  height: "105px"
+                }} 
         >
           <svg 
             className='scope-view'
@@ -131,6 +165,14 @@ const ComponentAnalyser = ({node, tone}) => {
           >
             start
         </div>
+        <div 
+          className='analyser-parameters'
+          onClick={handleScopeType}
+          style={{border: "1px solid", position: 'absolute', bottom: 20, right: 0}}
+          >
+           change
+        </div>
+
     </div>
   )
 }
