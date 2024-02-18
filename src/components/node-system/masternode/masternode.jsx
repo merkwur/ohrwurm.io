@@ -12,6 +12,8 @@ import ComponentAnalyser from '../node-components/component-analyser/component-a
 
 
 
+
+
 const MasterNode =  ({node, 
                       snapSize,
                       updateNodePosition, 

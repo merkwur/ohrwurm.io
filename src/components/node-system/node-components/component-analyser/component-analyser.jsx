@@ -61,7 +61,7 @@ const ComponentAnalyser = ({node, tone}) => {
         const xWaveform = Array.from(tone.tone.x.getValue())
         const pointsArray = xWaveform.map((value, index) => {
           // normalizing the x value to fit the graph into the scope exactly
-          const x = ((index / 127) * scopHeigth).toFixed(3)
+          const x = ((index / 127) * scopeWidth).toFixed(3)
           // since most periodic waves has range between [-1, 1] half of the scope will fit exactly but no room fot amplitude changes.
           const y = (((1 - (value)) * quarterScopeHeigth) + yOffset ).toFixed(3)
           return `${x}, ${y}`

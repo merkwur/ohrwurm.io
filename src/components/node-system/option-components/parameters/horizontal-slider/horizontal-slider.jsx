@@ -87,12 +87,20 @@ const HorizontalSlider = ({
     setTortoise(false)
   }
 
+
   useEffect(() => {
     if (isDragging) {
+      // Only add these listeners when dragging starts
       window.addEventListener('mousemove', handleMouseMove);
       window.addEventListener('mouseup', handleMouseUp);
     }
-  }, [isDragging]);
+    // No need to remove listeners here since handleMouseUp will take care of it
+    return () => {
+      // Cleanup function to ensure no dangling listeners from this effect
+      window.removeEventListener('mousemove', handleMouseMove);
+      window.removeEventListener('mouseup', handleMouseUp);
+    };
+  }, [isDragging]); // This effect toggles based on isDragging state
 
   useEffect(() => {
     window.addEventListener('keydown', handleKeyDown);
@@ -101,9 +109,6 @@ const HorizontalSlider = ({
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
       window.removeEventListener('keyup', handleKeyUp);
-
-      window.removeEventListener('mousemove', handleMouseMove);
-      window.removeEventListener('mouseup', handleMouseUp);
     };
   }, []); 
 

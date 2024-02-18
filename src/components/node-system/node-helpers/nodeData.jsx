@@ -266,7 +266,7 @@ const getSize = (name, type, snap) => {
       PulseOscillator: {...double },
       PWMOscillator: {...single },
       Noise: {...single },
-      AMOscillator:{...double },
+      AMOscillator:{...onehalf },
       FMOscillator: {...double },
       LFO: {...single }
     }, 

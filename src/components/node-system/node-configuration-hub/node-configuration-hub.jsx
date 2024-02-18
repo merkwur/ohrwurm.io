@@ -1,11 +1,13 @@
-import React, { useState } from 'react'
+import React, { memo, useState } from 'react'
 import "./node-configuration-hub.scss"
 import SourceOptions from '../option-components/source-options/source-options'
 import Transport from '../option-components/transport/transport'
 import InstrumentOptions from '../option-components/instrument-options/instrument-options'
 import EffectOptions from '../option-components/effect-options/effect-option'
+import Waveshaper from '../option-components/waveshaper-options/waveshaper'
 
-const NodeConfigurationHub = ({tone, notesToTrigger, getGlobalTime}) => {
+
+const NodeConfigurationHub = memo(({tone, notesToTrigger, getGlobalTime}) => {
 
 
   return (
@@ -31,12 +33,16 @@ const NodeConfigurationHub = ({tone, notesToTrigger, getGlobalTime}) => {
                 /> 
               ) : tone[toneObj].type === "Effect" ? (
                 <EffectOptions toneObj={tone[toneObj]} />
-              ) :  null}
+              ) : tone[toneObj].name === "WaveShaper" ? (
+                <div>
+                  <Waveshaper toneObj={tone[toneObj]}/>
+                </div>
+              ) : null}
           </React.Fragment>
         ))}
       </div>      
     </div>
   )
-}
+})
 
 export default NodeConfigurationHub
