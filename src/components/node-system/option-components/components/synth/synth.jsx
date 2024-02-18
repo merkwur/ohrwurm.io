@@ -24,7 +24,7 @@ const Synth = ({
                 _oscillatorType
 }) => {
 
-  console.log(_connected)
+  console.log(_oscillator)
 
   return (
     <div className='synth-wrapper'>

@@ -109,8 +109,14 @@ export const connectToneObjects = (from, to, which, nodes) => {
   }
 }
 
-export const disposeToneNode = (id, tones) => {
+export const disposeToneNode = (id, tones, nodes) => {
   if (tones[id].name === "Transport") return
+  if (tones[id].name === "Destination") {
+    nodes[id].connection.forEach(fromId => {
+      const fID = fromId.split(">")[0]
+      tones[fID].tone.disconnect(tones[id].tone)
+    })
+  }
   if (tones[id].name === "Analyser") {
     tones[id].tone.x.dispose()
     tones[id].tone.y.dispose()
@@ -255,6 +261,8 @@ export const getToneObject = ( nodeName ) => {
       return  new Tone.PluckSynth()
     case "MonoSynth":
       return new Tone.MonoSynth()
+    case "WaveShaper":
+      return new Tone.WaveShaper()
     default:
       return null; // Return null for unknown node types or if no tone object is provided
   }
@@ -448,10 +456,14 @@ export const getNodeParameters = (name, type) => {
         oscillator: {...OmniOscillator}
       }, 
       DuoSynth: {
-        voice0: {...monoSynthParams},
+        voice0: {...monoSynthParams, vibratoAmount: .5, vibratoRate: 40},
         voice1: {...monoSynthParams},
-        oscillatorType0: "osc",
-        oscillatorType1: "osc"
+        envelope: {...envelope},
+        modulationEnvelope: {...envelope},
+        oscillator0: {...OmniOscillator},
+        oscillator1: {...OmniOscillator},
+        oscillatorType: "osc",
+        modulationType: "osc"
       }, 
       PluckSynth: {
         synth: {
@@ -711,6 +723,8 @@ export const initialStates = {
     length:             {type: "slider",  min: 1,      max: 8,      multiplier:   1 ,   float: false , unit: null   },
     wet:                {type: "slider",  min: 0,      max: 1,      multiplier:   .01 , float: true  , unit: null   },
     feedback:           {type: "slider",  min: 0,      max: 1,      multiplier:   .01 , float: true  , unit: null   },
+    vibratoAmount:      {type: "slider",  min: 0,      max: 1,      multiplier:   .01 , float: true  , unit: null   },
+    vibratoRate:          {type: "slider",  min: 1,      max: 8192,   multiplier: 1    ,  float: false,  unit: "Hz"   },
     depth:           {type: "slider",  min: 0,      max: 1,      multiplier:   .01 , float: true  , unit: null   },
     p:                  {type: "slider",  min: 0,      max: 1,      multiplier:   .01 , float: true  , unit: null   },
     d:                  {type: "slider",  min: 0,      max: 1,      multiplier:   .01 , float: true  , unit: null   },

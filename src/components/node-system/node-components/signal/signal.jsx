@@ -3,7 +3,7 @@ import "./signal.scss"
 import Input from '../component-helpers/input/input'
 import Output from '../component-helpers/output/output'
 
-const Signal = ({node}) => {
+const Signal = ({node, tone}) => {
   const inputs = node.input ? Object.keys(node.input) : null 
 
 

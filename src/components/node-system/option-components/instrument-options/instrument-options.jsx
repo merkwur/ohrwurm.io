@@ -11,24 +11,44 @@ const InstrumentOptions = memo(({toneObj}) => {
   const [_parameters, setParameters] = useState(toneObj.parameters) 
   const [_envelope, setEnvelope] = useState(_parameters.hasOwnProperty("envelope") ? _parameters.envelope : null)
   const [_modulationEnvelope, setModulationEnvelope] = useState(_parameters.hasOwnProperty("modulationEnvelope") ? _parameters.modulationEnvelope : null)
-  const [_carrierParameters, setCarrierParameters] = useState(_parameters.hasOwnProperty("oscillator") ? _parameters.oscillator.osc : null)
-  const [_modulatorParameters, setModulatorParameters] = useState(_parameters.hasOwnProperty("modulator") ? _parameters.modulator.osc : null)
+  const [_carrierParameters, setCarrierParameters] = useState(_parameters.hasOwnProperty("oscillator") ? _parameters.oscillator.osc : _parameters.oscillator0 ? _parameters.oscillator0.osc : null)
+  const [_modulatorParameters, setModulatorParameters] = useState(_parameters.hasOwnProperty("modulator") ? _parameters.modulator.osc : _parameters.oscillator1 ? _parameters.oscillator1.osc : null)
   const [_oscillatorType, setOscillatorType] = useState(_parameters.oscillatorType)
   const [_modulationType, setModulationType]  =useState(_parameters.modulationType)
   const [_carrierBaseType, setCarrierBaseType] = useState(_parameters.type)
-  const [_synthParameters, setSynthParameters] = useState(_parameters.synth)
-  const [_modulatorSynthParameters, setModulatorSynthParameters] = useState(_parameters.modulatorSynth)
+  const [_synthParameters, setSynthParameters] = useState(_parameters.voice0 ? _parameters.voice0 : _parameters.synth)
+  const [_modulatorSynthParameters, setModulatorSynthParameters] = useState(_parameters.voice1 ? _parameters.voice1 : _parameters.modulatorSynth)
   const [_filterParameters, setFilterParameters] = useState(_synthParameters.hasOwnProperty("filter") ? _synthParameters.filter : null)
   const [_filterEnvelopeParameters, setFilterEnvelopeParameters] = useState(_synthParameters.hasOwnProperty("filter") ? _synthParameters.filterEnvelope : null)
   const [_isSynthConnected, setIsSynthConnected] = useState(toneObj.isTriggerConnected)
 
 
-  useEffect(() => {console.log("aaaaaaaaaaa")}, [toneObj])
 
   const handleParameterChange = (value, type, which, parent, from) => {
     
     if (type && which && parent && from) {
-      if (parent === "carrier") {
+      console.log(value, type, which, parent, from)
+      if (toneObj.name === "DuoSynth") {
+        if (parent === "carrier") {
+          if (from === "synth") {
+            if (type === "detune") {
+              toneObj.tone.detune.set({value: value})
+            } else if (typeof toneObj.tone[type] === "object") {
+              toneObj.tone[type].value = value
+            } else {
+              toneObj.tone[type] = value
+            }
+            setSynthParameters(previousParameters => ({
+              ...previousParameters, 
+              [type]: value
+            }))
+          } else {
+            toneObj.tone.voice0.oscillator[type] = value
+          }
+        } else {
+
+        }
+      } else if (parent === "carrier") {
         if (from === "synth") {
           if (type === "detune") {
             toneObj.tone.detune.set({value: value})
@@ -71,7 +91,6 @@ const InstrumentOptions = memo(({toneObj}) => {
             [type]: value
           }))
         } else {
-          console.log("form oisc")
           toneObj.tone.modulation[type] = value
           setModulatorParameters(previousParameters => ({
             ...previousParameters, 
@@ -85,7 +104,6 @@ const InstrumentOptions = memo(({toneObj}) => {
 
 
   const handleWaveTypes = (wave, which, parent) => {
-    console.log(which, parent)
     if (wave && which, parent) {
       if (parent === "carrier") {
         if (which === "carrier") {
@@ -103,7 +121,6 @@ const InstrumentOptions = memo(({toneObj}) => {
       } else {
         if (which === "carrier") {
           toneObj.tone.modulation.baseType = wave
-          console.log("synth: mod && osc: carrier", wave)
           setModulatorParameters(previousParameters => ({
             ...previousParameters, 
             type: wave
@@ -122,7 +139,6 @@ const InstrumentOptions = memo(({toneObj}) => {
 
 
   const handleOscillatorType = (type, which) => {
-    const oscType = type === "osc" ? "oscillator" : type
     
     if (type && which) {
       if (which === "carrier") {
@@ -224,12 +240,13 @@ const InstrumentOptions = memo(({toneObj}) => {
         { openProperties ? (
           <div className='parameters'
             style={{
-              borderRight: `1px solid ${colorScheme["Instrument"]}` 
+              borderRight: `1px solid ${colorScheme["Instrument"]}`, 
+              display: toneObj.name === "DuoSynth" ? "flex" : ""
             }}
               > 
               <div className='parameters-left-side'>
                 <div className='synth-header'>
-                  carrier
+                  {_parameters.voice0 ? "voice0" : "carrier"}
                 </div>
                 <Synth 
                   parentSource={"carrier"}
@@ -258,7 +275,7 @@ const InstrumentOptions = memo(({toneObj}) => {
               {_modulatorParameters ? (
                 <div className='parameters-right-side'>
                   <div className='synth-header'>
-                    modulation
+                    {_parameters.voice1 ?  "voice1" : "modulation"}
                   </div>
                   <Synth 
                     parentSource={"modulator"}
@@ -273,7 +290,7 @@ const InstrumentOptions = memo(({toneObj}) => {
                     _envelope={_modulationEnvelope}
                     _oscillatorType={_modulationType}
                   />
-                  {_synthParameters.filter ? (
+                  {_modulatorSynthParameters.filter ? (
                     <Mono 
                       filter={_filterParameters}
                       filterEnvelope={_filterEnvelopeParameters}

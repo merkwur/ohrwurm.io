@@ -18,6 +18,7 @@
 
   .parameters{
     overflow-y: scroll;
+    
     .synth-header{
       font-size: 9pt;
       font-weight: 300;
@@ -26,12 +27,14 @@
     .parameters-left-side{
       width: 160px;
       margin-left: .25rem;
+      overflow-y: scroll;
      
     }
 
     .parameters-right-side{
       width: 160px;
       border-left: 1px solid #77777777;
+      overflow-y: scroll;
 
     }
   }

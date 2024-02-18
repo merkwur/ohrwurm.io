@@ -211,7 +211,7 @@ const MasterNode =  ({node,
           )}
         </>
       ) : node.type === "Signal" ? (
-        <Signal node={node} />
+        <Signal node={node} tone={tone}/>
       ): null 
      }
 

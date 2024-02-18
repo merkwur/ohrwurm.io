@@ -68,7 +68,7 @@ const NodeCanvas = () => {
 
   const nodeRemove = (id) => {
     const updated = deleteNode(id, nodeData, lineData, toneData)
-    disposeToneNode(id, toneData)
+    disposeToneNode(id, toneData, nodeData)
     setNodeData(updated[0])
     setLineData(updated[1])
     setToneData(updated[2]) 
@@ -110,7 +110,7 @@ const NodeCanvas = () => {
                     bpm: bpm})
   }
   
-  // useEffect(() => {console.log(nodeData)}, [nodeData])
+   useEffect(() => {console.log(nodeData)}, [nodeData])
   // useEffect(() => {console.log(lineData)}, [lineData])
    useEffect(() => {console.log(toneData)}, [toneData])
 
@@ -264,7 +264,7 @@ const NodeCanvas = () => {
                 notesToTrigger={(arr, ids, bpm) => handleNotesToTrigger(arr, ids, bpm)}
                 getValidMoves={(x, y, id) => handleValidMoves(x, y, id)}
                 validMoves={valids}
-                tone={node.name === "Analyser" ? toneData[node.id] : null}
+                tone={node.name === "Analyser" || node.type === "Signal" ? toneData[node.id] : null}
                 />
             </React.Fragment>
           );  
