@@ -1,14 +1,16 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import "./component-analyser.scss"
 import Input from '../component-helpers/input/input'
 import Output from '../component-helpers/output/output'
 import { colorScheme } from '../../node-helpers/helperFunctions'
+import { linspace } from '../../option-components/waveshaper-options/waveshapingFunctions'
 
 
 const yOffset = 25
 const scopeWidth = 150
-const scopHeigth = 100
+const scopeHeigth = 100
 const quarterScopeHeigth = 25
+const xValues = linspace(0, scopeWidth, 128)
 
 const ComponentAnalyser = ({node, tone}) => {
   const inputs = node.input ? Object.keys(node.input) : null 
@@ -22,6 +24,11 @@ const ComponentAnalyser = ({node, tone}) => {
   const [type, setType] = useState("waveform")
   const [isAnalyserRunning, setIsAnalyserRunning] = useState(false)
   const [lissajous, setLissajous] = useState(false)
+  const canvasRef = useRef(null)
+  const ctxRef = useRef(null)
+  const [length, setLength] = useState(xValues.length)
+  
+  
 
 
   // some sort of ticker component is necessary to dealing with the rate of getting value 
@@ -41,103 +48,122 @@ const ComponentAnalyser = ({node, tone}) => {
     }
   }
 
+  useEffect(() => {
+    if (!canvasRef.current) return;
+  
+    const canvas = canvasRef.current;
+    canvas.width = scopeWidth; 
+    canvas.height = scopeHeigth; 
+  
+    ctxRef.current = canvas.getContext('2d'); // Initialize and store the context
+  }, [])
+
+  const calcWaveForm = (x) => {
+    return (1 - x * .5) * 50
+  }
+
+  const calcFFT = (x) => {
+    return (1 - x * .57) 
+  }
+
+  const calcLissajousx = (x) => {
+    return 75 + (x * 40)
+  }
+
+  const calcLissajousy = (y) => {
+    return 50 + (y * 40)
+  }
 
   useEffect(() => {
-    // check inputs 
+    
+    if (!ctxRef.current) return 
+    const ctx = ctxRef.current
+    ctx.strokeStyle = colorScheme["Component"]
+    ctx.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height)   
+    ctx.beginPath()
+    
+    
     if (node.input.x && !node.input.y) {
-      if (type === "fft") {
-        // tone returns to Float32Array, values cannot be convertable to string 
-        // we need to wrap it to Array again.
-        const xWaveform = Array.from(tone.tone.x.getValue()).slice(1)
-        // fft's first value will always have an infinite magnitude to skip checking each value .slice() is better
-        const pointsArray = xWaveform.map((value, index) => {
-          const x = ((index / 127) * scopeWidth).toFixed(3)
-          // quick and dirty way to fit the graph into scope
-          const y = (1 - (value * .5) + 10).toFixed(3)
-            return `${x}, ${y}`
-        }).join(" ") || ""
-        setPoints(pointsArray)
-      } else {
-        const xWaveform = Array.from(tone.tone.x.getValue())
-        const pointsArray = xWaveform.map((value, index) => {
-          // normalizing the x value to fit the graph into the scope exactly
-          const x = ((index / 127) * scopeWidth).toFixed(3)
-          // since most periodic waves has range between [-1, 1] half of the scope will fit exactly but no room fot amplitude changes.
-          const y = (((1 - (value)) * quarterScopeHeigth) + yOffset ).toFixed(3)
-          return `${x}, ${y}`
-        }).join(" ") || ""
-      setPoints(pointsArray)
-      }
-    }
-
-    if (node.input.x && node.input.y) {
-      if (lissajous) {
-        const xWaveform = tone.tone.x.getValue()
-        const yWaveform = tone.tone.y.getValue()
-  
-        const pointsArray = Array.from(xWaveform).map((value, index) => {
-          const x = (30+(1 - value) * 45).toFixed(3)
-          const y = ((1.04 - yWaveform[index]) * 44).toFixed(3)
-          return `${x}, ${y}`
-        }).join(" ") || ""  
-        setPoints(pointsArray)
-
-      } else if (type === "fft") {
-          const yWaveform = Array.from(tone.tone.y.getValue()).slice(1)
-          const secondPointsArray = yWaveform.map((value, index) => {
-            const x = ((index / 127) * scopeWidth).toFixed(3)
-            const y = (1 - (value * .6) - 5).toFixed(3)
-            return `${x}, ${y}`
-          }).join(" ") || ""
-          setSecondPoints(secondPointsArray)
-  
-          const xWaveform = Array.from(tone.tone.x.getValue()).slice(1)
-          const pointsArray = xWaveform.map((value, index) => {
-            const x = ((index / 127) * scopeWidth).toFixed(3)
-            const y = (1 - (value * .6) - 5).toFixed(3)
-            return `${x}, ${y}`
-          }).join(" ") || ""
-          setPoints(pointsArray)
-        } else {
-          const yWaveform = tone.tone.y.getValue()
-          const secondPointsArray = Array.from(yWaveform).map((value, index) => {
-            const x = ((index / 127) * scopeWidth).toFixed(3)
-            const y = (((1 - value) * quarterScopeHeigth) + yOffset ).toFixed(3)
-            return `${x}, ${y}`
-          }).join(" ") || ""
-          setSecondPoints(secondPointsArray)
-  
-          const xWaveform = tone.tone.x.getValue()
-          const pointsArray = Array.from(xWaveform).map((value, index) => {
-            const x = ((index / 127) * scopeWidth).toFixed(3)
-            const y = (((1 - value) * quarterScopeHeigth) + yOffset ).toFixed(3)
-            return `${x}, ${y}`
-          }).join(" ") || ""
-          setPoints(pointsArray)
-        }
+      let waveformValueX = tone.tone.x.getValue()
+      if (type === "fft") ctx.moveTo(xValues[1], (1 - calcFFT(waveformValueX[1])))
+      else ctx.moveTo(0, calcWaveForm(waveformValueX[0]))
       
-    }
-
-    if (!node.input.x && node.input.y) {
+    
       if (type === "fft") {
-        const yWaveform = Array.from(tone.tone.y.getValue()).slice()
-        const pointsArray = Array.from(yWaveform).map((value, index) => {
-          const x = ((index / 127) * scopeWidth).toFixed(3)
-          const y = (1 - (value * .6) - 5).toFixed(3)
-          return `${x}, ${y}`
-        }).join(" ") || ""
-        setPoints(pointsArray)
+        for (let i = 2; i < length; i++) {
+          ctx.lineTo(xValues[i], calcFFT(waveformValueX[i]))
+        }
       } else {
-        const yWaveform = tone.tone.y.getValue()
-        const pointsArray = Array.from(yWaveform).map((value, index) => {
-          const x = ((index / 127) * scopeWidth).toFixed(3)
-          const y = (((1 - value) * quarterScopeHeigth) + yOffset ).toFixed(3)
-          return `${x}, ${y}`
-        }).join(" ") || ""
-        setPoints(pointsArray)
+        for (let i = 1; i < length; i++) {
+          ctx.lineTo(xValues[i], calcWaveForm(waveformValueX[i]))
+        }
+      } 
+      ctx.stroke()
+
+    } else if (!node.input.x && node.input.y) {
+        let waveformValueY = tone.tone.y.getValue()
+        if (type === "fft") ctx.moveTo(0, calcFFT(waveformValueY[1]))
+        else ctx.moveTo(0, calcWaveForm(waveformValueY[0]))
+        
+
+        if (type === "fft") {
+          for (let i = 1; i < length; i++) {
+            ctx.lineTo(xValues[i], calcFFT[i])
+          }
+        } else {
+          for (let i = 1; i < length; i++) {
+            ctx.lineTo(xValues[i], calcWaveForm[i])
+          }
+        }
+        ctx.stroke()
+
+      } else if (node.input.x && node.input.y) {
+        let waveformValueY = tone.tone.y.getValue()
+        let waveformValueX = tone.tone.x.getValue()
+        
+        if (lissajous) {
+          ctx.moveTo(calcLissajousx(waveformValueX[0]), calcLissajousy(waveformValueY[0]))
+          for (let i = 1; i < length; i++) {
+            ctx.lineTo(calcLissajousx(waveformValueX[i]), calcLissajousy(waveformValueY[i]))
+          }
+        } else if (!lissajous && type === "fft") {
+
+          ctx.beginPath()
+          ctx.strokeStyle = colorScheme["Component"]
+          ctx.moveTo(0, calcFFT(waveformValueX[1]))
+          for (let i = 2; i < length; i++) {
+            ctx.lineTo(xValues[i], calcFFT(waveformValueX[i]))
+          }
+          ctx.stroke()
+          
+          ctx.beginPath()
+          ctx.strokeStyle = colorScheme["Instrument"]
+          ctx.moveTo(0, calcFFT(waveformValueY[1]))
+          for (let i = 2; i < length; i++) {
+            ctx.lineTo(xValues[i], calcFFT(waveformValueY[i]))
+          }
+          ctx.stroke()
+        } else if (!lissajous && type === "waveform") {
+          ctx.beginPath()
+          ctx.strokeStyle = colorScheme["Component"]
+          ctx.moveTo(0, calcWaveForm(waveformValueX[0]))
+
+          for (let i = 1; i < length; i++) {
+            ctx.lineTo(xValues[i], calcWaveForm(waveformValueX[i]))
+          }
+          ctx.stroke()
+
+          ctx.beginPath()
+          ctx.strokeStyle = colorScheme["Instrument"]
+          ctx.moveTo(0, calcWaveForm(waveformValueY[0]))
+          for (let i = 0; i < length; i++){
+            ctx.lineTo(xValues[i], calcWaveForm(waveformValueY[i]))
+          }
+          ctx.stroke()
+        }
       }
-    }
-  
+
+
   }, [time])  
 
   
@@ -218,40 +244,25 @@ const ComponentAnalyser = ({node, tone}) => {
                                     linear-gradient(to bottom, ${colorScheme["natural"]}22 1px, transparent 1px)`
                 }} 
         >
-          <svg 
-            className='scope-view'
-            style={{borderBottom: `1px solid ${colorScheme[node.type]}` , position: 'absolute', top: 5}}
-            
-            width="150" 
-            height="100" 
-            viewBox='0 0 150 100'
-            >
-            { isAnalyserRunning && node.input.x || node.input.y ? (
-              <polyline 
-                fill='none'
-                stroke={`${colorScheme[node.type]}77`}
-                strokeWidth={1}
-                points={points}
-              />
-            ) : null}
-            {!lissajous && node.input.x && node.input.y ? (
-              <polyline 
-                fill='none'
-                stroke="#ff424277"
-                strokeWidth={1}
-                points={secondPoints}
-              />
-            ) : null}
-          </svg>
+        
         </div>
         <div 
           className='analyser-parameters'
           
           style={{    
             position: 'absolute', 
-            bottom: 5, right: 0,      
+            top: 0, right: 0,
+            borderBottom: `1px solid ${colorScheme["Component"]}`      
           }}
           >
+          <canvas 
+            id="waveformCanvas" 
+            ref={canvasRef}
+            
+            >
+          </canvas>
+
+          </div>
           <div 
             className='button'
             style={{
@@ -296,7 +307,6 @@ const ComponentAnalyser = ({node, tone}) => {
             > 
             {type === "fft" ? "fft" : "waveform" }      
           </div>
-        </div>
 
     </div>
   )

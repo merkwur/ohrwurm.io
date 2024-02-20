@@ -1,5 +1,7 @@
 import * as Tone from "tone"
 
+
+
 export const triggerEvents = () => {
   console.log("started")
   Tone.Transport.start()

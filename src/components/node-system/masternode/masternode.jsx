@@ -56,7 +56,7 @@ const MasterNode =  ({node,
     setInitialY(y - parseInt(topElement.parentElement.style.top)-70)
 
     setIsDragging(true)      
-    console.log(topElement.class) 
+    
     if (topElement.className && typeof topElement.className === "string" && topElement.className.includes("container")) {
       setIsNodeDragging(true)
       const grabbedNode = nodeRef.current[node.id]
