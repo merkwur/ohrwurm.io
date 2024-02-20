@@ -18,7 +18,7 @@ const ComponentAnalyser = ({node, tone}) => {
   const [isClockRunning, setIsClockRunning] = useState(false)
   const [time, setTime] = useState(0)
   const [intervalId, setIntervalId] = useState(0)
-  const [fps, setFps] = useState(60)
+  const [fps, setFps] = useState(45)
   const [points, setPoints] = useState("")
   const [secondPoints, setSecondPoints] = useState("")
   const [type, setType] = useState("waveform")
@@ -120,12 +120,13 @@ const ComponentAnalyser = ({node, tone}) => {
       } else if (node.input.x && node.input.y) {
         let waveformValueY = tone.tone.y.getValue()
         let waveformValueX = tone.tone.x.getValue()
-        
+        ctx.beginPath()
         if (lissajous) {
           ctx.moveTo(calcLissajousx(waveformValueX[0]), calcLissajousy(waveformValueY[0]))
           for (let i = 1; i < length; i++) {
             ctx.lineTo(calcLissajousx(waveformValueX[i]), calcLissajousy(waveformValueY[i]))
           }
+        ctx.stroke()
         } else if (!lissajous && type === "fft") {
 
           ctx.beginPath()
