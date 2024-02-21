@@ -65,7 +65,7 @@ const Synth = ({
                 options={initialStates.attackCurve.value}
                 selectFilterType={getCurveType}
                 value={_envelope.attackCurve}
-                header={"aCurve"}
+                header={"attackCurve"}
                 type={"Instrument"}
                 which={parentSource}
                 />

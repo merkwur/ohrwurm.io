@@ -9,8 +9,17 @@ import OctavePicker from './transport-helpers/octave-picker'
 import { colorScheme } from '../../node-helpers/helperFunctions'
 
 
-// There should be better way to manage all the states
-
+/* The transport object is making my eyes too bleed when I trying to look in it!!
+   This is not an efficient way to make this object. I am keeping it for the test cases.
+   It will be refactored and more simplified also needs to move  => nodeCanvas => Underneath 
+   the masterNode section in order to make more pleasant. it should be controlled on node
+   parameters not from the node hub section !!! Also it will be divided many section
+   main section is simle trigger. noise synth and amplitude and/or frequency envelope component
+   there will be add-on on top of trigger which is simply quantizer. quantizer will be animated
+   steps will be adjustable and can move with each time step. also there will be another add-ons
+   one is durations which holds the normal range for each tick how long the note duration will 
+   play. and there will be probabilities. these are currently exist but computationally absurd!
+*/
 
 const Transport = ({id, name, type, notesToTrigger, getGlobalTime}) => {
 

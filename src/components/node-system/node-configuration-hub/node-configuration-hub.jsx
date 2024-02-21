@@ -5,6 +5,7 @@ import Transport from '../option-components/transport/transport'
 import InstrumentOptions from '../option-components/instrument-options/instrument-options'
 import EffectOptions from '../option-components/effect-options/effect-option'
 import Waveshaper from '../option-components/waveshaper-options/waveshaper'
+import ComponentOptions from '../option-components/component-options/component-options'
 
 
 const NodeConfigurationHub = memo(({tone, notesToTrigger, getGlobalTime}) => {
@@ -37,7 +38,13 @@ const NodeConfigurationHub = memo(({tone, notesToTrigger, getGlobalTime}) => {
                 <div>
                   <Waveshaper toneObj={tone[toneObj]}/>
                 </div>
-              ) : null}
+              ) : tone[toneObj].type === "Component" ? 
+              <>
+                {tone[toneObj].name !== "Analyser" && tone[toneObj].name !== "CrossFade" ? (
+                  <ComponentOptions toneObj={tone[toneObj]} />
+                ) : null} 
+              </>
+              : null}
           </React.Fragment>
         ))}
       </div>      

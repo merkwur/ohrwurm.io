@@ -231,7 +231,7 @@ export const getToneObject = ( nodeName ) => {
     case "Filter": 
       return  new Tone.Filter(263.61, "lowpass")
     case "Follower": 
-      return  new Tone.Follower(.25)
+      return  new Tone.Follower()
     case "FrequencyEnvelope": 
       return  new Tone.FrequencyEnvelope(.1, .2, .5, .6)
     case "Limiter": 
@@ -264,6 +264,14 @@ export const getToneObject = ( nodeName ) => {
       return new Tone.MonoSynth()
     case "WaveShaper":
       return new Tone.WaveShaper()
+    case "Gate":
+      return new Tone.Gate()
+    case "PanVol":
+      return new Tone.PanVol()
+    case "Panner":
+      return new Tone.Panner()
+    case "Recorder": 
+      return new Tone.Recorder()
     default:
       return null; // Return null for unknown node types or if no tone object is provided
   }
@@ -543,7 +551,7 @@ export const getNodeParameters = (name, type) => {
 
     }
     const ComponentParams = {
-      AmplitudeEnvelope: {...envelope},
+      AmplitudeEnvelope: {envelope: {...envelope}},
       Analyser: {size: 128, smoothing: 0, type: "fft"},
       BiquadFilter: {
         detune: 0, 
@@ -558,22 +566,20 @@ export const getNodeParameters = (name, type) => {
       Compressor: {
         knee: 0,
         ratio: 1, 
-        reduction: 0, 
+        
         release: .2, 
         threshold: 0
       },
-      Convolver: {normalize: true},
-      CrossFade: {fade: .5},
-      DCMeter: {},
+    
       EQ3: {low: 0, lowFrequency: 120, mid: 0, high: 0, highFrequency: 4096, Q: 1},
-      Envelope: {...envelope},
+      Envelope: {envelope: {...envelope}},
       FFT: {normalRange: true, smoothing: 0},
       FeedbackCombFilter: {delayTime: .2, resonance: .5},
       Filter: {...filterParams},
       Follower: {smoothing: 0},
-      FrequencyEnvelope: {...envelope, octaves: 1},
+      FrequencyEnvelope: {envelope : {...envelope}, octaves: 1, baseFrequency: 120, exponent: 1},
       Gate: {smoothing: 0, threshold: 0},
-      Limiter: {reduction: 0, threshold: 0},
+      Limiter: {threshold: 0},
       LowpassCombFilter: {dampening: .2, delayTime: .2, resonance: 2.},
       Merge: {},
       Meter: {},
@@ -615,7 +621,7 @@ export const getNodeParameters = (name, type) => {
         rolloffFactor: .1, 
       },
       PhaseShiftAllpass: {offset90: .5},
-      Recorder: {state: "stopped", },
+      Recorder: {start: false },
       Solo: {},
       Split: {},
       Volume: {volume: 0},
@@ -673,7 +679,7 @@ export const initialStates = {
     attack:             {type: "slider",  min: 0.01,        max: 1,      multiplier: .01 ,   float: true ,  unit: null   },
     decay:              {type: "slider",  min: 0.01,        max: 1,      multiplier: .01 ,   float: true ,  unit: null   },
     sustain:            {type: "slider",  min: 0.01,        max: 1,      multiplier: .01 ,   float: true ,  unit: null   },
-    release:            {type: "slider",  min: 0,        max: Infinity, multiplier: .01,  float: true ,  unit: null   },
+    release:            {type: "slider",  min: 0,        max: 1, multiplier: .01,  float: true ,  unit: null   },
     detune:             {type: "slider",  min: -1200,  max: 1200,   multiplier:  1   ,  float: false,  unit: "cents"   },
     portamento:         {type: "slider",  min: 0,      max: 1,      multiplier: .001 ,  float: true ,  unit: null   },
     frequency:          {type: "slider",  min: 1,      max: 8192,   multiplier: 1    ,  float: false,  unit: "Hz"   },
@@ -695,24 +701,25 @@ export const initialStates = {
     attackCurve:        {type: "select",  value: ["linear", "exponential", "sine", "cosine", "bounce", "ripple", "step"]},
     releaseCurve:       {type: "select",  value: ["linear", "exponential", "sine", "cosine", "bounce", "ripple", "step"]},
     decayCurve:         {type: "select",  value: ["linear", "exponential"]},
-    pan:                {type: "slider",  min: .1,     max: 20,     multiplier:  .01 ,  float: true ,  unit: null   },
+    pan:                {type: "slider",  min: -1,     max: 1,     multiplier:  .01 ,  float: true ,  unit: null   },
     knee:               {type: "slider",  min: .1,     max: 20,     multiplier:  .01 ,  float: true ,  unit: null   },
-    ratio:              {type: "slider",  min: .1,     max: 20,     multiplier:  .01 ,  float: true ,  unit: null   },
-    threshold:          {type: "slider",  min: .1,     max: 20,     multiplier:  .01 ,  float: true ,  unit: null   },
+    ratio:              {type: "slider",  min: 1,     max: 20,     multiplier:  .01 ,  float: true ,  unit: null   },
+    threshold:          {type: "slider",  min: -100,     max: 0,     multiplier:  .01 ,  float: true ,  unit: null   },
     sensitivity:        {type: "slider",  min: -96,    max: 96,     multiplier:   1 ,   float: false , unit: "db"   },
     pitch:        {type: "slider",  min: -96,    max: 96,     multiplier:   1 ,   float: false , unit: null   },
     order:              {type: "slider",  min:  1,    max: 100,     multiplier:   1 ,   float: false , unit: null   },
     Q:                  {type: "slider",  min: .1,     max: 20,     multiplier:  .01 ,  float: true ,  unit: null   },
-    low:                {type: "slider",  min: .1,     max: 20,     multiplier:  .01 ,  float: true ,  unit: null   },
-    lowFrequency:       {type: "slider",  min: .1,     max: 20,     multiplier:  .01 ,  float: true ,  unit: null   },
-    mid:                {type: "slider",  min: .1,     max: 20,     multiplier:  .01 ,  float: true ,  unit: null   },
-    high:               {type: "slider",  min: .1,     max: 20,     multiplier:  .01 ,  float: true ,  unit: null   },
-    highFrequency:      {type: "slider",  min: .1,     max: 20,     multiplier:  .01 ,  float: true ,  unit: null   },
+    low:                {type: "slider",  min: -48,     max: 48,     multiplier:  1 ,  float: false ,  unit: "db"   },
+    lowFrequency:       {type: "slider",  min: .1,     max: 1200,     multiplier:  1 ,  float: false ,  unit: "Hz"   },
+    mid:                {type: "slider",  min: -48,     max: 48,     multiplier:  1 ,  float: false ,  unit: "db"   },
+    high:               {type: "slider",  min: -48,     max: 48,     multiplier:  1 ,  float: false ,  unit: "db"   },
+    highFrequency:      {type: "slider",  min: 1200,     max: 8196,     multiplier:  1 ,  float: false ,  unit: "Hz"   },
     delayTime:          {type: "slider",  min: .1,     max: 1,     multiplier:  .01 ,  float: true ,  unit: null   },
     reduction:          {type: "slider",  min: .1,     max: 20,     multiplier:  .01 ,  float: true ,  unit: null   },
     normalize:          {type: "boolean", min: .1,     max: 20,     multiplier:  .01 ,  float: true ,  unit: null   },
     fade:               {type: "slider",  min: .1,     max: 20,     multiplier:  .01 ,  float: true ,  unit: null   },
     smoothing:          {type: "slider",  min: .1,     max: 20,     multiplier:  .01 ,  float: true ,  unit: null   },
+    exponent:          {type: "slider",  min: .1,     max: 20,     multiplier:  .01 ,  float: true ,  unit: null   },
     type:               {type: "select",  value: ["sine", "square", "sawtooth", "triangle"]},
     coneInnerAngle:     {type: "slider",  min: .1,     max: 20,     multiplier:  .01 ,  float: true ,  unit: null   },
     coneOuterAngle:     {type: "slider",  min: .1,     max: 20,     multiplier:  .01 ,  float: true ,  unit: null   },

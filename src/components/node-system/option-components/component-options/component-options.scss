@@ -1,0 +1,34 @@
+.component-options-wrapper{
+  height: 100%;
+  background-color: #17171777;
+  color: bisque;
+  display: flex;
+  flex-direction: row;
+
+  .left-stander{
+    border-right: 1px solid #77777777;
+    padding-top: 2rem;
+    font-weight: 500;
+    font-size: 12pt;
+    
+    .header{
+      writing-mode: vertical-rl;
+    }
+  }
+
+  .parameters{
+    overflow-y: scroll;
+        
+    .head{
+      height: 20px;
+    }
+    .parameters-left-side{
+      width: 160px;
+      margin-left: .25rem;
+      overflow-y: scroll;
+      min-height: 50%;
+    }
+
+
+  }
+}
