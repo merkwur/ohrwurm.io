@@ -6,10 +6,8 @@ import { colorScheme } from '../../node-helpers/helperFunctions'
 import { linspace } from '../../option-components/waveshaper-options/waveshapingFunctions'
 
 
-const yOffset = 25
 const scopeWidth = 150
 const scopeHeigth = 100
-const quarterScopeHeigth = 25
 const xValues = linspace(0, scopeWidth, 128)
 
 const ComponentAnalyser = ({node, tone}) => {
@@ -19,16 +17,12 @@ const ComponentAnalyser = ({node, tone}) => {
   const [time, setTime] = useState(0)
   const [intervalId, setIntervalId] = useState(0)
   const [fps, setFps] = useState(45)
-  const [points, setPoints] = useState("")
-  const [secondPoints, setSecondPoints] = useState("")
   const [type, setType] = useState("waveform")
   const [isAnalyserRunning, setIsAnalyserRunning] = useState(false)
   const [lissajous, setLissajous] = useState(false)
   const canvasRef = useRef(null)
   const ctxRef = useRef(null)
   const [length, setLength] = useState(xValues.length)
-  
-  
 
 
   // some sort of ticker component is necessary to dealing with the rate of getting value 
@@ -80,10 +74,10 @@ const ComponentAnalyser = ({node, tone}) => {
     const ctx = ctxRef.current
     ctx.strokeStyle = colorScheme["Component"]
     ctx.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height)   
-    ctx.beginPath()
     
     
     if (node.input.x && !node.input.y) {
+      ctx.beginPath()
       let waveformValueX = tone.tone.x.getValue()
       if (type === "fft") ctx.moveTo(xValues[1], (1 - calcFFT(waveformValueX[1])))
       else ctx.moveTo(0, calcWaveForm(waveformValueX[0]))
@@ -101,68 +95,71 @@ const ComponentAnalyser = ({node, tone}) => {
       ctx.stroke()
 
     } else if (!node.input.x && node.input.y) {
-        let waveformValueY = tone.tone.y.getValue()
-        if (type === "fft") ctx.moveTo(0, calcFFT(waveformValueY[1]))
-        else ctx.moveTo(0, calcWaveForm(waveformValueY[0]))
-        
 
-        if (type === "fft") {
-          for (let i = 1; i < length; i++) {
-            ctx.lineTo(xValues[i], calcFFT[i])
-          }
-        } else {
-          for (let i = 1; i < length; i++) {
-            ctx.lineTo(xValues[i], calcWaveForm[i])
-          }
+      ctx.beginPath()
+      ctx.strokeStyle = colorScheme["Instrument"]
+      let waveformValueY = tone.tone.y.getValue()
+      if (type === "fft") ctx.moveTo(xValues[1], (1 - calcFFT(waveformValueY[1])))
+      else ctx.moveTo(0, calcWaveForm(waveformValueY[0]))
+      
+    
+      if (type === "fft") {
+        for (let i = 2; i < length; i++) {
+          ctx.lineTo(xValues[i], calcFFT(waveformValueY[i]))
         }
-        ctx.stroke()
+      } else {
+        for (let i = 1; i < length; i++) {
+          ctx.lineTo(xValues[i], calcWaveForm(waveformValueY[i]))
+        }
+      } 
+      ctx.stroke()
 
-      } else if (node.input.x && node.input.y) {
-        let waveformValueY = tone.tone.y.getValue()
-        let waveformValueX = tone.tone.x.getValue()
+    } else if (node.input.x && node.input.y) {
+      let waveformValueY = tone.tone.y.getValue()
+      let waveformValueX = tone.tone.x.getValue()
+      ctx.beginPath()
+      if (lissajous) {
+        ctx.moveTo(calcLissajousx(waveformValueX[0]), calcLissajousy(waveformValueY[0]))
+        for (let i = 1; i < length; i++) {
+          ctx.lineTo(calcLissajousx(waveformValueX[i]), calcLissajousy(waveformValueY[i]))
+        }
+      ctx.stroke()
+      } else if (!lissajous && type === "fft") {
+
         ctx.beginPath()
-        if (lissajous) {
-          ctx.moveTo(calcLissajousx(waveformValueX[0]), calcLissajousy(waveformValueY[0]))
-          for (let i = 1; i < length; i++) {
-            ctx.lineTo(calcLissajousx(waveformValueX[i]), calcLissajousy(waveformValueY[i]))
-          }
-        ctx.stroke()
-        } else if (!lissajous && type === "fft") {
-
-          ctx.beginPath()
-          ctx.strokeStyle = colorScheme["Component"]
-          ctx.moveTo(0, calcFFT(waveformValueX[1]))
-          for (let i = 2; i < length; i++) {
-            ctx.lineTo(xValues[i], calcFFT(waveformValueX[i]))
-          }
-          ctx.stroke()
-          
-          ctx.beginPath()
-          ctx.strokeStyle = colorScheme["Instrument"]
-          ctx.moveTo(0, calcFFT(waveformValueY[1]))
-          for (let i = 2; i < length; i++) {
-            ctx.lineTo(xValues[i], calcFFT(waveformValueY[i]))
-          }
-          ctx.stroke()
-        } else if (!lissajous && type === "waveform") {
-          ctx.beginPath()
-          ctx.strokeStyle = colorScheme["Component"]
-          ctx.moveTo(0, calcWaveForm(waveformValueX[0]))
-
-          for (let i = 1; i < length; i++) {
-            ctx.lineTo(xValues[i], calcWaveForm(waveformValueX[i]))
-          }
-          ctx.stroke()
-
-          ctx.beginPath()
-          ctx.strokeStyle = colorScheme["Instrument"]
-          ctx.moveTo(0, calcWaveForm(waveformValueY[0]))
-          for (let i = 0; i < length; i++){
-            ctx.lineTo(xValues[i], calcWaveForm(waveformValueY[i]))
-          }
-          ctx.stroke()
+        ctx.strokeStyle = colorScheme["Component"]
+        ctx.moveTo(0, calcFFT(waveformValueX[1]))
+        for (let i = 2; i < length; i++) {
+          ctx.lineTo(xValues[i], calcFFT(waveformValueX[i]))
         }
+        ctx.stroke()
+        
+        ctx.beginPath()
+        ctx.strokeStyle = colorScheme["Instrument"]
+        ctx.moveTo(0, calcFFT(waveformValueY[1]))
+        for (let i = 2; i < length; i++) {
+          ctx.lineTo(xValues[i], calcFFT(waveformValueY[i]))
+        }
+        ctx.stroke()
+      } else if (!lissajous && type === "waveform") {
+        ctx.beginPath()
+        ctx.strokeStyle = colorScheme["Component"]
+        ctx.moveTo(0, calcWaveForm(waveformValueX[0]))
+
+        for (let i = 1; i < length; i++) {
+          ctx.lineTo(xValues[i], calcWaveForm(waveformValueX[i]))
+        }
+        ctx.stroke()
+
+        ctx.beginPath()
+        ctx.strokeStyle = colorScheme["Instrument"]
+        ctx.moveTo(0, calcWaveForm(waveformValueY[0]))
+        for (let i = 0; i < length; i++){
+          ctx.lineTo(xValues[i], calcWaveForm(waveformValueY[i]))
+        }
+        ctx.stroke()
       }
+    }
 
 
   }, [time])  
@@ -257,7 +254,6 @@ const ComponentAnalyser = ({node, tone}) => {
           }}
           >
           <canvas 
-            id="waveformCanvas" 
             ref={canvasRef}
             
             >

@@ -67,7 +67,7 @@ const getElu = (x) => {
 
 const getModulated = (x) => {
   const arr = x.map(value => {
-    return .5 * (Math.sin(2 * Math.PI * .4 * value + (.5 * (Math.cos(2 * Math.PI * .7 * value + Math.PI/2)))))
+    return  .7 * (Math.sin(2 * Math.PI * .4 * value + ( (Math.cos(2 * Math.PI * .9 * value + Math.PI/2)))))
   })
   return arr
 }

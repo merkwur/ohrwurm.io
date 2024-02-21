@@ -1,26 +1,37 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import "./waveshaper.scss"
 import { colorScheme } from '../../node-helpers/helperFunctions'
-import {  curveTypes } from './waveshapingFunctions'
-import { lerp } from 'three/src/math/MathUtils'
+import {  curveTypes, linspace } from './waveshapingFunctions'
 
 const curveNames = ["I", "tanh", "sigmoid", "relu", "leaky", "gelu", "fold", "elu", "modulated", "circular"]
 
 const scopeWidth = 140
 const scopeHeigth = 100
+const xValues = linspace(-Math.PI, Math.PI, 32)
+
 
 const Waveshaper = ({toneObj}) => {
   const [openProperties, setOpenProperties] = useState(true)
   const [curve, setCurve] = useState(new Float32Array(32))
   const [curves, setCurves] = useState([])
-  const [points, setPoints] = useState([])
+  
   const [blob, setBlob] = useState({x: 70, y: 70})
   const [initialX, setInitialX] = useState(0)
   const [initialY, setInitialY] = useState(0)
   const [isDragging, setIsDragging] = useState(false)
   const [selected, setSelected] = useState([])
   const radius = 50
+  const shaperCanvasRef = useRef(null)
+  const shaperCtx = useRef(null)
 
+
+  useEffect(() => {
+    if (!shaperCanvasRef.current) return;
+    const canvas = shaperCanvasRef.current;
+    canvas.width = scopeWidth; 
+    canvas.height = scopeHeigth; 
+    shaperCtx.current = canvas.getContext('2d'); // Initialize and store the context
+  }, [])
 
   useEffect(() => {
     const t = (360 / curveNames.length) * (Math.PI / 180) 
@@ -33,52 +44,65 @@ const Waveshaper = ({toneObj}) => {
     setCurves(arr)  
   }, [])
 
+  const calcCurvey = (x) => {
+    return (1 - (x * scopeHeigth) * .30) + 50
+  }
+
+  const calcCurvex = (x) => {
+    return 70 + (x * 25)
+  }
+
   const curveInterpolation = (distance) => {
     let lerped
+    if (!shaperCtx.current) return 
+    const ctx = shaperCtx.current
+    ctx.strokeStyle = colorScheme["Signal"]
+    ctx.clearRect(0, 0, shaperCanvasRef.current.width, shaperCanvasRef.current.height)   
+    ctx.beginPath()
+    ctx.moveTo(0, calcCurvey(curve[0]))
+    ctx.lineWidth = 3
+    
     if (distance.length > 1) {
       let d = 0
-      let v = 0
+      let y = 0
       distance.forEach(dist => {
         d += dist.distance
       })
 
       lerped = curve.map((value, index) => {
-        v = 0
-        distance.forEach(dist => {
-          
-          v += curveTypes[dist.name][index] * (1 - (dist.distance / d))
-          
+        y = 0
+        distance.forEach(dist => {   
+          y += curveTypes[dist.name][index] * (1 - (dist.distance / d)) 
         })
-        return v 
+        ctx.lineTo(calcCurvex(xValues[index]), calcCurvey(y))
+        return y  
       })
-
-      toneObj.tone.curve = lerped
-      setCurve(lerped)      
+      toneObj.tone.curve = lerped    
+      setCurve(lerped)
+      ctx.stroke()
     } else if (distance.length === 1){
-      toneObj.tone.curve = curveTypes[distance[0].name]
-      setCurve(new Float32Array(curveTypes[distance[0].name]))
+      ctx.beginPath() 
+      ctx.moveTo(0, calcCurvey(curve[0]))
+      lerped = curveTypes[distance[0].name].map((value, index) => {
+        const y = calcCurvey(value)
+        ctx.lineTo(calcCurvex(xValues[index]), y)
+        return value
+      })
+      
+      toneObj.tone.curve = lerped
+      setCurve(lerped)
+      
+      ctx.stroke()
     } else {
-      toneObj
-      setCurve(new Float32Array(curveTypes["I"]))
+      toneObj.tone.curve = curveTypes["I"]
+      setCurve(xValues)
     }
   }
 
 
   useEffect(() => {
-      const arr = Array.from(curve).map((value, index) => {
-        const x = (index / curve.length)  * scopeWidth
-        const y = (1-(value * scopeHeigth) * .3) + 45 
-        return `${x} ${y}`
-      }).join(" ") || ""
-      setPoints(arr)
-      
-  }, [curve])
-
-  
-
-useEffect(() => {
-  getDistance()
-}, [blob])
+    getDistance()
+  }, [blob])
 
   const getDistance = () => {
     if (curves.length > 0 && blob) {
@@ -112,15 +136,15 @@ useEffect(() => {
   }
 
   const handleMouseMove = (event) => {
+    const handler = setTimeout(() => {
     const x = event.clientX - initialX
     const y = event.clientY - initialY
     const updatedBlob = {
       x: blob.x + x, y: blob.y + y
     }        
     setBlob(updatedBlob); // Update the state with the new array
-    //const handler = setTimeout(() => {
-   // }, 5)
-    //return () => clearTimeout(handler)    
+    }, 120)
+    return () => clearTimeout(handler)    
   }
 
 
@@ -172,7 +196,7 @@ useEffect(() => {
                   position: 'absolute', 
                   top: value.y, left: value.x, 
                   height: "25px", width: "25px",
-                
+                  zIndex: 99,
                   fontSize: "7pt", fontWeight: "500",
                   display: "flex", justifyContent: "center", 
                   alignItems: 'center',                  
@@ -194,40 +218,97 @@ useEffect(() => {
                 position:'absolute', left: blob.x, top: blob.y, 
                 height: "20px", width: "20px", borderRadius: "50%",
                 backgroundColor: `${colorScheme["Signal"]}`,
-                transform: "translate(-50%, -50%)"
+                transform: "translate(-50%, -50%)",
+                zIndex: 999,
               }}  
               >
           </div>
           <div className='scope'
-               style={{display: "flex", 
-                  justifyContent: "center", 
-                  alignItems: "center", 
-                  position: 'relative',   
-                  top: "140px",
-                  left: -5,               
-                  height: `${scopeHeigth}px`, 
-                  cursor: "not-allowed", 
-                  backgroundSize: "25px 25px",
-                  backgroundImage: `linear-gradient(to right, ${colorScheme["natural"]}22 1px, transparent 1px),
-                                    linear-gradient(to bottom, ${colorScheme["natural"]}22 1px, transparent 1px)`
-                }} 
+               style={{ display: "flex", 
+                        zIndex: 0,
+                        justifyContent: "center", 
+                        alignItems: "center", 
+                        position: 'relative',   
+                        top: "140px",
+                        left: 0,
+   
+                        height: `${scopeHeigth}px`, 
+                        width: `${scopeWidth}px`,
+                        cursor: "not-allowed", 
+                        backgroundSize: "10px 10px",
+                        backgroundImage: `linear-gradient(to right, ${colorScheme["natural"]}22 1px, transparent 1px),
+                                          linear-gradient(to bottom, ${colorScheme["natural"]}22 1px, transparent 1px)`
+                      }} 
+        > 
+        <div 
+          className='center-line'
+            style={{
+            height: "100%",
+            position: 'absolute',
+            left: "70px",
+            borderLeft: `1px solid ${colorScheme["Signal"]}77`
+            }}         
         >
-          <svg 
-            className='scope-view'
-            style={{borderBottom: `1px solid`, position: 'absolute'}}
-            
-            width={scopeWidth} 
-            height={scopeHeigth} 
-            viewBox={`0 0 ${scopeWidth} ${scopeHeigth}`}
-            >
-            <polyline 
-              fill='none'
-              stroke={`${colorScheme["Signal"]}`}
-              strokeWidth={1}
-              points={points}
-            />
+        </div>
+        <div 
+          className='center-line-horizontal'
+            style={{
+            width: "140px",
+            position: 'absolute',
+            top: "50px",
+            borderTop: `1px solid ${colorScheme["Signal"]}77`
+            }}         
+        >
+        </div>
+        <div 
+          className='+1'
+            style={{
+            height: "100%",
+            position: 'absolute',
+            right: "70px", fontSize: "6.5pt", fontWeight: "700",
+            top: "10px",
+            color: `${colorScheme["Signal"]}`
+            }}         
+        > 1
+        </div>
+        <div 
+          className='-1'
+            style={{
+            height: "100%",
+            position: 'absolute',
+            right: "70px", fontSize: "6.5pt", fontWeight: "700",
+            top: "70px",
+            color: `${colorScheme["Signal"]}`
+            }}         
+        > -1
+        </div>
+        <div 
+          className='center-line-horizontal'
+            style={{
+            width: "10px",
+            position: 'absolute',
+            top: "20px",
+            borderTop: `1px solid ${colorScheme["Signal"]}77`
+            }}         
+        >
+        </div>
+        <div 
+          className='center-line-horizontal'
+            style={{
+            width: "10px",
+            position: 'absolute',
+            top: "80px",
+            borderTop: `1px solid ${colorScheme["Signal"]}77`
+            }}         
+        >
+        </div>
+          <canvas 
+            ref={shaperCanvasRef}
+            style={{
 
-          </svg>
+            }}
+            >
+          </canvas>
         </div>
       </div>
       ) : null}

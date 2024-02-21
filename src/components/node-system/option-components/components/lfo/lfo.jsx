@@ -27,7 +27,7 @@ const LFO = ({
               elements={LFOStates.type.value}
               value={parameters.type}
               parentType={"Source"}
-              whichOscillator={"carrier"}
+              whichSource={"carrier"}
               getWaveType={getWaveType}
               orientation={"vertical"}
             />

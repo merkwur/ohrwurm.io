@@ -57,8 +57,10 @@ export const invokeTriggerEvent = (triggerData, tones, nodes) => {
               instruments.forEach(instrument => {
                 if (instrument.includes("Oscillator")) {
                   tones[instrument].tone.frequency.rampTo(triggerData.notes[i], noteDuration * triggerData.durations[i])
-                } else {
+                } else if (instrument.includes("Synth")) {
                   tones[instrument].tone.triggerAttackRelease(triggerData.notes[i], noteDuration * triggerData.durations[i]);
+                } else {
+                  tones[instrument].tone.triggerAttackRelease(noteDuration * triggerData.durations[i]);
                 }
               })
             }
@@ -70,8 +72,10 @@ export const invokeTriggerEvent = (triggerData, tones, nodes) => {
             if (triggerData.probabilities[i] > Math.random()) {
               if (instruments[0].includes("Oscillator")) {
                 tones[instruments[0]].tone.frequency.rampTo(triggerData.notes[i], noteDuration * triggerData.durations[i])
-              } else {
+              } else if (instruments[0].includes("Synth")) {
                 tones[instruments[0]].tone.triggerAttackRelease(triggerData.notes[i], noteDuration * triggerData.durations[i]);
+              } else {
+                tones[instruments[0]].tone.triggerAttackRelease(noteDuration * triggerData.durations[i]);
               }
             }
           }, i * noteDuration * 1000); 
@@ -82,11 +86,11 @@ export const invokeTriggerEvent = (triggerData, tones, nodes) => {
 };
 
 export const connectToneObjects = (from, to, which, nodes) => {
-  // if (from.includes("Transport")) return
+  if (from.includes("Transport")) return
   if (to.includes("Analyser")) {
-    
     nodes[from].tone.connect(nodes[to].tone[which])
   }
+
   
   if (which === "node") {
     if (nodes[to].name !== "Destination") {
@@ -104,11 +108,6 @@ export const connectToneObjects = (from, to, which, nodes) => {
     }
   } 
 
-  if (nodes[from].name === "Transport" && nodes[to].name.includes("Synth")) {
-    const newNodes = {...nodes}
-    newNodes[to].isTriggerConnected = true
-    return newNodes
-  }
 }
 
 export const disposeToneNode = (id, tones, nodes) => {
