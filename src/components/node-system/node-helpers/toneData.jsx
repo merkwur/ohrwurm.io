@@ -57,7 +57,7 @@ export const invokeTriggerEvent = (triggerData, tones, nodes) => {
               instruments.forEach(instrument => {
                 if (instrument.includes("Oscillator")) {
                   tones[instrument].tone.frequency.rampTo(triggerData.notes[i], noteDuration * triggerData.durations[i])
-                } else if (instrument.includes("Synth")) {
+                } else if (instrument.includes("Synth") && !instrument.includes("Noise")) {
                   tones[instrument].tone.triggerAttackRelease(triggerData.notes[i], noteDuration * triggerData.durations[i]);
                 } else {
                   tones[instrument].tone.triggerAttackRelease(noteDuration * triggerData.durations[i]);
@@ -72,7 +72,7 @@ export const invokeTriggerEvent = (triggerData, tones, nodes) => {
             if (triggerData.probabilities[i] > Math.random()) {
               if (instruments[0].includes("Oscillator")) {
                 tones[instruments[0]].tone.frequency.rampTo(triggerData.notes[i], noteDuration * triggerData.durations[i])
-              } else if (instruments[0].includes("Synth")) {
+              } else if (instruments[0].includes("Synth") && !instruments[0].includes("Noise")) {
                 tones[instruments[0]].tone.triggerAttackRelease(triggerData.notes[i], noteDuration * triggerData.durations[i]);
               } else {
                 tones[instruments[0]].tone.triggerAttackRelease(noteDuration * triggerData.durations[i]);
@@ -476,7 +476,8 @@ export const getNodeParameters = (name, type) => {
       NoiseSynth: {
         synth: {},
         envelope: {...envelope}, 
-        type: "noiseType"
+        noiseTypes: ["brown", 'pink', "white"],
+        noiseType: "white"
       }, 
       FMSynth: {
         synth: {...commonSynthParams, harmonicity: 1, modulationIndex: 1, modulationType: "square"}, 
@@ -525,7 +526,7 @@ export const getNodeParameters = (name, type) => {
       }, 
       BitCrusher: {bits: 1, wet:1},
       Chebyshev: {order: 1, wet:1},
-      Chorus: {start: false, delayTime: .2, depth: 0, feedback: .2, frequency: 440, sperad: 0, wet:1 }, 
+      Chorus: {start: false, delayTime: .2, depth: 0, feedback: .2, frequency: 440, sperad: 0, wet:1, type: "sine" }, 
       Distortion: {distortion: 1, wet:1},
       FeedbackDelay: {delayTime: .25, feedback: .5, wet:1},
       Freeverb:{dampening: .2, roomSize: .5, wet: 1},

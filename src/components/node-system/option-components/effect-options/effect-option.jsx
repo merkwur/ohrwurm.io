@@ -15,6 +15,8 @@ const EffectOptions = ({toneObj}) => {
   const [_type, setType] = useState(_types ? _types[0] : null)
   const [_isOscilaltorRunning, setIsOscillatorRunning] = useState(_parameters.start ? false : null)
   const [_waveType, setWaveType] = useState(_parameters.start ? "sine" : null)
+  
+
 
   const handleParameterChange = (value, type) => {
     
@@ -102,25 +104,33 @@ const EffectOptions = ({toneObj}) => {
               />
             </div>
           ) : null}
-            {Object.keys(_parameters).map((parameter, index) => (
-              <div 
-                className='parameter'
-                key={"parameter"+index+"effect"}
-                >
-                  {initialStates[parameter] && initialStates[parameter].type === "slider" ? (
-                    <HorizontalSlider 
-                      name={parameter}
-                      type={"Instrument"}
-                      state={initialStates[parameter]}
-                      parameterValue={_parameters[parameter]}
-                      getParameter={(value, type) => handleParameterChange(value, type)}
-                      whichOscillator={null}
-                      parentOscillator={null}
-                      from={null}
-                    />
-                  ) : null }
-              </div>
-            ))}
+            <div className='sliders'
+              style={{
+                top : _parameters.hasOwnProperty("start") ? "75px" 
+                    
+                    : "29px"
+              }}
+            >
+              {Object.keys(_parameters).map((parameter, index) => (
+                <div 
+                  className='parameter'
+                  key={"parameter"+index+"effect"}
+                  >
+                    {initialStates[parameter] && initialStates[parameter].type === "slider" ? (
+                      <HorizontalSlider 
+                        name={parameter}
+                        type={"Instrument"}
+                        state={initialStates[parameter]}
+                        parameterValue={_parameters[parameter]}
+                        getParameter={(value, type) => handleParameterChange(value, type)}
+                        whichOscillator={null}
+                        parentOscillator={null}
+                        from={null}
+                      />
+                    ) : null }
+                </div>
+              ))}
+            </div>
         </div>
         ) : null}
     </div>

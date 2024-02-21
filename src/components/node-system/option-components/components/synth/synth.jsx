@@ -21,10 +21,12 @@ const Synth = ({
                 _envelope, 
                 _oscillator,           
                 _synth,
-                _oscillatorType
-}) => {
+                _oscillatorType, 
+                _noiseTypes
 
-  console.log(_oscillator)
+  }) => {
+
+  console.log(_noiseTypes)
 
   return (
     <div className='synth-wrapper'>
@@ -39,6 +41,16 @@ const Synth = ({
             getWaveType={getOscillatorType}
             orientation={"horizontal"}
           />
+        ) : _noiseTypes ? (
+          <Switch 
+            elements={_noiseTypes}
+            value={_oscillatorType}
+            parentType={"Instrument"}
+            whichSource={parentSource}
+            parentSource={parentSource}
+            getWaveType={getOscillatorType}
+            orientation={"horizontal"}
+          /> 
         ) : null}
         <div className='carrier-oscillator'> 
           {_envelope ? (

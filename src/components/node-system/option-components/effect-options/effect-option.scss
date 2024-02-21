@@ -20,7 +20,7 @@
   }
 
   .parameters{
-    
+        
     width: 140px;
     overflow-y: scroll;
     padding-left: .5rem;
@@ -29,5 +29,9 @@
       padding-bottom: .5rem;
     }
 
+    .sliders{
+      position: absolute;
+      
+    }
   }
 }

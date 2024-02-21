@@ -13,7 +13,7 @@ const InstrumentOptions = memo(({toneObj}) => {
   const [_modulationEnvelope, setModulationEnvelope] = useState(_parameters.hasOwnProperty("modulationEnvelope") ? _parameters.modulationEnvelope : null)
   const [_carrierParameters, setCarrierParameters] = useState(_parameters.hasOwnProperty("oscillator") ? _parameters.oscillator.osc : _parameters.oscillator0 ? _parameters.oscillator0.osc : null)
   const [_modulatorParameters, setModulatorParameters] = useState(_parameters.hasOwnProperty("modulator") ? _parameters.modulator.osc : _parameters.oscillator1 ? _parameters.oscillator1.osc : null)
-  const [_oscillatorType, setOscillatorType] = useState(_parameters.oscillatorType)
+  const [_oscillatorType, setOscillatorType] = useState(_parameters.noiseType ? _parameters.noiseType : _parameters.oscillatorType)
   const [_modulationType, setModulationType]  =useState(_parameters.modulationType)
   const [_carrierBaseType, setCarrierBaseType] = useState(_parameters.type)
   const [_synthParameters, setSynthParameters] = useState(_parameters.voice0 ? _parameters.voice0 : _parameters.synth)
@@ -21,6 +21,8 @@ const InstrumentOptions = memo(({toneObj}) => {
   const [_filterParameters, setFilterParameters] = useState(_synthParameters.hasOwnProperty("filter") ? _synthParameters.filter : null)
   const [_filterEnvelopeParameters, setFilterEnvelopeParameters] = useState(_synthParameters.hasOwnProperty("filter") ? _synthParameters.filterEnvelope : null)
   const [_isSynthConnected, setIsSynthConnected] = useState(toneObj.isTriggerConnected)
+  const [_noiseTypes, setNoiseTypes] = useState(_parameters.noiseTypes ? _parameters.noiseTypes : null)
+
 
   useEffect(() => {
     if (toneObj.name === "Synth") {
@@ -143,8 +145,9 @@ const InstrumentOptions = memo(({toneObj}) => {
 
 
   const handleOscillatorType = (type, which) => {
-    
-    if (type && which) {
+    if (toneObj.name === "NoiseSynth") {
+      toneObj.tone.noise.type = type
+    } else  if (type && which) {
       if (which === "carrier") {
         toneObj.tone.oscillator.sourceType = oscType
         setOscillatorType(type)
@@ -264,6 +267,7 @@ const InstrumentOptions = memo(({toneObj}) => {
                   _synth={_synthParameters}
                   _envelope={_envelope}
                   _oscillatorType={_oscillatorType}
+                  _noiseTypes={_noiseTypes}
                   
                 />
                 {_synthParameters.filter ? (
