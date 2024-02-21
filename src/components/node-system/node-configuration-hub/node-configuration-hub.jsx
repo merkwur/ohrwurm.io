@@ -1,7 +1,7 @@
 import React, { memo, useState } from 'react'
 import "./node-configuration-hub.scss"
 import SourceOptions from '../option-components/source-options/source-options'
-import Transport from '../option-components/transport/transport'
+
 import InstrumentOptions from '../option-components/instrument-options/instrument-options'
 import EffectOptions from '../option-components/effect-options/effect-option'
 import Waveshaper from '../option-components/waveshaper-options/waveshaper'
@@ -20,14 +20,6 @@ const NodeConfigurationHub = memo(({tone, notesToTrigger, getGlobalTime}) => {
                 <SourceOptions 
                   toneObj={tone[toneObj]}
                 />
-              ) : tone[toneObj].name === "Transport" ? (
-                <Transport 
-                  id={tone[toneObj].id} 
-                  name={tone[toneObj].name} 
-                  type={tone[toneObj].type}
-                  notesToTrigger={notesToTrigger}
-                  getGlobalTime={getGlobalTime}
-                  />
               ) : tone[toneObj].type === "Instrument" ? (
                 <InstrumentOptions 
                   toneObj={tone[toneObj]}
