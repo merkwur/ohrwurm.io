@@ -10,7 +10,7 @@
     padding-top: 2rem;
     font-weight: 500;
     font-size: 12pt;
-
+    
     .header{
       writing-mode: vertical-rl;
     }
@@ -28,7 +28,7 @@
       width: 160px;
       margin-left: .25rem;
       overflow-y: scroll;
-     
+      min-height: 50%;
     }
 
     .parameters-right-side{

@@ -22,7 +22,11 @@ const InstrumentOptions = memo(({toneObj}) => {
   const [_filterEnvelopeParameters, setFilterEnvelopeParameters] = useState(_synthParameters.hasOwnProperty("filter") ? _synthParameters.filterEnvelope : null)
   const [_isSynthConnected, setIsSynthConnected] = useState(toneObj.isTriggerConnected)
 
-
+  useEffect(() => {
+    if (toneObj.name === "Synth") {
+      toneObj.tone.oscillator.baseType = "sine"
+    }
+  }, [])
 
   const handleParameterChange = (value, type, which, parent, from) => {
     

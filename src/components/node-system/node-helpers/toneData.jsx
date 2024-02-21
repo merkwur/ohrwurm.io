@@ -474,8 +474,9 @@ export const getNodeParameters = (name, type) => {
        }
       }, 
       NoiseSynth: {
-        synth: {noise: "brown"},
-        envelop: {...envelope}, 
+        synth: {},
+        envelope: {...envelope}, 
+        type: "noiseType"
       }, 
       FMSynth: {
         synth: {...commonSynthParams, harmonicity: 1, modulationIndex: 1, modulationType: "square"}, 
