@@ -1,5 +1,5 @@
 import React, { memo, useEffect, useRef, useState } from 'react'
-import { menuContent } from '../node-system/node-helpers/nodelist'
+import { menuContent } from '../node-system/node-helpers/nodelist.js'
 import "./navbar.scss"
 import { colorScheme } from '../node-system/node-helpers/helperFunctions'
 import { description } from '../node-system/node-helpers/tooltips'

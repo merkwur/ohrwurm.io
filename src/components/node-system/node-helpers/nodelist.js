@@ -3,7 +3,9 @@ export const menuContent = {
   Core: [
     'Destination',
     'Gain',
-    'Transport',    
+    'Transport',
+    'Trigger',
+    'Sequencer'
   ], 
 
   Source: [

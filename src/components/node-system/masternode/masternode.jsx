@@ -8,6 +8,8 @@ import Effect from '../node-components/effects/effect'
 import Component from '../node-components/component/component'
 import Signal from '../node-components/signal/signal'
 import ComponentAnalyser from '../node-components/component-analyser/component-analyser'
+import Transport from '../node-components/transport/transport'
+import Sequencer from '../node-components/transport/sequencer/sequencer'
 
 
 
@@ -194,9 +196,17 @@ const MasterNode =  ({node,
     >
      {
       node.type === "Core" ? (
-            <Core
-              node={node}
-            />
+        <>
+        {node.name === "Transport" ? (
+          <Transport node={node} /> 
+        ) : node.name === "Sequencer" ? (
+          <Sequencer node={node} />
+        ) :(
+          <Core
+            node={node}
+          />
+        )}
+        </>
         
       ) : node.type === "Source" ? (
         <Source node={node}/> 

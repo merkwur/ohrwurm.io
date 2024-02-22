@@ -44,24 +44,24 @@ const NodeCanvas = () => {
 
 
   useEffect(() => { 
-    // this is an extremely basic and slow approach
-    // can be solved by using simple svg canvas and rects.
-    // however, it is good for stress testing. 
+
     const arr = [...zeros] 
     const reducedArr = [...reducedZeros]
-    const posArr = []
+  
     Object.keys(nodeData).forEach(node => {
-      arr[nodeData[node].cellIndex] = 1
-      if (nodeData[node].size.y > 70){
-        reducedArr[nodeData[node].reducedIndex + 24] = 1
-        arr[nodeData[node].cellIndex+48] = 1
-        arr[nodeData[node].cellIndex+(48*2)] = 1
+      if (nodeData[node].sizeNxM) {
+        for (let i = 0; i < nodeData[node].sizeNxM.x; i++) {
+          for (let j = 0; j <  nodeData[node].sizeNxM.y; j++) {
+            reducedArr[(nodeData[node].positionIndices.x+i) + (nodeData[node].positionIndices.y+j) * (cols/2) ] = 1
+          }
+        }
+      } else {
+        reducedArr[nodeData[node].reducedIndex] = 1
       }
-      reducedArr[nodeData[node].reducedIndex] = 1
-      posArr.push(nodeData[node].id, nodeData[node].positionIndices)
+      
     })
     
-    setPositionArray(arr)
+    
     setReducedPositionArray(reducedArr)
   }, [nodeData])
 
@@ -110,9 +110,9 @@ const NodeCanvas = () => {
                     bpm: bpm})
   }
   
-  // useEffect(() => {console.log(nodeData)}, [nodeData])
+  useEffect(() => {console.log(nodeData)}, [nodeData])
   // useEffect(() => {console.log(lineData)}, [lineData])
-  useEffect(() => {console.log(toneData)}, [toneData])
+  //useEffect(() => {console.log(toneData)}, [toneData])
 
 
   
@@ -176,6 +176,7 @@ const NodeCanvas = () => {
       <div>
       { positionDebug ? (
         <>
+
         <div 
             className='position-map'
             style={{
@@ -183,41 +184,7 @@ const NodeCanvas = () => {
                 height: "144px",
                 position: "absolute",
                 right: "0",
-                bottom: "40%",
-                backgroundColor: "#17171717",
-                backgroundSize: "10px",
-                backgroundImage: 
-                    `radial-gradient(to right, #22dbc027 1px, transparent 1px),
-                      radial-gradient(to bottom, #77777717 1px, transparent 1px)`,
-                zIndex: 99999
-            }}
-            >
-            {
-              positionArray.map((item, index) => (
-              <div 
-                  className='cells'
-                  key={index}
-                  style={{
-                    position: "absolute",
-                    left: `${(index % 48) * 8}px`, // Assuming each cell + border is 9px wide
-                    top: `${Math.floor(index / 48) * 8}px`, // Assuming each cell + border is 9px high
-                    backgroundColor: item === 0 ? "#17171742" : "#ff4242", // Corrected hex color codes
-                    width: "8px",
-                    height: "8px",
-                    border: ".01rem solid #77777717" // Corrected border color
-                  }}
-                >
-                </div>
-              ))}
-        </div>
-        <div 
-            className='position-map'
-            style={{
-                width: "384px",
-                height: "144px",
-                position: "absolute",
-                right: "0",
-                bottom: "60%",
+                bottom: "35%",
                 backgroundColor: "#17171742",
                 backgroundSize: "10px",
                 backgroundImage: 
@@ -272,8 +239,7 @@ const NodeCanvas = () => {
       
       <NodeConfigurationHub 
         tone={toneData} 
-        notesToTrigger={(notes, probabilities, durations, bpm) => handleNotesToTrigger(notes, probabilities, durations, bpm)}
-        getGlobalTime={(time) => handleGlobalTime(time)}
+
         />
       <LineCanvas 
         lines={lineData} 

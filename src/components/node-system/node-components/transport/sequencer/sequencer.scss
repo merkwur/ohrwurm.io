@@ -1,0 +1,50 @@
+.sequencer-container{
+  padding-left: .5rem;
+  .notes-wrapper{
+    
+    width: 200px;
+    margin-top: .5rem;
+
+    height: 120px;
+
+    .sequences{
+      display: flex;
+    }
+
+    .keys{
+      display: flex;
+      justify-content: center;
+      .key{
+        margin-left: .5rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border: 1px solid #d3869b42;
+        font-size: 7pt;
+        font-weight: 600;
+
+      }
+    }
+  }
+  
+  .bottom-parameters{
+    display: flex;
+    width: fit-content;
+
+    .note-sequence-switch{
+      width: 40px;
+      margin-right: .5rem;
+      
+    }
+  }
+
+
+  .subsequence-length-adjust{
+    position: absolute;
+    left: 0;
+    top: 5%;
+    width: 200px;
+    height: 100px;
+    
+  }
+}

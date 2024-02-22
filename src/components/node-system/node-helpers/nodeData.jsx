@@ -5,7 +5,7 @@ import { addToneObject } from "./toneData"
 
 export const addNode = (x, y, name, type, snapSize, nodes, tones) => {
   let id
-  if (name !== "Transport") {
+  if (name !== "Transport" || name !== "Trigger" || name === "Sequencer") {
     id = name + ":" + uuidv4().split("-")[0]
   } else {
     id = name
@@ -14,7 +14,6 @@ export const addNode = (x, y, name, type, snapSize, nodes, tones) => {
   const snappedY = (Math.floor(y / snapSize) * snapSize) + 5
   const normX = Math.floor((snappedX-5) / 40)
   const normY = Math.floor((snappedY-5) / 40)
-  const cellIndex = 48 * normY + normX 
   const reducedIndex = 24 * Math.floor(normY / 2) + Math.floor(normX / 2)
   const newNode = {
     id, 
@@ -22,13 +21,18 @@ export const addNode = (x, y, name, type, snapSize, nodes, tones) => {
     size: getSize(name, type, snapSize*2 - 10),
     input: getInputs(name,type),  
     position: {x: snappedX, y: snappedY},
-    cellIndices: {x: normX, y: normY},
     reducedIndex: reducedIndex,
     positionIndices: {x: Math.floor(normX/2), y: Math.floor(normY/2)},
     connection: [],
-    cellIndex: cellIndex,
+    sizeNxM: getReducedSize(name), 
     type, 
+    sequencer:   name === "Sequencer" 
+              || name === "Clock"
+              || name === "Probabilities"
+              || name === "Strider"
+              ? getSequencerData() : null,
   }
+
 
   const updatedNodes = {...nodes, [id]: newNode}
   const toneData = addToneObject(id, name, type, tones)
@@ -37,7 +41,13 @@ export const addNode = (x, y, name, type, snapSize, nodes, tones) => {
 
 
 
-
+const getSequencerData = () => {
+  return {
+    probabilities: Array(8).fill(1), 
+    durations: Array(8).fill(1),
+    strides: Array(8).fill(0)
+  }
+}
 
 export const deleteNode = (id, nodes, lines, tones) => {
   if (!nodes[id]) {
@@ -167,21 +177,12 @@ export const updateNodePositions = (id, x, y, nodes) => {
 
   const normX = (Math.floor(x / 40)) 
   const normY = (Math.floor(y / 40)) 
-  const cellIndex = 48 * normY + normX
   const rx = Math.floor(normX/2)  
   const ry = Math.floor(normY/2)
   const reducedIndex = 24 * ry + rx
 
-  // the only requirement here is the node.positionIndices
-  // the rest of the props are here for debugging
-
   const updatedNodes = JSON.parse(JSON.stringify(nodes))
-  updatedNodes[id].position.x = x
-  updatedNodes[id].position.y = y
-  updatedNodes[id].cellIndex = cellIndex
   updatedNodes[id].reducedIndex = reducedIndex
-  updatedNodes[id].cellIndices.x = normX
-  updatedNodes[id].cellIndices.y = normY
   updatedNodes[id].positionIndices.x = rx
   updatedNodes[id].positionIndices.y = ry
   
@@ -239,7 +240,14 @@ export const updateLinePosition = (x, y, id, lines) => {
 }
 
 
-
+const getReducedSize = (name) => {
+  const single = {x: 1, y: 1}
+  const reducedSizes = {
+    Sequencer: {x: 3, y: 2},
+    Gain: {...single}
+  }
+  return reducedSizes[name]
+}
 
 const getSize = (name, type, snap) => {
   const single = {
@@ -254,11 +262,22 @@ const getSize = (name, type, snap) => {
   const quad = {
     x: snap * 2 + 10, y: snap * 2 + 10
   }
+
+  const transport = {
+    x: snap * 3 + 10, y: snap * 2 + 10
+  }
+  console.log(name, type, snap)
+  const sequencer = {
+    x: snap * 3 + 20, y: snap * 2 + 10
+  }
+
   const nodeSizeData = {
     Core: {
       Destination: {...single},
       Gain: {...single},
-      Transport:  {...single}
+      Transport:  {...transport},
+      Trigger: {...single},
+      Sequencer: {...sequencer}
     },
     Source: {
       Oscillator: {...single },
@@ -385,6 +404,7 @@ const getInputs = (name, type) => {
         node: [] 
       },
       Transport: null, 
+      Trigger: null
     },
     Source: {
       AMOscillator: {

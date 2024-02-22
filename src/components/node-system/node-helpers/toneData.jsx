@@ -111,7 +111,7 @@ export const connectToneObjects = (from, to, which, nodes) => {
 }
 
 export const disposeToneNode = (id, tones, nodes) => {
-  if (tones[id].name === "Transport") return
+  if (!tones[id].tone) return
   if (tones[id].name === "Destination") {
     nodes[id].connection.forEach(fromId => {
       const fID = fromId.split(">")[0]
@@ -281,6 +281,8 @@ export const getNodeParameters = (name, type) => {
   if (name === "Destiantion") {
     return null
   }
+
+  if (name === "Trigger") return null
 
   const commonOscParams = {
       start: false,

@@ -8,7 +8,7 @@ import Waveshaper from '../option-components/waveshaper-options/waveshaper'
 import ComponentOptions from '../option-components/component-options/component-options'
 
 
-const NodeConfigurationHub = memo(({tone, notesToTrigger, getGlobalTime}) => {
+const NodeConfigurationHub = memo(({tone}) => {
 
 
   return (
