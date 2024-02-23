@@ -4,8 +4,6 @@ export const menuContent = {
     'Destination',
     'Gain',
     'Transport',
-    'Trigger',
-    'Sequencer'
   ], 
 
   Source: [

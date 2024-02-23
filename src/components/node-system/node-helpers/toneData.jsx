@@ -1,15 +1,6 @@
 import * as Tone from "tone"
 
 
-
-export const triggerEvents = () => {
-  console.log("started")
-  Tone.Transport.start()
-}
-export const stopEvents = () => {
-  console.log("stopped")
-  Tone.Transport.stop()
-}
 export const addToneObject = (id, name, type, tones) => {
   if (name === "Analyser") {
     const newToneObject = { 
@@ -37,7 +28,7 @@ export const addToneObject = (id, name, type, tones) => {
 }
 
 
-
+// refactor it !!!!
 export const invokeTriggerEvent = (triggerData, tones, nodes) => {
   if (!triggerData.instruments || triggerData.instruments.length <= 0) {
     return
@@ -282,6 +273,7 @@ export const getNodeParameters = (name, type) => {
     return null
   }
 
+
   if (name === "Trigger") return null
 
   const commonOscParams = {
@@ -301,7 +293,15 @@ export const getNodeParameters = (name, type) => {
   const nodeParams = {
     Core: {
       Destination: null,
-      Transport: {bpm: 120, notes: null, time: 0},
+      Transport: {
+        bpm: 120,
+        probabilities: Array(8).fill([1]), 
+        durations: Array(8).fill([1]), 
+        stride: Array(8).fill([0]), 
+        lengths: Array(8).fill([1]), 
+        keys: Array(8).fill(["C1"]),
+        positions: Array.from(Array(8).keys())
+      },
       Gain: {gain: .5}
     },
 
@@ -731,15 +731,15 @@ export const initialStates = {
     panningModel:       {type: "select",  value: ["equalpower, HRTF"]},
     rolloffFactor:      {type: "slider",  min: .1,     max: 20,     multiplier:  .01 ,  float: true ,  unit: null   },
     bits:               {type: "slider",  min: 1,      max: 20,     multiplier:  .01 ,  float: true ,  unit: null   },
-    bpm:                {type: "slider",  min: 1,      max: 999,    multiplier:   1 ,   float: false,  unit: "bpm"  },
-    length:             {type: "slider",  min: 1,      max: 8,      multiplier:   1 ,   float: false , unit: null   },
     wet:                {type: "slider",  min: 0,      max: 1,      multiplier:   .01 , float: true  , unit: null   },
     feedback:           {type: "slider",  min: 0,      max: 1,      multiplier:   .01 , float: true  , unit: null   },
     vibratoAmount:      {type: "slider",  min: 0,      max: 1,      multiplier:   .01 , float: true  , unit: null   },
-    vibratoRate:          {type: "slider",  min: 1,      max: 8192,   multiplier: 1    ,  float: false,  unit: "Hz"   },
-    depth:           {type: "slider",  min: 0,      max: 1,      multiplier:   .01 , float: true  , unit: null   },
-    p:                  {type: "slider",  min: 0,      max: 1,      multiplier:   .01 , float: true  , unit: null   },
-    d:                  {type: "slider",  min: 0,      max: 1,      multiplier:   .01 , float: true  , unit: null   },
+    vibratoRate:        {type: "slider",  min: 1,      max: 8192,   multiplier: 1    ,  float: false,  unit: "Hz"   },
+    depth:              {type: "slider",  min: 0,      max: 1,      multiplier:   .01 , float: true  , unit: null   },
+    bpm:                {type: "slider",  min: 1,      max: 999,    multiplier:   1 ,   float: false,  unit: "bpm"  },
+    lengths:            {type: "slider",  min: 1,      max: 8,      multiplier:   1 ,   float: false , unit: null   },
+    probabilities:      {type: "slider",  min: 0,      max: 1,      multiplier:   .01 , float: true  , unit: null   },
+    durations:          {type: "slider",  min: 0,      max: 1,      multiplier:   .01 , float: true  , unit: null   },
     orientationX:       {type: "slider",  min: -Infinity, max: Infinity,     multiplier:  1 ,  float: false ,  unit: "cm"   },
     orientationY:       {type: "slider",  min: -Infinity, max: Infinity,     multiplier:  1 ,  float: false ,  unit: "cm"   },
     orientationZ:       {type: "slider",  min: -Infinity, max: Infinity,     multiplier:  1 ,  float: false ,  unit: "cm"   },

@@ -6,6 +6,7 @@ import InstrumentOptions from '../option-components/instrument-options/instrumen
 import EffectOptions from '../option-components/effect-options/effect-option'
 import Waveshaper from '../option-components/waveshaper-options/waveshaper'
 import ComponentOptions from '../option-components/component-options/component-options'
+import Transport from '../option-components/transport/transport'
 
 
 const NodeConfigurationHub = memo(({tone}) => {
@@ -20,7 +21,10 @@ const NodeConfigurationHub = memo(({tone}) => {
                 <SourceOptions 
                   toneObj={tone[toneObj]}
                 />
-              ) : tone[toneObj].type === "Instrument" ? (
+              ) : tone[toneObj].name === "Transport" ? (
+                <Transport tone={tone[toneObj]}/>
+              )
+               : tone[toneObj].type === "Instrument" ? (
                 <InstrumentOptions 
                   toneObj={tone[toneObj]}
                 /> 

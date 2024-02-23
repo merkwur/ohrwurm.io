@@ -26,11 +26,7 @@ export const addNode = (x, y, name, type, snapSize, nodes, tones) => {
     connection: [],
     sizeNxM: getReducedSize(name), 
     type, 
-    sequencer:   name === "Sequencer" 
-              || name === "Clock"
-              || name === "Probabilities"
-              || name === "Strider"
-              ? getSequencerData() : null,
+    sequencer: null,
   }
 
 
@@ -275,7 +271,7 @@ const getSize = (name, type, snap) => {
     Core: {
       Destination: {...single},
       Gain: {...single},
-      Transport:  {...transport},
+      Transport:  {...single},
       Trigger: {...single},
       Sequencer: {...sequencer}
     },
