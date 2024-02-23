@@ -14,7 +14,8 @@ const EffectOptions = ({toneObj}) => {
   const [_types, setTypes] = useState(_parameters.type ? initialStates[_parameters.type].value : null)
   const [_type, setType] = useState(_types ? _types[0] : null)
   const [_isOscilaltorRunning, setIsOscillatorRunning] = useState(_parameters.start ? false : null)
-  const [_waveType, setWaveType] = useState(_parameters.start ? "sine" : null)
+  const [_waveType, setWaveType] = useState("sine")
+ 
   
 
 
@@ -45,6 +46,7 @@ const EffectOptions = ({toneObj}) => {
   }
 
   const handleOscillatorState = () => {
+    if (toneObj.name === "Vibrato") return 
     if (!_isOscilaltorRunning) {
       
       toneObj.tone.start()
@@ -80,7 +82,7 @@ const EffectOptions = ({toneObj}) => {
           {_parameters.hasOwnProperty("start") ? (
             <>
               <StartButton 
-                value={_isOscilaltorRunning}
+                value={toneObj.name === "Vibrato" ? true : _isOscilaltorRunning}
                 getOscillatorState={() => handleOscillatorState()}
               />
               <Switch 

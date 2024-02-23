@@ -4,6 +4,7 @@ import "./instrument-options.scss"
 import Synth from '../components/synth/synth'
 import Mono from '../components/mono/mono'
 
+// kind of unhappy about the whole component, will refactored it more later
 
 const InstrumentOptions = memo(({toneObj}) => {
 
@@ -33,7 +34,6 @@ const InstrumentOptions = memo(({toneObj}) => {
   const handleParameterChange = (value, type, which, parent, from) => {
     
     if (type && which && parent && from) {
-      console.log(value, type, which, parent, from)
       if (toneObj.name === "DuoSynth") {
         if (parent === "carrier") {
           if (from === "synth") {
@@ -149,11 +149,11 @@ const InstrumentOptions = memo(({toneObj}) => {
       toneObj.tone.noise.type = type
     } else  if (type && which) {
       if (which === "carrier") {
-        toneObj.tone.oscillator.sourceType = oscType
+        toneObj.tone.oscillator.sourceType = type
         setOscillatorType(type)
         setCarrierParameters(_parameters.oscillator[type])
       } else {
-        toneObj.tone.modulation.sourceType = oscType
+        toneObj.tone.modulation.sourceType = type
         setModulationType(type)
         setModulatorParameters(_parameters.modulator[type])
       }

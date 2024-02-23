@@ -26,7 +26,6 @@ const Synth = ({
 
   }) => {
 
-  console.log(_noiseTypes)
 
   return (
     <div className='synth-wrapper'>

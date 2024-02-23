@@ -333,11 +333,11 @@ export const getNodeParameters = (name, type) => {
         count: 1
       },
       PWMOscillator: {
-        detune: 0,
+        
         
       },
       PulseOscillator: {
-        detune: 0,
+        
 
       },
       AMOscillator: {
@@ -505,7 +505,7 @@ export const getNodeParameters = (name, type) => {
       }, 
       BitCrusher: {bits: 1, wet:1},
       Chebyshev: {order: 1, wet:1},
-      Chorus: {start: false, delayTime: .2, depth: 0, feedback: .2, frequency: 440, sperad: 0, wet:1, type: "sine" }, 
+      Chorus: {start: false, delayTime: .2, depth: 0, feedback: .2, frequency: 440, sperad: 0, wet:1}, 
       Distortion: {distortion: 1, wet:1},
       FeedbackDelay: {delayTime: .25, feedback: .5, wet:1},
       Freeverb:{dampening: .2, roomSize: .5, wet: 1},
@@ -518,7 +518,7 @@ export const getNodeParameters = (name, type) => {
       Reverb: {decay: .2, preDelay: 0, wet: 1},
       StereoWidener: {width: 0, wet: 1},
       Tremolo: {start:false, depth: .2, frequency: 440, spread: 0, wet: 1},
-      Vibrato: {depth:.2, frequency: 1, type: "type", wet: 1},
+      Vibrato: {start:true, depth:.2, frequency: 1, wet: 1},
 
     }
     const ComponentParams = {

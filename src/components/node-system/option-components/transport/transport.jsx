@@ -355,7 +355,8 @@ const Transport = ({tone, trigger}) => {
                               top: `${10 + 70/_length * index}%`, 
                               left: `${12.5*_sequencePositions[index]+idx*12.5}%`,
                               border: index === slct.i && idx === slct.j ? "3px solid" : "1px solid",
-                              color: index === slct.i && idx === slct.j ? `${colorScheme["Core"]}77` : "#777777aa"
+                              color: index === slct.i && idx === slct.j ? `${colorScheme["Core"]}77` : "#777777aa",
+                              backgroundColor: time % _length === index ? `${colorScheme["Core"]}42` : ""
                             }}
                           >
 
