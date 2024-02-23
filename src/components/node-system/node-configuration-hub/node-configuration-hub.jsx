@@ -9,7 +9,9 @@ import ComponentOptions from '../option-components/component-options/component-o
 import Transport from '../option-components/transport/transport'
 
 
-const NodeConfigurationHub = memo(({tone}) => {
+const NodeConfigurationHub = memo(({tone, trigger}) => {
+
+  
 
 
   return (
@@ -22,7 +24,7 @@ const NodeConfigurationHub = memo(({tone}) => {
                   toneObj={tone[toneObj]}
                 />
               ) : tone[toneObj].name === "Transport" ? (
-                <Transport tone={tone[toneObj]}/>
+                <Transport tone={tone[toneObj]} trigger={trigger}/>
               )
                : tone[toneObj].type === "Instrument" ? (
                 <InstrumentOptions 

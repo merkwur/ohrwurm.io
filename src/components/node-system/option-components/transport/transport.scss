@@ -20,25 +20,37 @@
   .parameters{
     font-size: 8pt;
     padding-left: .5rem;
-    
-    // border: 1px solid #ff4242;
     width: 300px;
     display: flex;
 
     .transport-configuration{
-      padding-top: 2rem;
+      
       width: 50px;
       border-right: #77777777 1px solid;
+
+      .strides{
+        padding-top: .25rem;
+        width: 100%;
+        height: 91%;
+      
+
+        .stride{
+          border-bottom: 1px solid;
+        }
+      }
     
     }
     .sequencer-quantizer{      
       width: 100%;
       position: relative;
+
       .key-screen{
         width: 100%;
         display: flex;
         height: 10%;
         justify-content: center;
+        font-size: 8pt;
+        font-weight: 700;
 
        .key{
         display: flex;
@@ -50,8 +62,10 @@
       }
       .sequence{
         
-        height: 60%;
+        height: 70%;
         .sliders{
+          padding-top: .5rem;
+          padding-left: .5rem;
           display: flex;
         }
         .sequence-cells{
