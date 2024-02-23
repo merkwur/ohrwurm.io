@@ -181,11 +181,8 @@ const Transport = ({tone, trigger}) => {
     const keysArr = _keyScreen.slice(start, end)
     const durArr = _sequenceDurations[n]
     const probArr = _sequenceProbabilities[n]
-    trigger(keysArr, durArr, probArr)
-    console.log(keysArr)
-    console.log(durArr)
-    console.log(probArr)
-          
+    trigger(keysArr, durArr, probArr, tone.id, _bpm)
+        
           
   }
 
@@ -249,6 +246,7 @@ const Transport = ({tone, trigger}) => {
                   {_sequenceStrides.slice(0, _length).map((item, index) => (
                     <div
                       className='stride'
+                      key={"strides"+index+item}
                       style={{
                         height: `${77.7/_length}%`
                       }}

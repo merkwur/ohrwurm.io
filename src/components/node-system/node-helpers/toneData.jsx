@@ -29,51 +29,20 @@ export const addToneObject = (id, name, type, tones) => {
 
 
 // refactor it !!!!
-export const invokeTriggerEvent = (triggerData, tones, nodes) => {
-  if (!triggerData.instruments || triggerData.instruments.length <= 0) {
-    return
-  }
+export const invokeTriggerEvent = (notes, durations, probabilities, instruments, bpm, tones) => {
+  if (!Array.isArray(notes)) return 
+  let noteDuration = 60 / (bpm * notes.length)
   
-  if (triggerData.notes) {
-    let noteDuration = (60 / triggerData.bpm)
-    const instruments = Object.keys(nodes).filter(node => triggerData.instruments.includes(nodes[node].id));
-    
-    if (Array.isArray(triggerData.notes)) {
-      noteDuration /= triggerData.notes.length
-
-      if (instruments.length > 1) {
-        for (let i = 0; i < triggerData.notes.length; i++) {
-          setTimeout(() => {
-            if (triggerData.probabilities[i] > Math.random()) {
-              instruments.forEach(instrument => {
-                if (instrument.includes("Oscillator")) {
-                  tones[instrument].tone.frequency.rampTo(triggerData.notes[i], noteDuration * triggerData.durations[i])
-                } else if (instrument.includes("Synth") && !instrument.includes("Noise")) {
-                  tones[instrument].tone.triggerAttackRelease(triggerData.notes[i], noteDuration * triggerData.durations[i]);
-                } else {
-                  tones[instrument].tone.triggerAttackRelease(noteDuration * triggerData.durations[i]);
-                }
-              })
-            }
-          }, i * noteDuration * 1000); 
-        } 
-      } else {
-        for (let i = 0; i < triggerData.notes.length; i++) {
-          setTimeout(() => {
-            if (triggerData.probabilities[i] > Math.random()) {
-              if (instruments[0].includes("Oscillator")) {
-                tones[instruments[0]].tone.frequency.rampTo(triggerData.notes[i], noteDuration * triggerData.durations[i])
-              } else if (instruments[0].includes("Synth") && !instruments[0].includes("Noise")) {
-                tones[instruments[0]].tone.triggerAttackRelease(triggerData.notes[i], noteDuration * triggerData.durations[i]);
-              } else {
-                tones[instruments[0]].tone.triggerAttackRelease(noteDuration * triggerData.durations[i]);
-              }
-            }
-          }, i * noteDuration * 1000); 
-        }
+  notes.forEach((note, index) => {
+    setTimeout(() => {
+      if (Math.random() < probabilities[index]) {
+        instruments.forEach((instrument, i) => {
+          
+          tones[instrument].tone.triggerAttackRelease(note, noteDuration * durations[index])
+        })
       }
-    }
-  }
+    }, index * noteDuration * 1000)
+  })
 };
 
 export const connectToneObjects = (from, to, which, nodes) => {

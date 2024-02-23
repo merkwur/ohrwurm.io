@@ -101,9 +101,10 @@ const NodeCanvas = () => {
     setLineData(updatedLines)
   }
   
-  const handleTrigger = (data) => {
-    console.log("we are calling from node canvas")
-
+  const handleTrigger = (notes, durations, probabilities, id, bpm) => {
+    const instruments = nodeData[id].connection.map(item => item.split(">")[1].split("=")[0])
+    if (!instruments || instruments.length === 0) return
+    invokeTriggerEvent(notes, durations, probabilities, instruments, bpm, toneData)
   }
   
   useEffect(() => {console.log(nodeData)}, [nodeData])
@@ -235,7 +236,7 @@ const NodeCanvas = () => {
       
       <NodeConfigurationHub 
         tone={toneData} 
-        trigger={(data) => handleTrigger(data)}
+        trigger={(notes, durations, probabilities, id, bpm) => handleTrigger(notes, durations, probabilities, id, bpm)}
         />
       <LineCanvas 
         lines={lineData} 
