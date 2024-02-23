@@ -107,9 +107,9 @@ const NodeCanvas = () => {
     invokeTriggerEvent(notes, durations, probabilities, instruments, bpm, toneData)
   }
   
-  useEffect(() => {console.log(nodeData)}, [nodeData])
+  // useEffect(() => {console.log(nodeData)}, [nodeData])
   // useEffect(() => {console.log(lineData)}, [lineData])
-  useEffect(() => {console.log(toneData)}, [toneData])
+  // useEffect(() => {console.log(toneData)}, [toneData])
 
 
   

@@ -28,7 +28,7 @@ export const addToneObject = (id, name, type, tones) => {
 }
 
 
-// refactor it !!!!
+
 export const invokeTriggerEvent = (notes, durations, probabilities, instruments, bpm, tones) => {
   if (!Array.isArray(notes)) return 
   let noteDuration = 60 / (bpm * notes.length)
@@ -37,8 +37,11 @@ export const invokeTriggerEvent = (notes, durations, probabilities, instruments,
     setTimeout(() => {
       if (Math.random() < probabilities[index]) {
         instruments.forEach((instrument, i) => {
-          
-          tones[instrument].tone.triggerAttackRelease(note, noteDuration * durations[index])
+          if (tones[instrument].name === "NoiseSynth") {
+            tones[instrument].tone.triggerAttackRelease( noteDuration * durations[index])
+          } else {
+            tones[instrument].tone.triggerAttackRelease(note, noteDuration * durations[index])
+          }
         })
       }
     }, index * noteDuration * 1000)

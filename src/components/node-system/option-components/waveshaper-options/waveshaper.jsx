@@ -34,6 +34,17 @@ const Waveshaper = ({toneObj}) => {
   }, [])
 
   useEffect(() => {
+    if (openProperties) {
+      if (!shaperCanvasRef.current) return;
+      const canvas = shaperCanvasRef.current;
+      canvas.width = scopeWidth; 
+      canvas.height = scopeHeigth; 
+      shaperCtx.current = canvas.getContext('2d'); // Initialize and store the context
+      getDistance()
+    }  
+  }, [openProperties])
+
+  useEffect(() => {
     const t = (360 / curveNames.length) * (Math.PI / 180) 
     const arr = []
     for (let i = 0; i < curveNames.length; i++) {
@@ -100,6 +111,7 @@ const Waveshaper = ({toneObj}) => {
   }
 
 
+
   useEffect(() => {
     getDistance()
   }, [blob])
@@ -125,7 +137,7 @@ const Waveshaper = ({toneObj}) => {
   }
 
   useEffect(() => {
-    
+    getDistance()
   }, [selected])
 
 

@@ -36,7 +36,6 @@ const Transport = ({tone, trigger}) => {
   const noteRefs = useRef([])
 
 
-  console.log(_divDims)
 
   const handleClock = () => {
     if(!isClockRunning) {
@@ -95,7 +94,7 @@ const Transport = ({tone, trigger}) => {
           const x = clamp(Math.floor((event.clientX - initials.x) / 5), 0, 100)
           const octaves = Math.floor(x / (100 / 8))
           const key = chroma[Math.floor(y /9 )]
-          console.log(key,octaves)
+          
           const dimsArr = [..._divDims]
           dimsArr[referenceIndex] = {x: x, y: y}
           setDivDims(dimsArr)
@@ -116,7 +115,6 @@ const Transport = ({tone, trigger}) => {
 
 
   const handleValues = (value, type) => {
-    console.log(value, type)
     if (type === "length") {
       setLength(value)
     } 
@@ -126,14 +124,12 @@ const Transport = ({tone, trigger}) => {
     if (type === "probs") {
       const arr = [..._sequenceProbabilities]; 
       arr[slct.i] = [...arr[slct.i]]; 
-      console.log(slct, arr);
       arr[slct.i][slct.j] = value; 
       setSequenceProbabilities(arr);
     }
     if (type === "durs") {
       const arr = [..._sequenceDurations]; 
       arr[slct.i] = [...arr[slct.i]]; 
-      console.log(slct, arr);
       arr[slct.i][slct.j] = value;
       setSequenceDurations(arr);
     }

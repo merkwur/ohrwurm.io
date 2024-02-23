@@ -20,7 +20,7 @@ export const menuContent = {
 
   Instrument: [
     'AMSynth',
-    'DuoSynth',
+    //'DuoSynth',
     'FMSynth',
     'MembraneSynth',
     'MetalSynth',
