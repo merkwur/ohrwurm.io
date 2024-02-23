@@ -4,7 +4,7 @@ import "./instrument-options.scss"
 import Synth from '../components/synth/synth'
 import Mono from '../components/mono/mono'
 
-// kind of unhappy about the whole component, will refactored it more later
+// kind of unhappy about the whole component, will refactore it more later
 
 const InstrumentOptions = memo(({toneObj}) => {
 

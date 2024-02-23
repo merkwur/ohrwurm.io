@@ -25,6 +25,7 @@ const Transport = ({tone, trigger}) => {
   const [_sequenceStrides, setSequenceStrides] = useState(tone.parameters.strides)
   const [_sequenceKeys, setSequenceKeys] = useState(tone.parameters.keys)
   const [_keyScreen, setKeyScreen] = useState(Array(8).fill("C1"))
+  const [_divDims, setDivDims] = useState(Array(8).fill({x: 0, y: 0}))
   const [isDragging, setIsDragging] = useState(false)
   const [slct, setSlct] = useState({i: 0, j: 0})
   const [note2Seq, setNote2Seq] = useState(true)
@@ -35,7 +36,7 @@ const Transport = ({tone, trigger}) => {
   const noteRefs = useRef([])
 
 
-  
+  console.log(_divDims)
 
   const handleClock = () => {
     if(!isClockRunning) {
@@ -95,8 +96,11 @@ const Transport = ({tone, trigger}) => {
           const octaves = Math.floor(x / (100 / 8))
           const key = chroma[Math.floor(y /9 )]
           console.log(key,octaves)
-          noteRefs.current[referenceIndex].children[0].style.width  = `${x}%`
-          noteRefs.current[referenceIndex].children[0].style.height = `${y}%`
+          const dimsArr = [..._divDims]
+          dimsArr[referenceIndex] = {x: x, y: y}
+          setDivDims(dimsArr)
+          //noteRefs.current[referenceIndex].children[0].style.width  = `${x}%`
+          //noteRefs.current[referenceIndex].children[0].style.height = `${y}%`
           
           const arr = [..._keyScreen]
           arr[referenceIndex] = key+octaves
@@ -281,7 +285,7 @@ const Transport = ({tone, trigger}) => {
                 </div>
                 <div className='sequence'>
                   <div className='adjustables'> 
-                    {_keyScreen.map((item, index) => (
+                    {_divDims.map((item, index) => (
                       <div 
                         className='sequence-cells'
                         key={item+index+"sequence-cells"}
@@ -299,7 +303,7 @@ const Transport = ({tone, trigger}) => {
                         >   
                         <div className='key-pickers'
                           style={{
-                            height: 0, width: 0, backgroundColor: "#777777", maxHeight: "100%",
+                            height: `${item.y}%`, width: `${item.x}%`, backgroundColor: "#777777", maxHeight: "100%",
                             transformOrigin: "center" 
                           }}
                         >
