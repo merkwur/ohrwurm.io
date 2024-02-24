@@ -5,6 +5,7 @@ import { colorScheme } from '../node-system/node-helpers/helperFunctions'
 import { description } from '../node-system/node-helpers/tooltips'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faFileArchive, faFileLines } from '@fortawesome/free-solid-svg-icons'
+import { pictograms } from './pictos.js'
 
 const Navbar = memo(({getNodeInfo}) => {
   const [active, setActive] = useState(null)
@@ -132,7 +133,8 @@ const Navbar = memo(({getNodeInfo}) => {
                     className='navbar-component-header'
                     style={{
                             borderBottom: `1px solid ${colorScheme[key]}`,
-                            height: active === key ? "80%" : "14%"
+                            height: active === key ? "80%" : "14%",
+                            color: active === key ? "#f2d2bd" : "#f2d2bd42"
                           }}
                   > {key} </div>  
                 </React.Fragment>
@@ -160,11 +162,15 @@ const Navbar = memo(({getNodeInfo}) => {
                         onMouseEnter={() => setNode(item)}
                         
                       >
+                      <svg 
+                        viewBox="0 0 30 30" style={{width: "30px", height: "30px"}}>                        
+                        <image href={`${item}.png`} width={30} height={30}/>
+                      </svg>
                       </div>
                     </>
                   ))}
                   <div className='node-name'>
-                      {`${node} >`}
+                      {`${node} ?>`}
                   </div>
                 </>
               ) : null}

@@ -23,7 +23,6 @@
       .navbar-component-header{
         padding-left: .75rem;
         display: flex;
-        color: bisque;
         font-size: 10.5pt;
         font-weight: 700;        
         align-items: end;
@@ -51,6 +50,8 @@
         border: 1px solid;
         word-wrap: break-word;
         white-space: normal;
+        justify-content: center;
+        align-items: center;
       }
       .node-name{
         position: absolute;
@@ -58,7 +59,7 @@
         right: 20%;
         font-size: 18pt;
         font-weight: 700;
-        color: bisque;
+        color: #f2d2bd42;
       }
     }
     .tooltips{

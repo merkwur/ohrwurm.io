@@ -20,14 +20,14 @@ export const menuContent = {
 
   Instrument: [
     'AMSynth',
-    //'DuoSynth',
+    //'DuoSynth', // will be implemented
     'FMSynth',
     'MembraneSynth',
     'MetalSynth',
     'MonoSynth',
     'NoiseSynth',
     'PluckSynth',
-    'PolySynth',
+    //'PolySynth', // will be implemented
     'Synth',
   ],
 
@@ -82,7 +82,7 @@ export const menuContent = {
     'Panner',
     //'Panner3D',
     //'PhaseShiftAllpass',
-    'Recorder',
+    // 'Recorder',
     //'Solo',
     //'Split',
     //'Volume',
