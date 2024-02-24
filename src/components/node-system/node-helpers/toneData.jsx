@@ -51,7 +51,9 @@ export const invokeTriggerEvent = (notes, durations, probabilities, instruments,
 export const connectToneObjects = (from, to, which, nodes) => {
   if (from.includes("Transport")) return
   if (to.includes("Analyser")) {
+
     nodes[from].tone.connect(nodes[to].tone[which])
+  
   }
 
   
@@ -508,7 +510,7 @@ export const getNodeParameters = (name, type) => {
       }, 
       BitCrusher: {bits: 1, wet:1},
       Chebyshev: {order: 1, wet:1},
-      Chorus: {start: false, delayTime: .2, depth: 0, feedback: .2, frequency: 440, sperad: 0, wet:1}, 
+      Chorus: {start: false, delayTime: .2, depth: 0.5, feedback: .2, frequency: 440, sperad: 0, wet:1}, 
       Distortion: {distortion: 1, wet:1},
       FeedbackDelay: {delayTime: .25, feedback: .5, wet:1},
       Freeverb:{dampening: .2, roomSize: .5, wet: 1},

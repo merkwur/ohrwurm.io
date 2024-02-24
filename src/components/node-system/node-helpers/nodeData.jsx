@@ -492,101 +492,82 @@ const getInputs = (name, type) => {
         frequency: null, 
         baseFrequency: null,
         gain: null, 
-        wet: null,
         node: null,
       }, 
       AutoPanner: {
         frequency: null, 
-        wet: null, 
         node: null,
       }, 
       AutoWah: {
         gain: null, 
-        wet: null, 
         Q: null, 
         node: null,
         
       }, 
       BitCrusher: {
         bits: null, 
-        wet: null, 
         node: null,
       }, 
       Chebyshev: {
-        wet: null, 
         node: null,
       }, 
       Chorus: {
         feedback: null, 
         frequency: null, 
-        wet: null,         
         node: null,
       }, 
       Distortion: {
-        wet: null, 
         node: null,
       }, 
       FeedbackDelay: {
         feedback: null, 
-        wet: null,
         node: null,
       }, 
       Freeverb: {
         roomSize: null, 
         dampening: null, 
-        wet: null, 
         node: null,
       },
       FrequencyShifter: {
         frequency: null, 
-        wet: null, 
         node: null,
       },
       JCReverb: {
         roomSize: null, 
-        wet: null,
         node: null,
       },
       MidSideEffect: {
-        wet: null, 
         node: null,
       },
       Phaser: {
         Q: null, 
         octaves: null, 
-        wet: null, 
         frequency: null,
         node: null,
       },
       PingPongDelay: {
         feedback: null, 
-        wet: null, 
         node: null,
       },
       PitchShift: {
         feedback: null, 
-        wet: null,
         node: null,
       },
       Reverb: {
-        wet: null, 
         node: null,
       }, 
       StereoWidener: {
         width: null, 
-        wet: null,
         node: null,
       },
       Tremolo: {
         depth: null, 
-        wet: null,
         frequency: null, 
         node: null,
       },
       Vibrato: {
         frequency: null,
         depth: null, 
-        wet: null,
         node: null,
       },
     }, 

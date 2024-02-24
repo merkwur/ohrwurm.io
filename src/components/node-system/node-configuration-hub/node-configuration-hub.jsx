@@ -1,4 +1,4 @@
-import React, { memo, useState } from 'react'
+import React, { memo, useEffect, useRef, useState } from 'react'
 import "./node-configuration-hub.scss"
 import SourceOptions from '../option-components/source-options/source-options'
 
@@ -11,12 +11,11 @@ import Transport from '../option-components/transport/transport'
 
 const NodeConfigurationHub = memo(({tone, trigger}) => {
 
-  
-
-
   return (
     <div className='node-config-hub-container'>
-      <div className='node-config-hub'> 
+      <div 
+        className='node-config-hub'
+      > 
         {Object.keys(tone).map((toneObj) => (
           <React.Fragment key={toneObj}>
               {tone[toneObj].type === "Source" ? (

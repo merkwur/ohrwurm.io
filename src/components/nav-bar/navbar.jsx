@@ -132,6 +132,7 @@ const Navbar = memo(({getNodeInfo}) => {
                     className='navbar-component-header'
                     style={{
                             borderBottom: `1px solid ${colorScheme[key]}`,
+                            height: active === key ? "80%" : "14%"
                           }}
                   > {key} </div>  
                 </React.Fragment>
@@ -145,19 +146,26 @@ const Navbar = memo(({getNodeInfo}) => {
               {openSubMenu && active ? (
                 <>
                   {menuContent[active].map(item => (
-                    <div 
-                      id={item}
-                      className='items'
-                      key={item}
-                      style={{backgroundColor: colorScheme[active]}}
-                      ref={(ref) => itemRef[item] = ref}
-                      onMouseDown={(event) => handleMouseDown(event)}
-                      onMouseEnter={() => setNode(item)}
-                      
-                    >
-                      {item}
-                    </div>
+                    <>
+                      <div 
+                        id={item}
+                        className='items'
+                        key={item}
+                        style={{
+                          color: colorScheme[active],
+                          boxShadow: `0 0 3px 1px ${colorScheme[active]}`
+                        }}
+                        ref={(ref) => itemRef[item] = ref}
+                        onMouseDown={(event) => handleMouseDown(event)}
+                        onMouseEnter={() => setNode(item)}
+                        
+                      >
+                      </div>
+                    </>
                   ))}
+                  <div className='node-name'>
+                      {`${node} >`}
+                  </div>
                 </>
               ) : null}
             </div>

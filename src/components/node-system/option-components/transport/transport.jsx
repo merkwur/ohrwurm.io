@@ -206,7 +206,7 @@ const Transport = ({tone, trigger}) => {
   useEffect(() => {
     getTriggerReadyData()
 
-  }, [_sequencePositions])
+  }, [time])
 
   useEffect(() => {
     if (isDragging) {
