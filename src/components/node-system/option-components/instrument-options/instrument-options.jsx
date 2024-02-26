@@ -4,18 +4,6 @@ import "./instrument-options.scss"
 import Synth from '../components/synth/synth'
 import Mono from '../components/mono/mono'
 
-/* felt cute,  might delete it later! :P xoxo
-joke aside there are multiple bugs in this component 
-the way the Tone object hold the synth's information and my oscillator selection
-together cause an issue. If one choose any oscillator 
-and play with the parameters these parameters will be carrying through
-all other oscillator types. Such as any chosen modulation type will be 
-affect all the other oscillators. 
-That is because all the synths' has oscillator and modulation
-keys in Tone object. these are _OmniOscillator and this object
-holds all the parameters of the each individual oscillator. 
-
-*/ 
 
 const InstrumentOptions = memo(({toneObj}) => {
 
@@ -47,7 +35,7 @@ const InstrumentOptions = memo(({toneObj}) => {
     if (toneObj.isTriggerConnected && type === "frequency") {
       return
     }
-
+    /* there should be better way to handle whis! */
     if (type && which && parent && from) {
       if (toneObj.name === "DuoSynth") {
         if (parent === "carrier") {
@@ -161,14 +149,19 @@ const InstrumentOptions = memo(({toneObj}) => {
 
   const handleOscillatorType = (type, which) => {
 
-
-    
     
     if (toneObj.name === "NoiseSynth") {
       toneObj.tone.noise.type = type
     } else  if (type && which) {
       if (which === "carrier") {
-        toneObj.tone.oscillator.type = toneObj.tone.oscillator.baseType
+        console.log()
+        if (type !== "pwm" || type !== "pulse") {
+          if (toneObj.tone.oscillator.partialCount > 1) {
+            toneObj.tone.oscillator.type = toneObj.tone.oscillator.baseType + toneObj.tone.oscillator.partialCount
+          } else {
+             toneObj.tone.oscillator.type = toneObj.tone.oscillator.baseType 
+          }
+        }
         toneObj.tone.oscillator.sourceType = type
         setOscillatorType(type)
         setCarrierParameters(_parameters.oscillator[type])
