@@ -4,12 +4,13 @@ import { Scale } from 'tonal'
 import { colorScheme } from '../../node-helpers/helperFunctions'
 import HorizontalSlider from '../parameters/horizontal-slider/horizontal-slider'
 import { initialStates } from '../../node-helpers/toneData'
-import { events } from '@react-three/fiber'
 import { clamp } from 'three/src/math/MathUtils'
 import StartButton from '../parameters/start-button/start-button'
 
 
 const chroma = Scale.get("C chromatic").notes
+
+// I do considering the adding 31 EDO Scale too!
 
 const Transport = ({tone, trigger}) => {
   const [openProperties, setOpenProperties] = useState(true)
@@ -19,6 +20,7 @@ const Transport = ({tone, trigger}) => {
   const [_bpm, setBpm] = useState(tone.parameters.bpm)
   const [_sequenceLengths, setSequenceLengths] = useState(tone.parameters.lengths)
   const [_length, setLength] = useState(_sequenceLengths.length)
+  const [_sLength, setSLength] = useState(8)
   const [_sequencePositions, setSequencePositions] = useState(tone.parameters.positions)
   const [_sequenceProbabilities, setSequenceProbabilities] = useState(tone.parameters.probabilities)
   const [_sequenceDurations, setSequenceDurations] = useState(tone.parameters.durations)
@@ -55,12 +57,6 @@ const Transport = ({tone, trigger}) => {
       setIntervalId(id)
     }
   }, [_bpm])
-
-
-  const handleLength = (value) => {
-    setLength(value)
-  }
-
 
   const handleClick = (event, i, j) => {
     setSlct({i: i, j: j})
@@ -112,23 +108,28 @@ const Transport = ({tone, trigger}) => {
 
 
   const handleValues = (value, type) => {
-    if (type === "length") {
+    if (type === "lengths") {
+      console.log(value, type)
       setLength(value)
     } 
     if (type == "bpm") {
       setBpm(value)
     } 
-    if (type === "probs") {
+    if (type === "probabilities") {
       const arr = [..._sequenceProbabilities]; 
       arr[slct.i] = [...arr[slct.i]]; 
       arr[slct.i][slct.j] = value; 
       setSequenceProbabilities(arr);
     }
-    if (type === "durs") {
+    if (type === "duratoinss") {
       const arr = [..._sequenceDurations]; 
       arr[slct.i] = [...arr[slct.i]]; 
       arr[slct.i][slct.j] = value;
       setSequenceDurations(arr);
+    }
+
+    if (type === "sequenceLength") {
+      setSLength(value)
     }
 
   }
@@ -137,8 +138,6 @@ const Transport = ({tone, trigger}) => {
     const arr = [..._sequenceStrides]
     arr[index] = value
     setSequenceStrides(arr)
-    
-
   }
 
 
@@ -177,14 +176,14 @@ const Transport = ({tone, trigger}) => {
       if (_sequenceStrides[index] !== 0) {
         if (time % _sequenceStrides[index] === 0)
           
-          return (item + 1) % (9 - _sequenceLengths[index].length)
+          return (item + 1) % ((_sLength + 1) - _sequenceLengths[index].length)
           
         } 
       return item
     })
     
     const n = time % _length
-    const start = _sequencePositions[n]
+    const start = posArr[n]
     const end = start + _sequenceLengths[n].length
     const keysArr = _keyScreen.slice(start, end)
     const durArr = _sequenceDurations[n]
@@ -192,11 +191,6 @@ const Transport = ({tone, trigger}) => {
     trigger(keysArr, durArr, probArr, tone.id, _bpm)
     setSequencePositions(posArr)
   }
-
-
-  
-
-  
   
   useEffect(() => {
     getTriggerReadyData()
@@ -214,7 +208,7 @@ const Transport = ({tone, trigger}) => {
       window.removeEventListener('mousemove', handleMouseMove);
       window.removeEventListener('mouseup', handleMouseUp);
     };
-  }, [isDragging]); // This effect toggles based on isDragging state
+  }, [isDragging]); 
 
   
 
@@ -268,6 +262,8 @@ const Transport = ({tone, trigger}) => {
                     <div 
                       key={"arrays"+index+key}
                       className='key'
+                      style={{borderRight: index === _sLength-1 ? "3px solid #777777": "1px solid #777777"}}
+                      
                       >
                       {key}
                     </div>
@@ -286,9 +282,9 @@ const Transport = ({tone, trigger}) => {
                         onMouseDown={(event) => handleMouseDown(event, index, "not")}
                         style={{
                           
-                          width: `${12.5}%`, height: `${100}%`,
+                          width: `${100 / 8}%`, height: `${100}%`,
                           border: `1px solid ${colorScheme["Core"]}42`, 
-                          
+                          borderRight: index === _sLength-1 ? `2px solid ${colorScheme["Core"]}` : "", 
                           cursor: "pointer",
                           borderCollapse: "collapse",
                           display: "flex", alignItems: "center", justifyContent: "center"
@@ -316,25 +312,40 @@ const Transport = ({tone, trigger}) => {
                       />
                       <HorizontalSlider
                         key={`${slct.i}-${slct.j}`} 
-                        name={"probs"}
+                        name={"probabilities"}
                         state={initialStates["probabilities"]}
+                        isParamCentered={true}
+                        abbreviate={true}
                         parameterValue={_sequenceProbabilities[slct.i][slct.j]}
                         parentOscillator={"bpm"}
                         getParameter={(value, type) => handleValues(value, type)}
                       />
                       <HorizontalSlider
                         key={`d${slct.i}-${slct.j}`} 
-                        name={"durs"}
+                        name={"durations"}
                         state={initialStates["durations"]}
                         parameterValue={_sequenceDurations[slct.i][slct.j]}
                         parentOscillator={"durations"}
+                        abbreviate={true}
+                        isParamCentered={true}
                         getParameter={(value, type) => handleValues(value, type)}
                       />
                       <HorizontalSlider 
-                        name={"length"}
+                        name={"lengths"}
                         state={initialStates["lengths"]}
+                        abbreviate={true}
                         parameterValue={_length}
                         parentOscillator={"length"}
+                        isParamCentered={true}
+                        getParameter={(value, type) => handleValues(value, type)}
+                      />
+                      <HorizontalSlider 
+                        name={"sequenceLength"}
+                        state={initialStates["lengths"]}
+                        parameterValue={_length}
+                        abbreviate={true}
+                        parentOscillator={"sequenceLength"}
+                        isParamCentered={true}
                         getParameter={(value, type) => handleValues(value, type)}
                       />
                     </div>
@@ -350,9 +361,10 @@ const Transport = ({tone, trigger}) => {
                             onMouseDown={(events) => handleMouseDown(events, index,"note")}
                             onClick={(event) => handleClick(event, index, idx)}
                             style={{
+                              width: `${100 / 8}%`,
                               height: `${70/_length}%`,
                               top: `${10 + 70/_length * index}%`, 
-                              left: `${12.5*_sequencePositions[index]+idx*12.5}%`,
+                              left: `${(100/8)*_sequencePositions[index]+idx*(100/8)}%`,
                               border: index === slct.i && idx === slct.j ? "3px solid" : "1px solid",
                               color: index === slct.i && idx === slct.j ? `${colorScheme["Core"]}77` : "#777777aa",
                               backgroundColor: time % _length === index ? `${colorScheme["Core"]}42` : ""

@@ -42,8 +42,6 @@ const NodeCanvas = () => {
       console.log("There is only one Transport object can  be present at a time!")
       return 
     }
-      
-    
     const updatedNodes = addNode(x, y, node.name, node.type, snapSize, nodeData, toneData)
     setNodeData(updatedNodes[0])   
     setToneData(updatedNodes[1])

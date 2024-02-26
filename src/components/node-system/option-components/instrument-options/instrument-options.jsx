@@ -6,14 +6,15 @@ import Mono from '../components/mono/mono'
 
 /* felt cute,  might delete it later! :P xoxo
 joke aside there are multiple bugs in this component 
-the way Tone object hold the synth's information and my oscillator
-combination cause an effect that if one choose any oscillator 
+the way the Tone object hold the synth's information and my oscillator selection
+together cause an issue. If one choose any oscillator 
 and play with the parameters these parameters will be carrying through
-all other oscilaltor types. Such as any chosen modulation type will be 
-affect all the other oscillators. For that I need to reset all the values that 
-what setted at the previous Oscillator, this will ensure no parameters that
-does not belongs to or the parameter value belongs to that oscillator 
-will not effect the current one. 
+all other oscillator types. Such as any chosen modulation type will be 
+affect all the other oscillators. 
+That is because all the synths' has oscillator and modulation
+keys in Tone object. these are _OmniOscillator and this object
+holds all the parameters of the each individual oscillator. 
+
 */ 
 
 const InstrumentOptions = memo(({toneObj}) => {
@@ -43,6 +44,10 @@ const InstrumentOptions = memo(({toneObj}) => {
 
   const handleParameterChange = (value, type, which, parent, from) => {
     
+    if (toneObj.isTriggerConnected && type === "frequency") {
+      return
+    }
+
     if (type && which && parent && from) {
       if (toneObj.name === "DuoSynth") {
         if (parent === "carrier") {
@@ -155,10 +160,15 @@ const InstrumentOptions = memo(({toneObj}) => {
 
 
   const handleOscillatorType = (type, which) => {
+
+
+    
+    
     if (toneObj.name === "NoiseSynth") {
       toneObj.tone.noise.type = type
     } else  if (type && which) {
       if (which === "carrier") {
+        toneObj.tone.oscillator.type = toneObj.tone.oscillator.baseType
         toneObj.tone.oscillator.sourceType = type
         setOscillatorType(type)
         setCarrierParameters(_parameters.oscillator[type])

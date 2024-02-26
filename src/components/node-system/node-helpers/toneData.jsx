@@ -50,7 +50,13 @@ export const invokeTriggerEvent = (notes, durations, probabilities, instruments,
 };
 
 export const connectToneObjects = (from, to, which, nodes) => {
-  if (from.includes("Transport")) return
+  if (from.includes("Transport")) {
+    const newTone = {
+      ...nodes, 
+      [to]: {...nodes[to], isTriggerConnected: true}
+    }
+    return newTone
+  }
   if (to.includes("Analyser")) {
 
     nodes[from].tone.connect(nodes[to].tone[which])
@@ -721,9 +727,10 @@ export const initialStates = {
     vibratoRate:        {type: "slider",  min: 1,      max: 8192,   multiplier: 1    ,  float: false,  unit: "Hz"   },
     depth:              {type: "slider",  min: 0,      max: 1,      multiplier:   .01 , float: true  , unit: null   },
     bpm:                {type: "slider",  min: 1,      max: 999,    multiplier:   1 ,   float: false,  unit: "bpm"  },
-    lengths:            {type: "slider",  min: 1,      max: 8,      multiplier:   1 ,   float: false , unit: null, abbreviate: "len"   },
-    probabilities:      {type: "slider",  min: 0,      max: 1,      multiplier:   .01 , float: true  , unit: null, abbreviate: "probs"},
-    durations:          {type: "slider",  min: 0,      max: 1,      multiplier:   .01 , float: true  , unit: null, abbreviate: "durs"   },
+    lengths:            {type: "slider",  min: 1,      max: 8,      multiplier:   1 ,   float: false , unit: null, abbreviate: "l"   },
+    probabilities:      {type: "slider",  min: 0,      max: 1,      multiplier:   .01 , float: true  , unit: null, abbreviate: "p"},
+    durations:          {type: "slider",  min: 0,      max: 1,      multiplier:   .01 , float: true  , unit: null, abbreviate: "d"   },
+    sequenceLength:     {type: "slider",  min: 0,      max: 1,      multiplier:   .01 , float: true  , unit: null, abbreviate: "sl"   },
     orientationX:       {type: "slider",  min: -Infinity, max: Infinity,     multiplier:  1 ,  float: false ,  unit: "cm"   },
     orientationY:       {type: "slider",  min: -Infinity, max: Infinity,     multiplier:  1 ,  float: false ,  unit: "cm"   },
     orientationZ:       {type: "slider",  min: -Infinity, max: Infinity,     multiplier:  1 ,  float: false ,  unit: "cm"   },

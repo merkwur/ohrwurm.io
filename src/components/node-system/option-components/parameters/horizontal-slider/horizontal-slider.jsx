@@ -117,7 +117,7 @@ const HorizontalSlider = ({
   return (
     <div 
       className='frequency-wrapper'
-      style={{width: abbreviate ? "32px" : "", display: "flex" }}
+      style={{width: abbreviate ? "" : "", display: "flex" }}
       >
       
         <div 
@@ -127,7 +127,7 @@ const HorizontalSlider = ({
             fontSize: abbreviate ? "6.2pt" : ""
           }} 
           >
-            {`< ${abbreviate ? sign.slice(0,abbreviate) : sign === "modulationFrequency" ? "modFrequency" : name} >`}
+            {`< ${sign} >`}
         </div>
         <div 
           className='frequency-slider'
