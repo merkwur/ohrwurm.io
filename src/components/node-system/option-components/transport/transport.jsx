@@ -182,26 +182,9 @@ const Transport = ({tone, trigger}) => {
     const durArr = _sequenceDurations[n]
     const probArr = _sequenceProbabilities[n]
     trigger(keysArr, durArr, probArr, tone.id, _bpm)
-        
-          
   }
 
-  useEffect(() => {
-    const arr = _sequencePositions.slice(0, _length).map((item, index) => {
-      if (_sequenceStrides[index] !== 0) {
-        if (_sequenceStrides[index] > 0) {
-          const t = (_sequencePositions[index] + 1) % (9 - _sequenceLengths[index].length)
-          return t
-        } else {
-          const t = (_sequencePositions[index] + 8 - _sequenceLengths[index].length) % (9 - _sequenceLengths[index].length)
-          return t
-        }
-      } else {
-        return item
-      }
-    })
-    setSequencePositions(arr)
-  }, [time])
+
   
   useEffect(() => {
     getTriggerReadyData()

@@ -5,5 +5,11 @@
   font-weight: 600;
   border-radius: 10px;
 
-
+  .core-parameters{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
 }

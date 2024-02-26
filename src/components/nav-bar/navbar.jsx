@@ -148,7 +148,7 @@ const Navbar = memo(({getNodeInfo}) => {
               {openSubMenu && active ? (
                 <>
                   {menuContent[active].map(item => (
-                    <>
+                    <React.Fragment key={item+"wolla"}>
                       <div 
                         id={item}
                         className='items'
@@ -162,16 +162,20 @@ const Navbar = memo(({getNodeInfo}) => {
                         onMouseEnter={() => setNode(item)}
                         
                       >
-                      <svg 
-                        viewBox="0 0 30 30" style={{width: "30px", height: "30px"}}>                        
-                        <image href={`${item}.png`} width={30} height={30}/>
-                      </svg>
+                        <svg 
+                          viewBox="0 0 30 30" key={"svg"+active} style={{width: "60px", height: "60px" }}>                        
+                          <image href={`${item}.png`} width={30} height={30}/>
+                        </svg>
+
+  
                       </div>
-                    </>
+                    </React.Fragment>
                   ))}
-                  <div className='node-name'>
-                      {`${node} ?>`}
-                  </div>
+                  {node ? (
+                    <div className='node-name'>
+                        {`${node} ?>`}
+                    </div>
+                  ) : null}
                 </>
               ) : null}
             </div>
@@ -216,8 +220,8 @@ const Navbar = memo(({getNodeInfo}) => {
             borderBottomLeftRadius: "10px",
             borderBottomRightRadius: "10px",
             fontWeight: "800",
-            borderBottom: "1px solid #aaaaff77",
-            color: "#77777777"
+            borderBottom: "2px solid #f2d2bdaa",
+            color: "#f2d2bdaa"
              
             
         }}  

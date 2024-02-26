@@ -4,6 +4,7 @@ import { addToneObject } from "./toneData"
 
 
 export const addNode = (x, y, name, type, snapSize, nodes, tones) => {
+
   let id
   if (name !== "Transport" || name !== "Trigger" || name === "Sequencer") {
     id = name + ":" + uuidv4().split("-")[0]
@@ -262,9 +263,13 @@ const getSize = (name, type, snap) => {
   const transport = {
     x: snap * 3 + 10, y: snap * 2 + 10
   }
-  console.log(name, type, snap)
+
   const sequencer = {
     x: snap * 3 + 20, y: snap * 2 + 10
+  }
+
+  const inParam = {
+    x: snap * 1.5 + 10, y: snap 
   }
 
   const nodeSizeData = {
@@ -300,13 +305,13 @@ const getSize = (name, type, snap) => {
     Effect: {
       AutoFilter: {...onehalf},
       AutoPanner: {...single},
-      AutoWah: {...onehalf},
+      AutoWah: {...single},
       BitCrusher: {...single},
       Chebyshev: {...single},
-      Chorus: {...onehalf},
+      Chorus: {...single},
       Distortion:{...single},
       FeedbackDelay: {...single},
-      Freeverb: {...onehalf}, 
+      Freeverb: {...single}, 
       FrequencyShifter: {...single}, 
       JCReverb:{...single}, 
       MidSideEffect:{...single},
@@ -367,7 +372,7 @@ const getSize = (name, type, snap) => {
       Negate:{...single},
       Pow:{...single},
       Scale:{...single},
-      ScaleExp:{...single},
+      ScaleExp:{...onehalf},
       Signal:{...single},
       Subtract:{...single},
       ToneConstantSource:{...single},

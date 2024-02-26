@@ -25,6 +25,7 @@ const HorizontalSlider = ({
   const [initialX, setInitialX] = useState(0)
   const [achilles, setAchilles] = useState(false)
   const [tortoise, setTortoise] = useState(false)
+  const [sign, setSign] = useState(!abbreviate ? name : initialStates[name].abbreviate) 
   const unit = state.multiplier
   
 
@@ -116,7 +117,7 @@ const HorizontalSlider = ({
   return (
     <div 
       className='frequency-wrapper'
-      style={{width: abbreviate ? "30px" : "", display: "flex" }}
+      style={{width: abbreviate ? "32px" : "", display: "flex" }}
       >
       
         <div 
@@ -126,13 +127,13 @@ const HorizontalSlider = ({
             fontSize: abbreviate ? "6.2pt" : ""
           }} 
           >
-            {`< ${abbreviate ? name.slice(0,1) : name === "modulationFrequency" ? "modFrequency" : name} >`}
+            {`< ${abbreviate ? sign.slice(0,abbreviate) : sign === "modulationFrequency" ? "modFrequency" : name} >`}
         </div>
         <div 
           className='frequency-slider'
           onMouseDown={handleMouseDown}
           style={{
-            justifyContent: isParamCentered ? "center" : "left"
+            width: "100%", justifyContent: isParamCentered ? "center" : "left"
           }}
           >
         <div 

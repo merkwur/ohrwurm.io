@@ -17,7 +17,6 @@ const getDestination = () => {
     const y = index % 2 === 0 ? mainY() + (20 * Math.sin(value)) : mainY() + (-20 * Math.sin(value)) 
     return `${x} ${y}`
   }).join(" ") || ""
-  console.log(arr)  
   return arr
 }
 

@@ -4,7 +4,7 @@ import "./instrument-options.scss"
 import Synth from '../components/synth/synth'
 import Mono from '../components/mono/mono'
 
-// kind of unhappy about the whole component, will refactore it more later
+// felt cute,  might refactore it later! :P xoxo
 
 const InstrumentOptions = memo(({toneObj}) => {
 
@@ -110,7 +110,7 @@ const InstrumentOptions = memo(({toneObj}) => {
 
 
   const handleWaveTypes = (wave, which, parent) => {
-    if (wave && which, parent) {
+    if (wave && which && parent) {
       if (parent === "carrier") {
         if (which === "carrier") {
           toneObj.tone.oscillator.baseType = wave
@@ -248,7 +248,8 @@ const InstrumentOptions = memo(({toneObj}) => {
           <div className='parameters'
             style={{
               borderRight: `1px solid ${colorScheme["Instrument"]}`, 
-              display: toneObj.name === "DuoSynth" ? "flex" : ""
+              display: toneObj.name === "DuoSynth" ? "flex" : "",
+              flexDirection: toneObj.name !== "DuoSynth" ? "column" : ""
             }}
               > 
               <div className='parameters-left-side'>

@@ -4,7 +4,7 @@
   top: 0%;
   height: 14%;
   width: 100%;
-  background-color: #171717;
+  background-color: #17171777;
   z-index: 999999;
   .navbar{
     width: 100%;
@@ -43,15 +43,27 @@
       .items{
         width: 60px;
         min-width: 60px;
+        max-width: 60px;
         height: 60px;
         display: flex;
-        font-size: 12pt;
+        font-size: 7pt;
         border-radius: 5px;
         border: 1px solid;
         word-wrap: break-word;
+        overflow-wrap: break-word;
         white-space: normal;
         justify-content: center;
         align-items: center;
+
+        .name-box{
+          width: 50px;
+          font-size: 9.5pt;
+          font-weight: 600;
+          word-wrap: break-word;
+          overflow-wrap: break-word;
+          white-space: normal;
+          font-kerning: normal;
+        }
       }
       .node-name{
         position: absolute;

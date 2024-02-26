@@ -8,8 +8,7 @@ import Effect from '../node-components/effects/effect'
 import Component from '../node-components/component/component'
 import Signal from '../node-components/signal/signal'
 import ComponentAnalyser from '../node-components/component-analyser/component-analyser'
-import Transport from '../node-components/transport/transport'
-import Sequencer from '../node-components/transport/sequencer/sequencer'
+
 
 
 
@@ -52,14 +51,16 @@ const MasterNode =  ({node,
     event.preventDefault()
     const x = event.clientX
     const y = event.clientY
-    const topElement = document.elementFromPoint(x, y)
-    
+    let topElement = document.elementFromPoint(x, y)
+    if (topElement.className.includes("parameters")){
+      topElement = topElement.parentElement
+    }
     setInitialX(x - parseInt(topElement.parentElement.style.left)-70)
     setInitialY(y - parseInt(topElement.parentElement.style.top)-70)
 
     setIsDragging(true)      
     
-    if (topElement.className && typeof topElement.className === "string" && topElement.className.includes("container")) {
+    if (topElement.className && topElement.className.includes("container")) {
       setIsNodeDragging(true)
       const grabbedNode = nodeRef.current[node.id]
       nodeRef.current[node.id].style.zIndex = 99 
@@ -196,18 +197,7 @@ const MasterNode =  ({node,
     >
      {
       node.type === "Core" ? (
-        <>
-        {node.name === "Transport" ? (
-          <Transport node={node} /> 
-        ) : node.name === "Sequencer" ? (
-          <Sequencer node={node} />
-        ) :(
-          <Core
-            node={node}
-          />
-        )}
-        </>
-        
+        <Core node={node} tone={tone} />  
       ) : node.type === "Source" ? (
         <Source node={node}/> 
       ) : node.type === "Instrument" ? (

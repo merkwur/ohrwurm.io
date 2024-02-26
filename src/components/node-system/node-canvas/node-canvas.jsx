@@ -37,6 +37,13 @@ const NodeCanvas = () => {
   const [valids, setValids] = useState([]) 
 
   const getNodeInfo = (x, y, node) => {
+    const hasAlready = Object.keys(nodeData).find(n => nodeData[n].name === "Transport")
+    if (hasAlready) {
+      console.log("There is only one Transport object can  be present at a time!")
+      return 
+    }
+      
+    
     const updatedNodes = addNode(x, y, node.name, node.type, snapSize, nodeData, toneData)
     setNodeData(updatedNodes[0])   
     setToneData(updatedNodes[1])
@@ -107,9 +114,9 @@ const NodeCanvas = () => {
     invokeTriggerEvent(notes, durations, probabilities, instruments, bpm, toneData)
   }
   
-  useEffect(() => {console.log(nodeData)}, [nodeData])
+  //useEffect(() => {console.log(nodeData)}, [nodeData])
   // useEffect(() => {console.log(lineData)}, [lineData])
-  useEffect(() => {console.log(toneData)}, [toneData])
+  // useEffect(() => {console.log(toneData)}, [toneData])
 
 
   
@@ -228,7 +235,7 @@ const NodeCanvas = () => {
                 notesToTrigger={(arr, ids, bpm) => handleNotesToTrigger(arr, ids, bpm)}
                 getValidMoves={(x, y, id) => handleValidMoves(x, y, id)}
                 validMoves={valids}
-                tone={node.name === "Analyser" || node.type === "Signal" ? toneData[node.id] : null}
+                tone={node.name === "Analyser" || node.type === "Signal" || node.name === "Gain" ? toneData[node.id] : null}
                 />
             </React.Fragment>
           );  

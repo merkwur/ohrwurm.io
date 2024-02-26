@@ -15,8 +15,8 @@ const generateGradients = () => {
 
       const gradient = (
         <linearGradient id={gradientID} key={gradientID}>
-          <stop offset="15%" stopColor={colorScheme[fromColor]} />
-          <stop offset="85%" stopColor={colorScheme[toColor]} />
+          <stop offset="15%" stopColor={`${colorScheme[fromColor]}77`} />
+          <stop offset="85%" stopColor={`${colorScheme[toColor]}77`} />
         </linearGradient>
       );
 

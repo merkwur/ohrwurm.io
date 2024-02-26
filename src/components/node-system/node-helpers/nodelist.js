@@ -102,7 +102,7 @@ export const menuContent = {
     'ScaleExp',
     //'Signal',
     'Subtract',
-    'ToneConstantSource',
+    // /'ToneConstantSource',
     'WaveShaper',
     //'Zero',
   ]
