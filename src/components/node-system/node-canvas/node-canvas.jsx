@@ -37,7 +37,7 @@ const NodeCanvas = () => {
   const [valids, setValids] = useState([]) 
 
   const getNodeInfo = (x, y, node) => {
-    const hasAlready = Object.keys(nodeData).find(n => nodeData[n].name === "Transport")
+    const hasAlready = Object.keys(nodeData).find(n => nodeData[n].name === "Transport" && node.name === "Transport")
     if (hasAlready) {
       console.log("There is only one Transport object can  be present at a time!")
       return 
@@ -116,7 +116,7 @@ const NodeCanvas = () => {
   
   //useEffect(() => {console.log(nodeData)}, [nodeData])
   // useEffect(() => {console.log(lineData)}, [lineData])
-  // useEffect(() => {console.log(toneData)}, [toneData])
+  useEffect(() => {console.log(toneData)}, [toneData])
 
 
   

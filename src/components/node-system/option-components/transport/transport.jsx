@@ -23,13 +23,10 @@ const Transport = ({tone, trigger}) => {
   const [_sequenceProbabilities, setSequenceProbabilities] = useState(tone.parameters.probabilities)
   const [_sequenceDurations, setSequenceDurations] = useState(tone.parameters.durations)
   const [_sequenceStrides, setSequenceStrides] = useState(tone.parameters.strides)
-  const [_sequenceKeys, setSequenceKeys] = useState(tone.parameters.keys)
   const [_keyScreen, setKeyScreen] = useState(Array(8).fill("C1"))
   const [_divDims, setDivDims] = useState(Array(8).fill({x: 0, y: 0}))
   const [isDragging, setIsDragging] = useState(false)
   const [slct, setSlct] = useState({i: 0, j: 0})
-  const [note2Seq, setNote2Seq] = useState(true)
-  const [triggerReady, setTriggerReady] = useState({})
   const [initials, setInitials] = useState({x: 0, y: 0})
   const [whichElement, setWhichElement] = useState("")
   const [referenceIndex, setReferenceIndex] = useState(null)
@@ -85,27 +82,27 @@ const Transport = ({tone, trigger}) => {
     if (isDragging) {
       const handler = setTimeout(() => {
         if (whichElement === "note") {
-          const arr = [..._sequencePositions]
-          const xpos = Math.floor((event.clientX - initials.x) / 30)
-          arr[referenceIndex] += clamp(xpos, -_sequencePositions[referenceIndex], 8-_sequenceLengths[referenceIndex].length - _sequencePositions[referenceIndex])
-          setSequencePositions(arr)
+          if (_sequenceStrides[referenceIndex] === 0) {
+            const arr = [..._sequencePositions]
+            const xpos = Math.floor((event.clientX - initials.x) / 30)
+            arr[referenceIndex] += clamp(xpos, -_sequencePositions[referenceIndex], 8-_sequenceLengths[referenceIndex].length - _sequencePositions[referenceIndex])
+            setSequencePositions(arr)
+          }
         } else {
-          const y = clamp(Math.floor((event.clientY - initials.y)), 0, 100)
-          const x = clamp(Math.floor((event.clientX - initials.x) / 5), 0, 100)
+          const y = clamp(_divDims[referenceIndex].y + Math.floor((event.clientY - initials.y)), 0, 100)
+          const x = clamp(_divDims[referenceIndex].x + Math.floor((event.clientX - initials.x) / 5), 0, 100)
           const octaves = Math.floor(x / (100 / 8))
           const key = chroma[Math.floor(y /9 )]
           
           const dimsArr = [..._divDims]
           dimsArr[referenceIndex] = {x: x, y: y}
           setDivDims(dimsArr)
-          //noteRefs.current[referenceIndex].children[0].style.width  = `${x}%`
-          //noteRefs.current[referenceIndex].children[0].style.height = `${y}%`
           
           const arr = [..._keyScreen]
           arr[referenceIndex] = key+octaves
           setKeyScreen(arr)
         }
-      }, 5)
+      }, 20)
     }
 
   }
@@ -175,6 +172,17 @@ const Transport = ({tone, trigger}) => {
   // useEffect(() => {console.log(_sequenceProbabilities)}, [_sequenceProbabilities])
 
   const getTriggerReadyData = () => {
+    
+    const posArr = _sequencePositions.map((item, index) => {
+      if (_sequenceStrides[index] !== 0) {
+        if (time % _sequenceStrides[index] === 0)
+          
+          return (item + 1) % (9 - _sequenceLengths[index].length)
+          
+        } 
+      return item
+    })
+    
     const n = time % _length
     const start = _sequencePositions[n]
     const end = start + _sequenceLengths[n].length
@@ -182,12 +190,17 @@ const Transport = ({tone, trigger}) => {
     const durArr = _sequenceDurations[n]
     const probArr = _sequenceProbabilities[n]
     trigger(keysArr, durArr, probArr, tone.id, _bpm)
+    setSequencePositions(posArr)
   }
 
 
   
+
+  
+  
   useEffect(() => {
     getTriggerReadyData()
+    
 
   }, [time])
 
@@ -243,6 +256,7 @@ const Transport = ({tone, trigger}) => {
                         parameterValue={item}
                         whichOscillator={index}
                         getParameter={(value, name, index) => handleStrides(value, name, index)}
+                        isParamCentered={true}
                       />
                     </div>
                   ))}

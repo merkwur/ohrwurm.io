@@ -4,7 +4,17 @@ import "./instrument-options.scss"
 import Synth from '../components/synth/synth'
 import Mono from '../components/mono/mono'
 
-// felt cute,  might refactore it later! :P xoxo
+/* felt cute,  might delete it later! :P xoxo
+joke aside there are multiple bugs in this component 
+the way Tone object hold the synth's information and my oscillator
+combination cause an effect that if one choose any oscillator 
+and play with the parameters these parameters will be carrying through
+all other oscilaltor types. Such as any chosen modulation type will be 
+affect all the other oscillators. For that I need to reset all the values that 
+what setted at the previous Oscillator, this will ensure no parameters that
+does not belongs to or the parameter value belongs to that oscillator 
+will not effect the current one. 
+*/ 
 
 const InstrumentOptions = memo(({toneObj}) => {
 
