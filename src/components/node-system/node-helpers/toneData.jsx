@@ -38,9 +38,13 @@ export const invokeTriggerEvent = (notes, durations, probabilities, instruments,
     setTimeout(() => {
       if (Math.random() < probabilities[index]) {
         instruments.forEach((instrument, i) => {
-          if (tones[instrument].name === "NoiseSynth") {
+          if (tones[instrument].name === "NoiseSynth" || tones[instrument].name.includes("Envelope")) {
             tones[instrument].tone.triggerAttackRelease( noteDuration * durations[index])
-          } else {
+          } else if (tones[instrument].name.includes("Oscillator")) {
+            tones[instrument].tone.frequency.rampTo(note, noteDuration * durations[index])
+          }
+          
+          else {
             tones[instrument].tone.triggerAttackRelease(note, noteDuration * durations[index])
           }
         })
@@ -702,7 +706,6 @@ export const initialStates = {
     normalize:          {type: "boolean", min: .1,     max: 20,     multiplier:  .01 ,  float: true ,  unit: null   },
     fade:               {type: "slider",  min: .1,     max: 20,     multiplier:  .01 ,  float: true ,  unit: null   },
     smoothing:          {type: "slider",  min: .1,     max: 20,     multiplier:  .01 ,  float: true ,  unit: null   },
-    exponent:           {type: "slider",  min: .1,     max: 20,     multiplier:  .01 ,  float: true ,  unit: null   },
     type:               {type: "select",  value: ["sine", "square", "sawtooth", "triangle"]},
     coneInnerAngle:     {type: "slider",  min: .1,     max: 20,     multiplier:  .01 ,  float: true ,  unit: null   },
     coneOuterAngle:     {type: "slider",  min: .1,     max: 20,     multiplier:  .01 ,  float: true ,  unit: null   },

@@ -2,6 +2,8 @@ import React from 'react'
 import "./effect.scss"
 import Input from '../component-helpers/input/input'
 import Output from '../component-helpers/output/output'
+import { colorScheme } from '../../node-helpers/helperFunctions'
+import { abbreviates } from '../../node-helpers/nodeData'
 
 const Effect = ({node}) => {
   const inputs = node.input ? Object.keys(node.input) : null 
@@ -16,6 +18,18 @@ const Effect = ({node}) => {
         width :`${node.size.x}px`,
       }}
     >
+      <div 
+        className='background-hint'
+        style={{
+          position: "absolute",
+          left: 0,
+          top: 0, 
+          color: `${colorScheme[node.type]}`,
+          fontSize: `${7}pt`,    
+        }}
+        >
+          {abbreviates[node.name] ? abbreviates[node.name] : node.name}
+      </div> 
       <>
         {inputs ? (
           <>

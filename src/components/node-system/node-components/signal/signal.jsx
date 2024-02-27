@@ -4,6 +4,8 @@ import Input from '../component-helpers/input/input'
 import Output from '../component-helpers/output/output'
 import { initialStates } from '../../node-helpers/toneData'
 import HorizontalSlider from '../../option-components/parameters/horizontal-slider/horizontal-slider'
+import { abbreviates } from '../../node-helpers/nodeData'
+import { colorScheme } from '../../node-helpers/helperFunctions'
 
 
 const Signal = ({node, tone}) => {
@@ -28,6 +30,18 @@ const Signal = ({node, tone}) => {
         width :`${node.size.x}px`,
       }}
     >
+      <div 
+        className='background-hint'
+        style={{
+          position: "absolute",
+          left: 0,
+          top: 0, 
+          color: `${colorScheme[node.type]}`,
+          fontSize: `${7}pt`,    
+        }}
+        >
+          {abbreviates[node.name] ? abbreviates[node.name] : node.name}
+      </div> 
       <>
         {inputs ? (
           <>
@@ -56,6 +70,7 @@ const Signal = ({node, tone}) => {
                       parameterValue={_parameters[parameter]}
                       state={initialStates[parameter]}
                       abbreviate={true}
+                      isParamCentered={true}
                       getParameter={(value, param) => handleParameterChange(value, param)}
                     />
                   </div>

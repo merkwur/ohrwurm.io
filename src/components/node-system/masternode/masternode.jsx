@@ -52,7 +52,7 @@ const MasterNode =  ({node,
     const x = event.clientX
     const y = event.clientY
     let topElement = document.elementFromPoint(x, y)
-    if (topElement.className.includes("parameters")){
+    if (topElement.className.includes("parameters") || topElement.className.includes("hint")){
       topElement = topElement.parentElement
     }
     setInitialX(x - parseInt(topElement.parentElement.style.left)-70)

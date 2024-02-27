@@ -1,9 +1,10 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import "./core.scss"
 import Input from '../component-helpers/input/input'
 import Output from '../component-helpers/output/output'
 import { initialStates } from '../../node-helpers/toneData'
 import HorizontalSlider from '../../option-components/parameters/horizontal-slider/horizontal-slider'
+import { colorScheme } from '../../node-helpers/helperFunctions'
 
 
 
@@ -17,11 +18,28 @@ const Core = ({node, tone}) => {
     tone.tone[type].value = value
   }
 
+
   return (
     <div 
       className='core-container'
       id={node.id}      
-      > 
+
+      >
+
+        <div 
+          className='background-hint'
+          style={{
+            position: "absolute",
+            left: 0,
+            top: 0, 
+            color: `${colorScheme["Core"]}`,
+            fontSize: `${7}pt`,
+            
+          }}
+          >
+            {node.name}
+        </div> 
+
       <>
         {inputs ? (
           <>

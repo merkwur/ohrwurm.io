@@ -5,6 +5,8 @@ import Synth from '../components/synth/synth'
 import Mono from '../components/mono/mono'
 
 
+/*felt cute. might delete it later! :P xoxo*/
+
 const InstrumentOptions = memo(({toneObj}) => {
 
   const [openProperties, setOpenProperties] = useState(true)
@@ -22,6 +24,9 @@ const InstrumentOptions = memo(({toneObj}) => {
   const [_filterEnvelopeParameters, setFilterEnvelopeParameters] = useState(_synthParameters.hasOwnProperty("filter") ? _synthParameters.filterEnvelope : null)
   const [_isSynthConnected, setIsSynthConnected] = useState(toneObj.isTriggerConnected)
   const [_noiseTypes, setNoiseTypes] = useState(_parameters.noiseTypes ? _parameters.noiseTypes : null)
+
+
+
 
 
   useEffect(() => {

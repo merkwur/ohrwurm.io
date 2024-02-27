@@ -4,6 +4,20 @@
   font-size: 6.5pt;
   font-weight: 600;
   border-radius: 10px;
+  
+  .background-hint{
+    padding-top: .1rem;
+    width: 70px;
+    height: 15px;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    white-space: normal;
+    font-weight: 400;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #171713;
+  }
 
   .core-parameters{
     width: 100%;

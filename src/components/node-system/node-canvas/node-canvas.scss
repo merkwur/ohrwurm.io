@@ -18,4 +18,33 @@
     radial-gradient(to right, #22dbc027 1px, rgba(0, 0, 0, 0) 2px),
     radial-gradient(to bottom, #77777717 1px, rgba(0, 0, 0, 0) 2px);
   }
+
+  .tone-tree {
+    width: 20%;
+    height: 56%;
+    position: absolute;
+    right: 0;
+    bottom: 30%;
+    background-color: #17171777;
+    font-weight: 400;
+    font-size: 6.7pt;
+    border-left: 1px solid #77777777;
+
+    .tone-tree-text{
+      color: #f2d2bd;
+      padding-left: 1rem;
+      padding-top: 2rem;
+    }
+
+    &.copied{
+      animation: flashFade 1s ease-out;
+    }
+
+  }
+
+}
+
+@keyframes flashFade {
+  from {background-color: #f2d2bd77;}
+  to {background-color: #17171777;}
 }

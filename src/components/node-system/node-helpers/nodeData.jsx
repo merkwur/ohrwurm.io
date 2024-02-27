@@ -254,7 +254,10 @@ const getSize = (name, type, snap) => {
     x: snap, y: snap*2+10
   }
   const onehalf = {
-    x: snap, y: snap * 1.5 + 10
+    x: snap, y: snap * 1.5 + 5
+  }
+  const onequarter = {
+    x: snap, y: snap * 1.25 + 5
   }
   const quad = {
     x: snap * 2 + 10, y: snap * 2 + 10
@@ -291,7 +294,7 @@ const getSize = (name, type, snap) => {
       LFO: {...single }
     }, 
     Instrument: {
-      AMSynth: {...double},
+      AMSynth: {...onehalf},
       FMSynth: {...double},
       DuoSynth: {...double},
       MembraneSynth: {...single},
@@ -332,7 +335,7 @@ const getSize = (name, type, snap) => {
       Convolver:{...single},
       CrossFade:{...single},
       DCMeter:{...single},
-      EQ3:{...single},
+      EQ3:{...onehalf},
       Envelope:{...single},
       FFT:{...single},
       FeedbackCombFilter:{...single},
@@ -371,7 +374,7 @@ const getSize = (name, type, snap) => {
       Multiply:{...single},
       Negate:{...single},
       Pow:{...single},
-      Scale:{...single},
+      Scale:{...onequarter},
       ScaleExp:{...onehalf},
       Signal:{...single},
       Subtract:{...single},
@@ -384,6 +387,16 @@ const getSize = (name, type, snap) => {
 }
 
 
+export const abbreviates = {
+  MembraneSynth: "Membrane",
+  GreaterThanZero: "GreaterThan0", 
+  FeedbackDelay: "FeedbackD", 
+  FrequencyShifter: "FreqShifter",
+  PingPongDelay: "PingPongD", 
+  AmplitudeEnvelope: "AmpEnv", 
+  FeedbackCombFilter: "FeedbackCF", 
+  FrequencyEnvelope: "FreqEnv"
+}
 
 
 const getInputs = (name, type) => {
@@ -442,7 +455,7 @@ const getInputs = (name, type) => {
     }, Instrument: {
       AMSynth: {
         ...commonSynthParams, 
-        modulation: null, 
+        
         harmonicity: null, 
         trigger: null,
       }, 

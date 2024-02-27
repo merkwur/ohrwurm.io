@@ -21,6 +21,7 @@ const NodeConfigurationHub = memo(({tone, trigger}) => {
               {tone[toneObj].type === "Source" ? (
                 <SourceOptions 
                   toneObj={tone[toneObj]}
+
                 />
               ) : tone[toneObj].name === "Transport" ? (
                 <Transport tone={tone[toneObj]} trigger={trigger}/>
@@ -28,17 +29,27 @@ const NodeConfigurationHub = memo(({tone, trigger}) => {
                : tone[toneObj].type === "Instrument" ? (
                 <InstrumentOptions 
                   toneObj={tone[toneObj]}
+
                 /> 
               ) : tone[toneObj].type === "Effect" ? (
-                <EffectOptions toneObj={tone[toneObj]} />
+                <EffectOptions 
+                  toneObj={tone[toneObj]} 
+
+                  />
               ) : tone[toneObj].name === "WaveShaper" ? (
                 <div>
-                  <Waveshaper toneObj={tone[toneObj]}/>
+                  <Waveshaper 
+                    toneObj={tone[toneObj]}
+
+                    />
                 </div>
               ) : tone[toneObj].type === "Component" ? 
               <>
                 {tone[toneObj].name !== "Analyser" && tone[toneObj].name !== "CrossFade" ? (
-                  <ComponentOptions toneObj={tone[toneObj]} />
+                  <ComponentOptions 
+                    toneObj={tone[toneObj]} 
+
+                    />
                 ) : null} 
               </>
               : null}

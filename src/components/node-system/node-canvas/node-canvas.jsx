@@ -15,6 +15,8 @@ import LineCanvas from '../node-helpers/lineCanvas'
 import { addToneObject, connectToneObjects, disconnectToneNode, disposeToneNode, invokeTriggerEvent} from '../node-helpers/toneData'
 import MasterNode from '../masternode/masternode'
 import NodeConfigurationHub from '../node-configuration-hub/node-configuration-hub'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faCopy } from '@fortawesome/free-solid-svg-icons'
 
 
 const height = window.innerHeight - (window.innerHeight * .25)
@@ -29,12 +31,12 @@ const NodeCanvas = () => {
   const [triggerData, setTriggerData] = useState({})
   const [globalTime, setGlobalTime] = useState(0)
   const [snapSize, setSnapSize] = useState(40)
-  const [positionArray, setPositionArray] = useState(Array(cols * rows).fill(0))  
   const [reducedPositionArray, setReducedPositionArray] = useState(Array(Math.floor(cols * rows / 4)).fill(0))  
-  const [zeros, setZeros] = useState(Array(cols * rows).fill(0))
   const [reducedZeros, setReducedZeros] = useState(Array(Math.floor(cols * rows / 4)).fill(0))
   const [positionDebug, setPositionDebug] = useState(false)
   const [valids, setValids] = useState([]) 
+
+
 
   const getNodeInfo = (x, y, node) => {
     const hasAlready = Object.keys(nodeData).find(n => nodeData[n].name === "Transport" && node.name === "Transport")
@@ -50,7 +52,6 @@ const NodeCanvas = () => {
 
   useEffect(() => { 
 
-    const arr = [...zeros] 
     const reducedArr = [...reducedZeros]
   
     Object.keys(nodeData).forEach(node => {
@@ -114,7 +115,11 @@ const NodeCanvas = () => {
   
   //useEffect(() => {console.log(nodeData)}, [nodeData])
   // useEffect(() => {console.log(lineData)}, [lineData])
-  useEffect(() => {console.log(toneData)}, [toneData])
+  useEffect(() => {
+    console.log(toneData)
+
+  }, [toneData])
+  
 
 
   
@@ -122,12 +127,15 @@ const NodeCanvas = () => {
   const handleGlobalTime = (time) => {
     setGlobalTime(time)
   }
+
   useEffect(() => {
     invokeTriggerEvent(triggerData, toneData, nodeData)
   }, [globalTime])  
   
+
+
   
-  
+
   const handeLeftClick = (event) => {
     event.preventDefault()
   }
@@ -175,6 +183,7 @@ const NodeCanvas = () => {
         onClick={() => setPositionDebug(!positionDebug)}
       > pDebug
       </div>
+
       <div>
       { positionDebug ? (
         <>
@@ -202,12 +211,12 @@ const NodeCanvas = () => {
                   key={index}
                   style={{
                     position: "absolute",
-                    left: `${(index % 24) * 16}px`, // Assuming each cell + border is 9px wide
-                    top: `${Math.floor(index / 24) * 16}px`, // Assuming each cell + border is 9px high
-                    backgroundColor: item === 0 ? "#17171727" : "#ff4242", // Corrected hex color codes
+                    left: `${(index % 24) * 16}px`, 
+                    top: `${Math.floor(index / 24) * 16}px`, 
+                    backgroundColor: item === 0 ? "#17171727" : "#ff4242",
                     width: "16px",
                     height: "16px",
-                    border: ".01rem solid #77777717" // Corrected border color
+                    border: ".01rem solid #77777717" 
                   }}
                 >
                 </div>
@@ -215,6 +224,7 @@ const NodeCanvas = () => {
         </div>
         </>
       ) : null}
+
       </div>
       <Navbar getNodeInfo={(x, y, node) => getNodeInfo(x, y, node)}/>    
         {Object.keys(nodeData).map(nodeId => {        
