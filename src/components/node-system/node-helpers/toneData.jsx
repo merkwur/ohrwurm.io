@@ -676,7 +676,7 @@ export const initialStates = {
     pitchDecay:         {type: "slider",  min: 0,      max: .5,      multiplier: .001 ,  float: true ,  unit: null   },
     harmonicity:        {type: "slider",  min: .1,     max: 10,     multiplier: .001 ,  float: true ,  unit: "mf/cf"   },
     octaves:            {type: "slider",  min: 0.5,      max: 8,      multiplier: .001 ,  float: true ,  unit: null   },
-    width:              {type: "slider",  min: -1,     max: .99,      multiplier: .01  ,  float: true ,  unit: null   },
+    width:              {type: "slider",  min: -.98,     max: .98,      multiplier: .01  ,  float: true ,  unit: null   },
     spread:             {type: "slider",  min: 0,  max: 100,    multiplier: 1    ,  float: false,  unit: null   },
     partialCount:       {type: "slider",  min: 0,      max: 24,     multiplier: 1    ,  float: false,  unit: null   },
     gain:               {type: "slider",  min: 0.01,      max: 1,      multiplier: 0.01 ,  float: true ,  unit: null, abbreviate: "g"},
@@ -744,7 +744,7 @@ export const initialStates = {
 }
 
 export const LFOStates = {
-                  frequency:          {type: "slider",   min: .1,        max: 10,     multiplier: .1      , float: true   },
+                  frequency:          {type: "slider",   min: .1,        max: 1000,     multiplier: .1      , float: true   },
                   min:                {type: "slider",   min: -10000,    max: 10000,  multiplier: 1       , float: false  },
                   max:                {type: "slider",   min: -10000,    max: 10000,  multiplier: 1       , float: false  },
                   amplitude:          {type: "slider",   min: .001,      max: 1,      multiplier: .001    , float: true   },

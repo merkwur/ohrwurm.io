@@ -286,7 +286,7 @@ const getSize = (name, type, snap) => {
     Source: {
       Oscillator: {...single },
       FatOscillator: {...single },
-      PulseOscillator: {...double },
+      PulseOscillator: {...single },
       PWMOscillator: {...single },
       Noise: {...single },
       AMOscillator:{...onehalf },
@@ -306,7 +306,7 @@ const getSize = (name, type, snap) => {
       Synth: {...single}
     },
     Effect: {
-      AutoFilter: {...onehalf},
+      AutoFilter: {...single},
       AutoPanner: {...single},
       AutoWah: {...single},
       BitCrusher: {...single},
@@ -508,8 +508,6 @@ const getInputs = (name, type) => {
     }, Effect: {
       AutoFilter: {
         frequency: null, 
-        baseFrequency: null,
-        gain: null, 
         node: null,
       }, 
       AutoPanner: {
@@ -518,12 +516,10 @@ const getInputs = (name, type) => {
       }, 
       AutoWah: {
         gain: null, 
-        Q: null, 
         node: null,
         
       }, 
       BitCrusher: {
-        bits: null, 
         node: null,
       }, 
       Chebyshev: {
@@ -542,8 +538,6 @@ const getInputs = (name, type) => {
         node: null,
       }, 
       Freeverb: {
-        roomSize: null, 
-        dampening: null, 
         node: null,
       },
       FrequencyShifter: {
@@ -558,8 +552,6 @@ const getInputs = (name, type) => {
         node: null,
       },
       Phaser: {
-        Q: null, 
-        octaves: null, 
         frequency: null,
         node: null,
       },
@@ -597,7 +589,7 @@ const getInputs = (name, type) => {
           pan: null,node: null,
         }, 
         Compressor:{
-          knee: null, ratio: null, node: null,
+          knee: null, node: null,
         }, 
         Convolver: {
           node: null
