@@ -29,7 +29,6 @@ const MasterNode =  ({node,
   const [isDragging, setIsDragging] = useState(false)
   const [isNodeDragging, setIsNodeDragging] = useState(false)
   const [draggedNode, setDraggedNode] = useState()
-  const nodeRef = useRef({})
   const [lineMode, setLineMode] = useState(false)
   const [fromNode, setFromNode] = useState({id: "", type: "", class: ""})
   const [isConnectionValid, setIsConnectionValid] = useState(false)
@@ -40,10 +39,8 @@ const MasterNode =  ({node,
   const [snapX, setSnapsX] = useState(0)
   const [snapY, setSnapsY] = useState(0)
   const [isNodeSelected, setIsNodeSelected] = useState(false)
+  const nodeRef = useRef({})
     
-
-  
-
 
 
   const handleMouseDown = (event) => {
@@ -138,7 +135,6 @@ const MasterNode =  ({node,
   
                                 }))
         setIsConnectionValid(true)                            
-        console.log("ladhs")
         }
       }
     }
@@ -149,6 +145,7 @@ const MasterNode =  ({node,
 
   useEffect(() => {
     if (isConnectionValid) {
+      // checking node type depended is connection valid should be done here!!
       addLine(line, reversed)
       setIsConnectionValid(false)
 
@@ -199,7 +196,7 @@ const MasterNode =  ({node,
       node.type === "Core" ? (
         <Core node={node} tone={tone} />  
       ) : node.type === "Source" ? (
-        <Source node={node}/> 
+        <Source node={node} /> 
       ) : node.type === "Instrument" ? (
         <Instrument node={node}/>
       ) : node.type === "Effect"? (

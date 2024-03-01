@@ -26,6 +26,7 @@ const Synth = ({
 
   }) => {
 
+  
 
   return (
     <div className='synth-wrapper'>

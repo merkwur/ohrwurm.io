@@ -312,7 +312,8 @@ export const getNodeParameters = (name, type) => {
         width: 0
       },
       Noise: {
-        noise: null
+        start: false,
+        type: "pink"
       },
       AMOscillator: {
         ...commonOscParams,
@@ -721,6 +722,7 @@ export const initialStates = {
     exponent:           {type: "slider",  min: -Infinity,     max: Infinity, multiplier:  .1 ,  float: true ,  unit: null, abbreviate: "^"  },
     comparator:         {type: "slider",  min: -Infinity,     max: Infinity, multiplier:  .1 ,  float: true ,  unit: null, abbreviate: ">?"   },
     panningModel:       {type: "select",  value: ["equalpower, HRTF"]},
+    noise:              {type: "select",  value: ["pink", "brown", "white"]},
     rolloffFactor:      {type: "slider",  min: .1,     max: 20,     multiplier:  .01 ,  float: true ,  unit: null   },
     bits:               {type: "slider",  min: 1,      max: 20,     multiplier:  .01 ,  float: true ,  unit: null   },
     wet:                {type: "slider",  min: 0,      max: 1,      multiplier:   .01 , float: true  , unit: null   },

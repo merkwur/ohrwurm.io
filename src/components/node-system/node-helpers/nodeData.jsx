@@ -301,7 +301,7 @@ const getSize = (name, type, snap) => {
       MetalSynth: {...double},
       MonoSynth: {...single},
       NoiseSynth: {...single},
-      PluckSynth: {...onehalf},
+      PluckSynth: {...single},
       PolySynth: {...double},
       Synth: {...single}
     },
@@ -489,7 +489,7 @@ const getInputs = (name, type) => {
       }, 
       PluckSynth: {
         ...commonSynthParams, 
-        resonance: null, 
+        
         trigger: null
       }, 
       PolySynth: {

@@ -1,7 +1,7 @@
 export const description = {
   Destination: "A single master output which is connected to the AudioDestinationNode (aka your speakers). It provides useful conveniences such as the ability to set the volume and mute the entire application. It also gives you the ability to apply master effects to your application.",
   Gain: "A thin wrapper around the Native Web Audio GainNode. The GainNode is a basic building block of the Web Audio API and is useful for routing audio and adjusting gains.",
-  Transport: "Transport for timing musical events. Supports tempo curves and time changes.",
+  Transport: "Transport for timing musical events. It is not native transport object of Tone.js. Although, it has some similar functions and a little bit more. The each beat can be positionally and length-wise adjustable. 's' stands for stride, which responsible to move beat position by 'tick % s'. 'p' stands for probability, which is designates the probability of playing this beat in a sequence. 'd' stands for duration, which is responsible of how long each note will sustains (it has a same effect with envelope sustain, but can be adjustable for each individual beat.). 'l' is stands for length, which is a length of a sequence. 'sl' stands for stride length, which designates strides end position on the sequence. Also each beat trigger amount can be adjustable with mouse wheel. ",
   AMOscillator: `An amplitude modulated oscillator node. It is implemented with two oscillators, one which modulators the other's amplitude through a gain node.`,
   FMOscillator: `FMOscillator implements a frequency modulation synthesis.`,
   FatOscillator: `FatOscillator is an array of oscillators with detune spread between the oscillators.`,

@@ -1,14 +1,14 @@
-import React from 'react'
+import React, { useState } from 'react'
 import "./source.scss"
 import Input from '../component-helpers/input/input'
 import Output from '../component-helpers/output/output'
 import { colorScheme } from '../../node-helpers/helperFunctions'
 import { abbreviates } from '../../node-helpers/nodeData'
 
-const Source = ({node}) => {
+const Source = ({node, tone}) => {
   const inputs = node.input ? Object.keys(node.input) : null 
 
-
+  
   return (
     <div 
       className='source-container'
@@ -45,6 +45,7 @@ const Source = ({node}) => {
             ))}
          </>
         ) : null }
+
       </>
         <Output 
           id={node.id}

@@ -3,6 +3,9 @@ import "./source-options.scss"
 import { colorScheme } from '../../node-helpers/helperFunctions'
 import Oscillator from '../components/oscillator/oscillator'
 import LFO from '../components/lfo/lfo'
+import Dropdown from '../components/dropdown/dropdown'
+import StartButton from '../parameters/start-button/start-button'
+import { initialStates } from '../../node-helpers/toneData'
 
 
 
@@ -10,8 +13,17 @@ const SourceOptions = memo(({toneObj}) => {
 
   const [openProperties, setOpenProperties] = useState(true)
   const [_parameters, setParameters] = useState(toneObj.parameters)    
-  const [_modulatorParameters, setModulatorParameters] = useState(_parameters.hasOwnProperty("modulator") ? _parameters.modulator : null)
-  
+  const [_modulatorParameters, setModulatorParameters] = useState(_parameters.hasOwnProperty("modulator") ? _parameters.modulator : null)  
+
+
+
+  const handleNoiseType = (type) => {
+    toneObj.tone.type = type
+    setParameters(previousParameters => ({
+      ...previousParameters, 
+      type: type
+    }))
+  }
 
   const handleParameterChange = (value, type, which) => {
 
@@ -49,9 +61,10 @@ const SourceOptions = memo(({toneObj}) => {
     }
   }
 
-  //useEffect(() => {console.log(_parameters)}, [_parameters])
 
-  const handleStartOscillator = (id) => {
+
+
+  const handleStartOscillator = () => {
     if (!_parameters.start) {
       toneObj.tone.start()
     } else {
@@ -105,7 +118,19 @@ const SourceOptions = memo(({toneObj}) => {
                 getWaveType={(type, which) => handleWaveTypes(type, which)}
               />
             ) : toneObj.name === "Noise" ? (
-              <></>
+              <>
+                <StartButton 
+                  value={_parameters.start}
+                  getOscillatorState={handleStartOscillator}
+                /> 
+                <Dropdown 
+                  options={initialStates.noise.value}
+                  selectFilterType={(type) => handleNoiseType(type)}
+                  header={"noiseTypes"}
+                  value={_parameters.type}
+                  type={"Source"}
+                /> 
+              </>
             ) :  (
               <>
                 <div className='carrier-oscillator'>

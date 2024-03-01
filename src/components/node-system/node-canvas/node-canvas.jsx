@@ -115,7 +115,7 @@ const NodeCanvas = () => {
   }
   
   //useEffect(() => {console.log(nodeData)}, [nodeData])
-  useEffect(() => {console.log(lineData)}, [lineData])
+  //useEffect(() => {console.log(lineData)}, [lineData])
   useEffect(() => {
     console.log(toneData)
 
@@ -166,67 +166,7 @@ const NodeCanvas = () => {
         backgroundSize: `${snapSize*2}px ${snapSize*2}px, ${snapSize}px ${snapSize}px`
       }}
     >
-      <div 
-        className='position-debug'
-        style={{
-          position: "absolute", 
-          right: "5%",
-          bottom: "30%",
-          width: "50px", height: "30px", 
-          backgroundColor: "#171717", borderRadius: "10px",
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          color: "#777",
-          fontSize: "8pt"
 
-        }}
-        onClick={() => setPositionDebug(!positionDebug)}
-      > pDebug
-      </div>
-
-      <div>
-      { positionDebug ? (
-        <>
-
-        <div 
-            className='position-map'
-            style={{
-                width: "384px",
-                height: "144px",
-                position: "absolute",
-                right: "0",
-                bottom: "35%",
-                backgroundColor: "#17171742",
-                backgroundSize: "10px",
-                backgroundImage: 
-                    `radial-gradient(to right, #22dbc027 1px, transparent 1px),
-                      radial-gradient(to bottom, #77777717 1px, transparent 1px)`,
-                zIndex: 99999
-            }}
-            >
-            {
-              reducedPositionArray.map((item, index) => (
-              <div 
-                  className='cells'
-                  key={index}
-                  style={{
-                    position: "absolute",
-                    left: `${(index % 24) * 16}px`, 
-                    top: `${Math.floor(index / 24) * 16}px`, 
-                    backgroundColor: item === 0 ? "#17171727" : "#ff4242",
-                    width: "16px",
-                    height: "16px",
-                    border: ".01rem solid #77777717" 
-                  }}
-                >
-                </div>
-              ))}
-        </div>
-        </>
-      ) : null}
-
-      </div>
       <Navbar getNodeInfo={(x, y, node) => getNodeInfo(x, y, node)}/>    
         {Object.keys(nodeData).map(nodeId => {        
           const node = nodeData[nodeId];
@@ -244,7 +184,7 @@ const NodeCanvas = () => {
                 notesToTrigger={(arr, ids, bpm) => handleNotesToTrigger(arr, ids, bpm)}
                 getValidMoves={(x, y, id) => handleValidMoves(x, y, id)}
                 validMoves={valids}
-                tone={node.name === "Analyser" || node.type === "Signal" || node.name === "Gain" ? toneData[node.id] : null}
+                tone={node.name === "Analyser" || node.type === "Signal" || node.name === "Gain"  ? toneData[node.id] : null}
                 />
             </React.Fragment>
           );  
