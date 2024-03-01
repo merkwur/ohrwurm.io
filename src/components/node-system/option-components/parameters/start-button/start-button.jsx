@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import "./start-button.scss"
 
-const StartButton = ({value, getOscillatorState}) => {
-
+const StartButton = ({value, getOscillatorState, lightColor}) => {
+  const color = lightColor ? lightColor : "bisque"
   const [state, setState] = useState(value)
   
   const handleOscillatorState = () => {
@@ -15,7 +15,7 @@ const StartButton = ({value, getOscillatorState}) => {
       className='start-button'
       onClick={handleOscillatorState}
       style={{
-          backgroundColor: state ? "bisque" : "#272727", 
+          backgroundColor: state ? `${color}` : "#272727", 
           boxShadow: `0 0 2px 2px ${state ? "bisque" : ""}`
         }}
       > 

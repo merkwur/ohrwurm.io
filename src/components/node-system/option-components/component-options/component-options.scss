@@ -27,6 +27,17 @@
       margin-left: .25rem;
       overflow-y: scroll;
       min-height: 50%;
+
+      .params{
+
+        .record-time{
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          font-size: 18pt;
+          margin-top: .5rem;
+        }
+      }
     }
 
 

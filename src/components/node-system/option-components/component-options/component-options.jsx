@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { colorScheme } from '../../node-helpers/helperFunctions'
 import Envelope from '../components/envelope/envelope'
 import "./component-options.scss"
@@ -6,6 +6,7 @@ import Dropdown from '../components/dropdown/dropdown'
 import { initialStates } from '../../node-helpers/toneData'
 import HorizontalSlider from '../parameters/horizontal-slider/horizontal-slider'
 import StartButton from '../parameters/start-button/start-button'
+import Switch from '../parameters/switch/switch'
 
 const ComponentOptions = ({toneObj}) => {
   const [openProperties, setOpenProperties] = useState(true)
@@ -16,8 +17,31 @@ const ComponentOptions = ({toneObj}) => {
   const [_type, setType] = useState(_types ? _types[0] : null)
   const [_recorderState, setRecorderState] = useState(false)
   const [isRecording, setIsRecording] = useState(false)
+  const [whichExtension, setWhichExtension] = useState("wav")
+  const [isClockRunning, setIsClockRunning] = useState(false)
+  const [time, setTime] = useState(0)
+  const [minutes, setMinutes] = useState(0)
+  const [intervalId, setIntervalId] = useState(0)
+  const extension = ["wav", "mp3"]
   let recordedAudio 
   
+  const handleClock = () => {
+    if(!isClockRunning) {
+      clearInterval(intervalId)
+      const id = setInterval(() => setTime(p => p + 1), 60000 / 60)
+      setIntervalId(id)
+      setIsClockRunning(true)
+    } else {
+      clearInterval(intervalId)
+      setIntervalId(null)
+      setTime(0)
+      setIsClockRunning(false)
+    }
+  }
+
+  useEffect(() => {
+    setMinutes(Math.floor(time / 60) % 60)
+  }, [time])
 
   const handleEnvelopeParameters = (value, type) => {
     toneObj.tone[type] = value
@@ -62,17 +86,21 @@ const ComponentOptions = ({toneObj}) => {
   }
   
   const initRecorder = async () => {
-    console.log("we are in start", isRecording)
+    setIsClockRunning(true)
+    handleClock()
     await toneObj.tone.start()
+    
   }
   
   const stopRecording = async () => {  
+    setIsClockRunning(false)
+    handleClock()
     recordedAudio = await toneObj.tone.stop()
     const url = URL.createObjectURL(recordedAudio);
   
     const a = document.createElement('a');  
     a.href = url;
-    a.download = 'recorded-audio.wav'; 
+    a.download = `recorded-audio.${extension}`; 
     
     document.body.appendChild(a);
     a.click();
@@ -81,6 +109,10 @@ const ComponentOptions = ({toneObj}) => {
     URL.revokeObjectURL(url);
   }
 
+
+  const handleExtension = (type) => {
+    console.log(type)
+  }
 
   return (
     <div className='component-options-wrapper'>
@@ -152,10 +184,23 @@ const ComponentOptions = ({toneObj}) => {
                       />
                     )
                      :  parameter === "start" ? (
+                      <>
                         <StartButton 
                           value={_parameters.start}
                           getOscillatorState={(state) => handleState(state)}
+                          lightColor={colorScheme["Component"]}
                         />
+                        <Switch 
+                          elements={extension}
+                          value={whichExtension}
+                          orientation={"horizontal"}
+                          getWaveType={(type) => handleExtension(type)}
+                          parentType={"Component"}
+                        />
+                        <div className='record-time'>
+                          {minutes} : {time%60}
+                        </div>
+                      </>
                         ): null } 
                   </div>
                 ))}

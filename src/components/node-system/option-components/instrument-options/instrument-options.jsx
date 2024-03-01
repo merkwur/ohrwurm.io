@@ -27,7 +27,6 @@ const InstrumentOptions = memo(({toneObj}) => {
   const [_noiseTypes, setNoiseTypes] = useState(_parameters.noiseTypes ? _parameters.noiseTypes : null)
 
 
-  console.log(_carrierParameters)
 
   useEffect(() => {
     if (toneObj.name === "Synth") {
