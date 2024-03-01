@@ -3,6 +3,7 @@ import { colorScheme } from '../../node-helpers/helperFunctions'
 import "./instrument-options.scss"
 import Synth from '../components/synth/synth'
 import Mono from '../components/mono/mono'
+import { faHatCowboySide } from '@fortawesome/free-solid-svg-icons'
 
 
 /*felt cute. might delete it later! :P xoxo*/
@@ -26,8 +27,7 @@ const InstrumentOptions = memo(({toneObj}) => {
   const [_noiseTypes, setNoiseTypes] = useState(_parameters.noiseTypes ? _parameters.noiseTypes : null)
 
 
-
-
+  console.log(_carrierParameters)
 
   useEffect(() => {
     if (toneObj.name === "Synth") {

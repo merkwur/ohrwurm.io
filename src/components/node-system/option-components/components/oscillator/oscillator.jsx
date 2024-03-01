@@ -42,6 +42,7 @@ const Oscillator = ({ parameters,
               <HorizontalSlider 
                 name={param}
                 type={"Source"}
+                abbreviate={true}
                 state={initialStates[param]}
                 parameterValue={parameters[param]}
                 whichOscillator={which}

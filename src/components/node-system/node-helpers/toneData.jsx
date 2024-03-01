@@ -671,7 +671,7 @@ export const initialStates = {
     portamento:         {type: "slider",  min: 0,      max: 1,      multiplier: .001 ,  float: true ,  unit: null   },
     frequency:          {type: "slider",  min: 1,      max: 8192,   multiplier: 1    ,  float: false,  unit: "Hz"   },
     phase:              {type: "slider",  min: 0,      max: 360,    multiplier: 1    ,  float: false,  unit: "\u00b0"   },
-    modulationFrequency:{type: "slider",  min: .1,     max: 440,    multiplier: .1   ,  float: true ,  unit: "Hz"   },
+    modulationFrequency:{type: "slider",  min: .1,     max: 440,    multiplier: .1   ,  float: true ,  unit: "Hz", abbreviate: "modFreq"  },
     distortion:         {type: "slider",  min: 0.01,        max: 1,      multiplier: .01 ,   float: true ,  unit: null   },
     pitchDecay:         {type: "slider",  min: 0,      max: .5,      multiplier: .001 ,  float: true ,  unit: null   },
     harmonicity:        {type: "slider",  min: .1,     max: 10,     multiplier: .001 ,  float: true ,  unit: "mf/cf"   },

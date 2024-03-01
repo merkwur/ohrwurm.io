@@ -289,8 +289,8 @@ const getSize = (name, type, snap) => {
       PulseOscillator: {...single },
       PWMOscillator: {...single },
       Noise: {...single },
-      AMOscillator:{...onehalf },
-      FMOscillator: {...double },
+      AMOscillator:{...single },
+      FMOscillator: {...onehalf },
       LFO: {...single }
     }, 
     Instrument: {
@@ -395,7 +395,12 @@ export const abbreviates = {
   PingPongDelay: "PingPongD", 
   AmplitudeEnvelope: "AmpEnv", 
   FeedbackCombFilter: "FeedbackCF", 
-  FrequencyEnvelope: "FreqEnv"
+  FrequencyEnvelope: "FreqEnv", 
+  AMOscillator: "AMOsc", 
+  FMOscillator: "FMOsc", 
+  FatOscillator: "FatOsc", 
+  PWMOscillator: "PWMOsc", 
+  PulseOscillator: "Pulse"
 }
 
 
@@ -424,7 +429,6 @@ const getInputs = (name, type) => {
       AMOscillator: {
         harmonicity: null,
         ...commonOscillatorParams, 
-        "modulator_detune": null
       }, 
       Oscillator: {
         ...commonOscillatorParams
@@ -433,7 +437,6 @@ const getInputs = (name, type) => {
         ...commonOscillatorParams,
         harmonicity: null, 
         modulationIndex: null,
-        "modulator_detune": null
       }, 
       FatOscillator: {
         ...commonOscillatorParams, 
@@ -446,7 +449,6 @@ const getInputs = (name, type) => {
       PWMOscillator: {
         ...commonOscillatorParams, 
         modulationFrquency: null,
-        "modulator_detune": null
       }, 
       PulseOscillator: {
         ...commonOscillatorParams, 

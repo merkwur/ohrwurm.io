@@ -15,7 +15,8 @@ const ComponentOptions = ({toneObj}) => {
   const [_types, setTypes] = useState(_parameters.type ? initialStates[_parameters.type].value : null)
   const [_type, setType] = useState(_types ? _types[0] : null)
   const [_recorderState, setRecorderState] = useState(false)
-
+  const [isRecording, setIsRecording] = useState(false)
+  let recordedAudio 
   
 
   const handleEnvelopeParameters = (value, type) => {
@@ -49,6 +50,36 @@ const ComponentOptions = ({toneObj}) => {
     setType(type)
   }
 
+
+  const handleState = async () => {
+    if (!isRecording) {
+      setIsRecording(true)
+      await initRecorder()
+    } else {
+      setIsRecording(false)
+      await stopRecording()
+    }
+  }
+  
+  const initRecorder = async () => {
+    console.log("we are in start", isRecording)
+    await toneObj.tone.start()
+  }
+  
+  const stopRecording = async () => {  
+    recordedAudio = await toneObj.tone.stop()
+    const url = URL.createObjectURL(recordedAudio);
+  
+    const a = document.createElement('a');  
+    a.href = url;
+    a.download = 'recorded-audio.wav'; 
+    
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    
+    URL.revokeObjectURL(url);
+  }
 
 
   return (

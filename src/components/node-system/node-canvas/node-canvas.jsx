@@ -17,6 +17,7 @@ import MasterNode from '../masternode/masternode'
 import NodeConfigurationHub from '../node-configuration-hub/node-configuration-hub'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCopy } from '@fortawesome/free-solid-svg-icons'
+import { isConnectionValid } from '../node-helpers/connectionData'
 
 
 const height = window.innerHeight - (window.innerHeight * .25)
@@ -82,7 +83,7 @@ const NodeCanvas = () => {
  
 
   const handleAddLine = (line) => {
-    if (line) {
+    if (line && isConnectionValid(line.from.split(":")[0], line.which)) {
       const updated = addLine(line, lineData, nodeData)
       const connected = connectToneObjects(line.from, line.to, line.which, toneData)  
       setLineData(updated[0])
@@ -114,7 +115,7 @@ const NodeCanvas = () => {
   }
   
   //useEffect(() => {console.log(nodeData)}, [nodeData])
-  // useEffect(() => {console.log(lineData)}, [lineData])
+  useEffect(() => {console.log(lineData)}, [lineData])
   useEffect(() => {
     console.log(toneData)
 

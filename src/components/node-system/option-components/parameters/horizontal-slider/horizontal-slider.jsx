@@ -25,10 +25,10 @@ const HorizontalSlider = ({
   const [initialX, setInitialX] = useState(0)
   const [achilles, setAchilles] = useState(false)
   const [tortoise, setTortoise] = useState(false)
-  const [sign, setSign] = useState(!abbreviate ? name : initialStates[name].abbreviate) 
+  const [sign, setSign] = useState(abbreviate && initialStates[name].abbreviate ? initialStates[name].abbreviate : name) 
   const unit = state.multiplier
   
-
+  
   const handleMouseDown = (event) => {
     setIsDragging(true)
     setInitialX(event.clientX)  

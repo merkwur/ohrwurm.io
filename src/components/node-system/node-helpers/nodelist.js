@@ -82,7 +82,7 @@ export const menuContent = {
     'Panner',
     //'Panner3D',
     //'PhaseShiftAllpass',
-    // 'Recorder',
+    'Recorder',
     //'Solo',
     //'Split',
     //'Volume',

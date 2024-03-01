@@ -47,6 +47,7 @@ export const description = {
   Limiter: "Limiter will limit the loudness of an incoming signal. Under the hood it's composed of a Compressor with a fast attack and release and max compression ratio.", 
   PanVol: "PanVol is a Tone.Panner and Tone.Volume in one.", 
   Panner: "Panner is an equal power Left/Right Panner. It is a wrapper around the StereoPannerNode.", 
+  Recorder: "A wrapper around the MediaRecorder API. Unlike the rest of Tone.js, this module does not offer any sample-accurate scheduling because it is not a feature of the MediaRecorder API. This is only natively supported in Chrome and Firefox.",
   Abs: 'Return the absolute value of an incoming signal.', 
   Add: 'Add a signal and a number or two signals. When no value is passed into the constructor, Tone.Add will sum input and addend If a value is passed into the constructor, the it will be added to the input.', 
   AudioToGain: "AudioToGain converts an input in AudioRange [-1,1] to NormalRange [0,1].", 
