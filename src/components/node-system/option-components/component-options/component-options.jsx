@@ -20,6 +20,7 @@ const ComponentOptions = ({toneObj}) => {
   const [whichExtension, setWhichExtension] = useState("wav")
   const [isClockRunning, setIsClockRunning] = useState(false)
   const [time, setTime] = useState(0)
+  const [second, setSecond] = useState(0)
   const [minutes, setMinutes] = useState(0)
   const [intervalId, setIntervalId] = useState(0)
   const extension = ["wav", "mp3"]
@@ -29,6 +30,7 @@ const ComponentOptions = ({toneObj}) => {
     if(!isClockRunning) {
       clearInterval(intervalId)
       const id = setInterval(() => setTime(p => p + 1), 60000 / 60)
+      
       setIntervalId(id)
       setIsClockRunning(true)
     } else {
@@ -38,9 +40,10 @@ const ComponentOptions = ({toneObj}) => {
       setIsClockRunning(false)
     }
   }
-
+  
   useEffect(() => {
-    setMinutes(Math.floor(time / 60) % 60)
+    setSecond(pad(time%60, 2))
+    setMinutes(pad(Math.floor(time / 60) % 60, 2))
   }, [time])
 
   const handleEnvelopeParameters = (value, type) => {
@@ -91,7 +94,13 @@ const ComponentOptions = ({toneObj}) => {
     await toneObj.tone.start()
     
   }
-  
+
+  const pad = (num, size) => {
+    num = num.toString();
+    while (num.length < size) num = "0" + num;
+    return num;
+  } 
+
   const stopRecording = async () => {  
     setIsClockRunning(false)
     handleClock()
@@ -100,7 +109,7 @@ const ComponentOptions = ({toneObj}) => {
   
     const a = document.createElement('a');  
     a.href = url;
-    a.download = `recorded-audio.${extension}`; 
+    a.download = `recorded-audio.${whichExtension}`; 
     
     document.body.appendChild(a);
     a.click();
@@ -111,7 +120,7 @@ const ComponentOptions = ({toneObj}) => {
 
 
   const handleExtension = (type) => {
-    console.log(type)
+    setWhichExtension(type)
   }
 
   return (
@@ -185,11 +194,15 @@ const ComponentOptions = ({toneObj}) => {
                     )
                      :  parameter === "start" ? (
                       <>
-                        <StartButton 
-                          value={_parameters.start}
-                          getOscillatorState={(state) => handleState(state)}
-                          lightColor={colorScheme["Component"]}
-                        />
+                        <div className='state-buttons'>
+                          <StartButton 
+                            value={_parameters.start}
+                            getOscillatorState={(state) => handleState(state)}
+                            lightColor={colorScheme["Component"]}
+                            size={"big"}
+                          />
+                          
+                        </div>
                         <Switch 
                           elements={extension}
                           value={whichExtension}
@@ -198,7 +211,7 @@ const ComponentOptions = ({toneObj}) => {
                           parentType={"Component"}
                         />
                         <div className='record-time'>
-                          {minutes} : {time%60}
+                          {minutes} : {second}
                         </div>
                       </>
                         ): null } 

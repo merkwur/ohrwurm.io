@@ -29,7 +29,9 @@
       min-height: 50%;
 
       .params{
-
+        .state-buttons{
+          display: flex; 
+        }
         .record-time{
           display: flex;
           justify-content: center;
