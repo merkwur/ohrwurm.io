@@ -4,7 +4,7 @@
 This project is a browser-based Digital Audio Workstation (DAW) that leverages the [Tone.js](https://tonejs.github.io/docs/14.7.77/index.html) library for audio synthesis and processing. It introduces an intuitive, gesture-based interface for creating, deleting, and connecting audio nodes, streamlining the music production process directly within your web browser.
 
 Current looks v
-![current looks](./public/current-look.png)
+![current looks](./public/curr-look.png)
 
 
 ## Capabilities
