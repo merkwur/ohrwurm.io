@@ -88,7 +88,6 @@ const MasterOptions = ({tone, notesToTrigger, getGlobalTime}) => {
       } else {
         tone.parameters.oscillator[oscTyp].type = type
         tone.tone.oscillator.type = type
-        console.log("from tone obj", tone.parameters.oscillator[oscTyp].type)
       }
     }
   } 

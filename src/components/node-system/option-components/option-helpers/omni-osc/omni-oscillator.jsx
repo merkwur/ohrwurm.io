@@ -15,8 +15,6 @@ const OmniOscillator = ({id,
 
   
 
-  console.log("khjugasd;khj", oscillatorType)
-
   return (
     <div className='omni-oscillator'>
       <div className='oscillator-selector'>

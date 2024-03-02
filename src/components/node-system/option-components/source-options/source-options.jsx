@@ -78,9 +78,7 @@ const SourceOptions = memo(({toneObj}) => {
   }
 
   const handleWaveTypes = (type, which) => {
-    console.log("type: ", type, "parent: ", "which: ", which)
     if (which === "carrier" || which === "oscillator") {
-
       toneObj.tone.type = type
       setParameters(previousParameters => ({
         ...previousParameters, 

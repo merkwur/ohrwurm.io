@@ -182,7 +182,6 @@ const ComponentAnalyser = ({node, tone}) => {
   
 
   const handleScopeType = () => {
-    console.log(type)
     if (type === "waveform") {
       tone.tone.x.type = "fft"
       tone.tone.y.type = "fft"

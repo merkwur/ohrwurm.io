@@ -488,8 +488,6 @@ const getInputs = (name, type) => {
         trigger: null
       }, 
       PluckSynth: {
-        ...commonSynthParams, 
-        
         trigger: null
       }, 
       PolySynth: {

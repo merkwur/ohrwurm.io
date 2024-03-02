@@ -1,11 +1,14 @@
 * {
   box-sizing: border-box;
   margin: 0; /* Reset default margin */
+  
+  -ms-text-overflow: none;
+  scrollbar-width: none;
   padding: 0; /* Reset default padding */
 }
 
 :root {
-  font-family: montserrat;//Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-family: montserrat, Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.42;
   font-weight: 400;
 
@@ -19,8 +22,7 @@
   -moz-osx-font-smoothing: grayscale;
   -webkit-text-size-adjust: 100%;
 
-  ::-webkit-scrollbar {
-    
+  ::-webkit-scrollbar { 
     width: 0px;
   }
 

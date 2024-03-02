@@ -109,7 +109,6 @@ const Transport = ({tone, trigger}) => {
 
   const handleValues = (value, type) => {
     if (type === "lengths") {
-      console.log(value, type)
       setLength(value)
     } 
     if (type == "bpm") {

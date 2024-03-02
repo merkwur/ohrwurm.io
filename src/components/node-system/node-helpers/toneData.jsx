@@ -104,7 +104,6 @@ export const disposeToneNode = (id, tones, nodes) => {
 
 export const disconnectToneNode = (from, to, which, nodes) => {
   if (from.includes("Transport")) return 
-  console.log(`tone disconnection from ${from} to ${to}`)
   if (which === "node") {
     nodes[from].tone.disconnect(nodes[to].tone)
   } else if (which === "trigger"){

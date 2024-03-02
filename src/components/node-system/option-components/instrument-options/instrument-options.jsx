@@ -91,7 +91,6 @@ const InstrumentOptions = memo(({toneObj}) => {
         
         if (from === "synth") {
           if (type === "detune") {
-            console.log("type: ", type)
             toneObj.tone.modulation.detune.set({value: value})
             toneObj.tone.modulation.frequency.value = 1200
           } else if (toneObj.tone.modulation[type] === "object") {
@@ -158,7 +157,6 @@ const InstrumentOptions = memo(({toneObj}) => {
       toneObj.tone.noise.type = type
     } else  if (type && which) {
       if (which === "carrier") {
-        console.log()
         if (type !== "pwm" || type !== "pulse") {
           if (toneObj.tone.oscillator.partialCount > 1) {
             toneObj.tone.oscillator.type = toneObj.tone.oscillator.baseType + toneObj.tone.oscillator.partialCount
@@ -232,7 +230,6 @@ const InstrumentOptions = memo(({toneObj}) => {
   }
 
   const handleCurveType = (curveType, which) => {
-    console.log(which)    
     if (curveType) {
       if (which === "carrier") {
         toneObj.tone.envelope.attackCurve = curveType
