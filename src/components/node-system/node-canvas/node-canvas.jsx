@@ -7,71 +7,35 @@ import {addNode,
         deleteLine,
         deleteNode,
         updateLinePosition,      
-        getValidMoves,
-        
       } from '../node-helpers/nodeData'
 
 import LineCanvas from '../node-helpers/lineCanvas'
-import { addToneObject, connectToneObjects, disconnectToneNode, disposeToneNode, invokeTriggerEvent} from '../node-helpers/toneData'
+import { connectToneObjects, disconnectToneNode, disposeToneNode, invokeTriggerEvent} from '../node-helpers/toneData'
 import MasterNode from '../masternode/masternode'
 import NodeConfigurationHub from '../node-configuration-hub/node-configuration-hub'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCopy } from '@fortawesome/free-solid-svg-icons'
 import { isConnectionValid } from '../node-helpers/connectionData'
 
-
-const height = window.innerHeight - (window.innerHeight * .25)
-const width = 1920
-const rows = Math.floor((height ) / (40 * 2)) * 2
-const cols = Math.floor((width ) / (40 * 2))  * 2
 
 const NodeCanvas = () => {
   const [nodeData, setNodeData] = useState({})
   const [lineData, setLineData] = useState({})
   const [toneData, setToneData] = useState({})
-  const [triggerData, setTriggerData] = useState({})
-  const [globalTime, setGlobalTime] = useState(0)
   const [snapSize, setSnapSize] = useState(40)
-  const [reducedPositionArray, setReducedPositionArray] = useState(Array(Math.floor(cols * rows / 4)).fill(0))  
-  const [reducedZeros, setReducedZeros] = useState(Array(Math.floor(cols * rows / 4)).fill(0))
-  const [positionDebug, setPositionDebug] = useState(false)
   const [valids, setValids] = useState([]) 
 
-
-
+  // gets the node name from navabr drag'n drop gestures and creates the node
   const getNodeInfo = (x, y, node) => {
-    const hasAlready = Object.keys(nodeData).find(n => nodeData[n].name === "Transport" && node.name === "Transport")
+    const hasAlready = Object.keys(nodeData).find(n => 
+      nodeData[n].name === "Transport" && node.name === "Transport" 
+      || nodeData[n].name === "Destination" && node.name === "Destination")
     if (hasAlready) {
-      console.log("There is only one Transport object can  be present at a time!")
+      console.log(`There is only one ${node.name} object can  be present at a time!`)
       return 
     }
     const updatedNodes = addNode(x, y, node.name, node.type, snapSize, nodeData, toneData)
     setNodeData(updatedNodes[0])   
     setToneData(updatedNodes[1])
   }
-
-
-  useEffect(() => { 
-
-    const reducedArr = [...reducedZeros]
-  
-    Object.keys(nodeData).forEach(node => {
-      if (nodeData[node].sizeNxM) {
-        for (let i = 0; i < nodeData[node].sizeNxM.x; i++) {
-          for (let j = 0; j <  nodeData[node].sizeNxM.y; j++) {
-            reducedArr[(nodeData[node].positionIndices.x+i) + (nodeData[node].positionIndices.y+j) * (cols/2) ] = 1
-          }
-        }
-      } else {
-        reducedArr[nodeData[node].reducedIndex] = 1
-      }
-      
-    })
-    
-    
-    setReducedPositionArray(reducedArr)
-  }, [nodeData])
-
 
   const nodeRemove = (id) => {
     const updated = deleteNode(id, nodeData, lineData, toneData)
@@ -81,14 +45,13 @@ const NodeCanvas = () => {
     setToneData(updated[2]) 
   }
  
-
+  // if the connection type and the connection is possible creates a line between the nodes
   const handleAddLine = (line) => {
     if (line && isConnectionValid(line.from.split(":")[0], line.which)) {
       const updated = addLine(line, lineData, nodeData)
       const connected = connectToneObjects(line.from, line.to, line.which, toneData)  
       setLineData(updated[0])
       setNodeData(updated[1])
-
       if (connected) {
         setToneData(connected)
       }
@@ -102,38 +65,19 @@ const NodeCanvas = () => {
     setNodeData(updates[1])
   }
   
-  
+  // if line exists, updates the position when the node position changes
   const handleLinePositionUpdate = (x, y, id) => {
     const updatedLines = updateLinePosition(x, y, id, lineData)    
     setLineData(updatedLines)
   }
   
+  // this is a bridge function between transport object and the tone.triggerEvent()
   const handleTrigger = (notes, durations, probabilities, id, bpm) => {
     const instruments = nodeData[id].connection.map(item => item.split(">")[1].split("=")[0])
     if (!instruments || instruments.length === 0) return
     invokeTriggerEvent(notes, durations, probabilities, instruments, bpm, toneData)
   }
   
-  //useEffect(() => {console.log(nodeData)}, [nodeData])
-  //useEffect(() => {console.log(lineData)}, [lineData])
-  //useEffect(() => {console.log(toneData)}, [toneData])
-  
-
-
-  
-  
-  const handleGlobalTime = (time) => {
-    setGlobalTime(time)
-  }
-
-  useEffect(() => {
-    invokeTriggerEvent(triggerData, toneData, nodeData)
-  }, [globalTime])  
-  
-
-
-  
-
   const handeLeftClick = (event) => {
     event.preventDefault()
   }
@@ -146,13 +90,8 @@ const NodeCanvas = () => {
     setNodeData(updatedNodes)  
   }
 
-  const handleValidMoves = (x, y, id) => {
-    const validMoves = getValidMoves(x, y, id, nodeData)
-    
-    setValids(validMoves)
-  }
-  
-  
+  useEffect(() => {console.log(toneData)}, [toneData])
+
   return (
     <div 
     className='canvas'

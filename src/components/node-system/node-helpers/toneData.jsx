@@ -2,7 +2,7 @@ import * as Tone from "tone"
 
 
 export const addToneObject = (id, name, type, tones) => {
-
+  // we basically creating 2 analyser component for each input
   if (name === "Analyser") {
     const newToneObject = { 
       id, 
@@ -29,21 +29,22 @@ export const addToneObject = (id, name, type, tones) => {
 }
 
 
+// this is the simple transport's trigger events. it is working very well with the current structure of the transport object
 
 export const invokeTriggerEvent = (notes, durations, probabilities, instruments, bpm, tones) => {
   if (!Array.isArray(notes)) return 
   let noteDuration = 60 / (bpm * notes.length)
-  
+  // run the function for each note in the beat.  
   notes.forEach((note, index) => {
     setTimeout(() => {
       if (Math.random() < probabilities[index]) {
+        // there are specific type of trigger for Noise synth and for the envelopes
         instruments.forEach((instrument, i) => {
           if (tones[instrument].name === "NoiseSynth" || tones[instrument].name.includes("Envelope")) {
             tones[instrument].tone.triggerAttackRelease( noteDuration * durations[index])
           } else if (tones[instrument].name.includes("Oscillator")) {
             tones[instrument].tone.frequency.rampTo(note, noteDuration * durations[index])
-          }
-          
+          }        
           else {
             tones[instrument].tone.triggerAttackRelease(note, noteDuration * durations[index])
           }
@@ -53,6 +54,8 @@ export const invokeTriggerEvent = (notes, durations, probabilities, instruments,
   })
 };
 
+
+// handles the tone backend
 export const connectToneObjects = (from, to, which, nodes) => {
   if (from.includes("Transport")) {
     const newTone = {
@@ -62,12 +65,8 @@ export const connectToneObjects = (from, to, which, nodes) => {
     return newTone
   }
   if (to.includes("Analyser")) {
-
     nodes[from].tone.connect(nodes[to].tone[which])
-  
   }
-
-  
   if (which === "node") {
     if (nodes[to].name !== "Destination") {
       nodes[from].tone.connect(nodes[to].tone)
@@ -83,17 +82,19 @@ export const connectToneObjects = (from, to, which, nodes) => {
       nodes[from].tone.connect(nodes[to].tone[which])
     }
   } 
-
 }
 
+// this triggers when the node is deleted. It also remove the node in tone.js tree
 export const disposeToneNode = (id, tones, nodes) => {
-  if (!tones[id].tone) return
+  // destination node does not contatin any tone object. so it should handle seperately
   if (tones[id].name === "Destination") {
     nodes[id].connection.forEach(fromId => {
       const fID = fromId.split(">")[0]
       tones[fID].tone.disconnect(tones[id].tone)
     })
   }
+
+  if (!tones[id].tone) return
   if (tones[id].name === "Analyser") {
     tones[id].tone.x.dispose()
     tones[id].tone.y.dispose()
@@ -102,6 +103,7 @@ export const disposeToneNode = (id, tones, nodes) => {
   }
 }
 
+// disconnects node from its connections. does not remove the node. Just disconnects it.
 export const disconnectToneNode = (from, to, which, nodes) => {
   if (from.includes("Transport")) return 
   if (which === "node") {
@@ -633,8 +635,6 @@ export const getNodeParameters = (name, type) => {
       ToneConstantSource: {curve: new Float32Array()},
       WaveShaper: {},
       Zero: {},
-
-
     }
 
 
@@ -659,7 +659,7 @@ export const getNodeParameters = (name, type) => {
   return nodeParams[type][name]
 }  
 
-// complete the states
+
 
 
 export const initialStates = { 

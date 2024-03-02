@@ -35,7 +35,7 @@ const Transport = ({tone, trigger}) => {
   const noteRefs = useRef([])
 
 
-
+  // simple clock
   const handleClock = () => {
     if(!isClockRunning) {
       clearInterval(intervalId)
@@ -58,11 +58,10 @@ const Transport = ({tone, trigger}) => {
     }
   }, [_bpm])
 
+  // selects the trigger markers -aka grey boxes-
   const handleClick = (event, i, j) => {
     setSlct({i: i, j: j})
   }
-
-  
 
   const handleMouseDown = (event, index, which) =>{
     setIsDragging(true)
@@ -76,6 +75,7 @@ const Transport = ({tone, trigger}) => {
 
   const handleMouseMove = (event) => {
     if (isDragging) {
+      // using  timeout for each adjustment prevents react maximum update depth issue, otherwise calls too many unnecessary rerenders. 
       const handler = setTimeout(() => {
         if (whichElement === "note") {
           if (_sequenceStrides[referenceIndex] === 0) {
@@ -99,6 +99,7 @@ const Transport = ({tone, trigger}) => {
           setKeyScreen(arr)
         }
       }, 20)
+      return () => clearTimeout(handler)
     }
 
   }
@@ -140,9 +141,8 @@ const Transport = ({tone, trigger}) => {
   }
 
 
-
-  const handleLengths = (event, index) => {
-    
+  // the lengths are the main component changing it changes all the sequnce structure
+  const handleLengths = (event, index) => {    
     const lengthArr = [..._sequenceLengths]
     const pArr = [..._sequenceProbabilities]
     const dArr = [..._sequenceDurations]
@@ -167,16 +167,13 @@ const Transport = ({tone, trigger}) => {
     setSequenceDurations(dArr)
   }
 
-  // useEffect(() => {console.log(_sequenceProbabilities)}, [_sequenceProbabilities])
-
+  // calcualtes all the necessaty data for each beat -!!not for the each trigger-
+  // that means any changes in the structre will be affect after the beat finishes
   const getTriggerReadyData = () => {
-    
     const posArr = _sequencePositions.map((item, index) => {
       if (_sequenceStrides[index] !== 0) {
         if (time % _sequenceStrides[index] === 0)
-          
           return (item + 1) % ((_sLength + 1) - _sequenceLengths[index].length)
-          
         } 
       return item
     })
@@ -191,10 +188,9 @@ const Transport = ({tone, trigger}) => {
     setSequencePositions(posArr)
   }
   
+
   useEffect(() => {
     getTriggerReadyData()
-    
-
   }, [time])
 
   useEffect(() => {
@@ -203,7 +199,6 @@ const Transport = ({tone, trigger}) => {
       window.addEventListener('mouseup', handleMouseUp);
     }
     return () => {
-      // Cleanup function to ensure no dangling listeners from this effect
       window.removeEventListener('mousemove', handleMouseMove);
       window.removeEventListener('mouseup', handleMouseUp);
     };
@@ -261,7 +256,7 @@ const Transport = ({tone, trigger}) => {
                     <div 
                       key={"arrays"+index+key}
                       className='key'
-                      style={{borderRight: index === _sLength-1 ? "3px solid #777777": "1px solid #777777"}}
+                      style={{borderRight: index === _sLength-1 ? `3px solid ${colorScheme["Core"]}`: "1px solid #777777"}}
                       
                       >
                       {key}
@@ -283,7 +278,7 @@ const Transport = ({tone, trigger}) => {
                           
                           width: `${100 / 8}%`, height: `${100}%`,
                           border: `1px solid ${colorScheme["Core"]}42`, 
-                          borderRight: index === _sLength-1 ? `2px solid ${colorScheme["Core"]}` : "", 
+                          borderRight: index === _sLength-1 ? `3px solid ${colorScheme["Core"]}` : "", 
                           cursor: "pointer",
                           borderCollapse: "collapse",
                           display: "flex", alignItems: "center", justifyContent: "center"
@@ -291,7 +286,7 @@ const Transport = ({tone, trigger}) => {
                         >   
                         <div className='key-pickers'
                           style={{
-                            height: `${item.y}%`, width: `${item.x}%`, backgroundColor: "#777777", maxHeight: "100%",
+                            height: `${item.y}%`, width: `${item.x}%`, backgroundColor: `${colorScheme["Core"]}77`, maxHeight: "100%",
                             transformOrigin: "center" 
                           }}
                         >

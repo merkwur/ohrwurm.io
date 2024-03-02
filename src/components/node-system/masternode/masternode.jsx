@@ -9,20 +9,12 @@ import Component from '../node-components/component/component'
 import Signal from '../node-components/signal/signal'
 import ComponentAnalyser from '../node-components/component-analyser/component-analyser'
 
-
-
-
-
-
-
 const MasterNode =  ({node, 
                       snapSize,
                       updateNodePosition, 
                       removeNode, 
                       addLine, 
                       updateLinePosition,                     
-                      getValidMoves,
-                      validMoves,
                       tone
                     }) => {
 
@@ -30,7 +22,6 @@ const MasterNode =  ({node,
   const [isNodeDragging, setIsNodeDragging] = useState(false)
   const [draggedNode, setDraggedNode] = useState()
   const [lineMode, setLineMode] = useState(false)
-  const [fromNode, setFromNode] = useState({id: "", type: "", class: ""})
   const [isConnectionValid, setIsConnectionValid] = useState(false)
   const [line, setLine] = useState({})
   const [initialX, setInitialX] = useState(0);
@@ -42,7 +33,7 @@ const MasterNode =  ({node,
   const nodeRef = useRef({})
     
 
-
+  // this function handles both node position and the line creation
   const handleMouseDown = (event) => {
     setLineMode(false)
     event.preventDefault()
@@ -79,7 +70,7 @@ const MasterNode =  ({node,
     }
   }
 
-
+  // calculates the node positions
   const handleMouseMove = (event) => {
     if (isDragging && !lineMode && isNodeDragging) {
       const handler = setTimeout(() => {
@@ -116,15 +107,13 @@ const MasterNode =  ({node,
   }, [snapX, snapY])
 
 
-  
+  // triggers the line creation and the node conneciton if the end position is valid
   const handleMouseUp = (event) => {
     setIsDragging(false)
     setIsNodeDragging(false)
     if (lineMode) {
       const dragEndElement = document.elementFromPoint( event.clientX, event.clientY)
-      
       if (dragEndElement.id !== line.from) {
-
         if (dragEndElement.getAttribute("sockettype")) {
           const {left, top} = dragEndElement.getBoundingClientRect()
           setLine(l => ({...l,  ex: Math.floor(left) + 5, 
@@ -132,7 +121,6 @@ const MasterNode =  ({node,
                                 to: dragEndElement.id,
                                 toType: dragEndElement.getAttribute("whichparent"),
                                 which: dragEndElement.getAttribute("sockettype")
-  
                                 }))
         setIsConnectionValid(true)                            
         }
@@ -140,15 +128,15 @@ const MasterNode =  ({node,
     }
     nodeRef.current[node.id].style.boxShadow = null
     setIsNodeSelected(false)
+    window.removeEventListener('mousemove', handleMouseMove);
+    window.removeEventListener('mouseup', handleMouseUp);
   }
 
 
   useEffect(() => {
     if (isConnectionValid) {
-      // checking node type depended is connection valid should be done here!!
       addLine(line, reversed)
       setIsConnectionValid(false)
-
     }
     setLine({})
   }, [isConnectionValid])
@@ -174,13 +162,7 @@ const MasterNode =  ({node,
       window.removeEventListener('mouseup', handleMouseUp);
     };
   }, [isDragging]);
-
-
-
-  useEffect(() => {
-  }, [node])
-
-
+  
 
   return (
     <div 

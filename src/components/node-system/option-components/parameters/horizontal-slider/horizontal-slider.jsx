@@ -4,11 +4,8 @@ import { clamp, colorScheme } from '../../../node-helpers/helperFunctions'
 import { initialStates } from '../../../node-helpers/toneData'
 
 
-
-
 const HorizontalSlider = ({
                             name, 
-                            type,
                             abbreviate,
                             parameterValue,
                             state,
@@ -35,20 +32,16 @@ const HorizontalSlider = ({
   }
 
 
-
   const handleMouseMove = (event) => {
     if (isDragging && event.clientX > 0) {
       let newVal
       if (achilles) {
         newVal = value + ((event.clientX - initialX) * unit * 10)
-       
       } else if (tortoise) {
         newVal = value + Math.floor(((event.clientX - initialX) * unit) / 20)
-       
       } else{
-        if (name === "length") {
+        if (name === "lengths" || name === "sequenceLength") {
           newVal = value + Math.floor(((event.clientX - initialX) * unit) / 20)
-
         } else {
           newVal = value + (event.clientX - initialX) * unit
         }

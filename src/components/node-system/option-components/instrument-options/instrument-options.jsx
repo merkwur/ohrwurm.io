@@ -144,7 +144,6 @@ const InstrumentOptions = memo(({toneObj}) => {
             modulationType: wave
           }))
         }
-
       }
     }
   }

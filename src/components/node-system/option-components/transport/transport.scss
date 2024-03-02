@@ -70,9 +70,6 @@
           display: flex;
           
         }
-        .sequence-cells{
-         
-        }
 
         .adjustables{
           display: flex;
@@ -81,18 +78,12 @@
         }
       }
       
-        
-
         .note{
           position: absolute;
           border-collapse: collapse;
           width: 12.5%;
           background-color: #77777777;
-
         }
-      
     }
-
-
   }  
 }

@@ -4,7 +4,6 @@ import { addToneObject } from "./toneData"
 
 
 export const addNode = (x, y, name, type, snapSize, nodes, tones) => {
-
   let id
   if (name !== "Transport" || name !== "Trigger" || name === "Sequencer") {
     id = name + ":" + uuidv4().split("-")[0]
@@ -15,22 +14,18 @@ export const addNode = (x, y, name, type, snapSize, nodes, tones) => {
   const snappedY = (Math.floor(y / snapSize) * snapSize) + 5
   const normX = Math.floor((snappedX-5) / 40)
   const normY = Math.floor((snappedY-5) / 40)
-  const reducedIndex = 24 * Math.floor(normY / 2) + Math.floor(normX / 2)
+  
   const newNode = {
     id, 
     name, 
     size: getSize(name, type, snapSize*2 - 10),
     input: getInputs(name,type),  
-    position: {x: snappedX, y: snappedY},
-    reducedIndex: reducedIndex,
+    position: {x: snappedX, y: snappedY},  
     positionIndices: {x: Math.floor(normX/2), y: Math.floor(normY/2)},
     connection: [],
     sizeNxM: getReducedSize(name), 
     type, 
-    sequencer: null,
   }
-
-
   const updatedNodes = {...nodes, [id]: newNode}
   const toneData = addToneObject(id, name, type, tones)
   return [updatedNodes, toneData]
@@ -38,19 +33,10 @@ export const addNode = (x, y, name, type, snapSize, nodes, tones) => {
 
 
 
-const getSequencerData = () => {
-  return {
-    probabilities: Array(8).fill(1), 
-    durations: Array(8).fill(1),
-    strides: Array(8).fill(0)
-  }
-}
-
 export const deleteNode = (id, nodes, lines, tones) => {
   if (!nodes[id]) {
     throw new Error('Node ID not found');
   }
-  
   const node = nodes[id];
   
   // Use reduce to iterate over connections and accumulate updates
@@ -59,7 +45,7 @@ export const deleteNode = (id, nodes, lines, tones) => {
       const [newLines, newNodes] = deleteLine(connectionId, currentLines, currentNodes);
       return [newNodes, newLines];
     },
-    [nodes, lines] // Initial values
+    [nodes, lines]
     );
     
     const { [id]: __, ...updateTones} = tones
@@ -103,7 +89,6 @@ export const deleteNode = (id, nodes, lines, tones) => {
       if (lines[id]) {
         return [lines, nodes];
       }
-      
       // Clone the nodes object to maintain immutability
       const newNodes = JSON.parse(JSON.stringify(nodes));
       
@@ -111,8 +96,6 @@ export const deleteNode = (id, nodes, lines, tones) => {
       if (!newNodes[fromId] || !newNodes[toId]) {
         throw new Error('Node ID not found');
       }
-      
-      
       newNodes[fromId].connection.push(id);
       newNodes[toId].connection.push(id);
       
@@ -124,18 +107,11 @@ export const deleteNode = (id, nodes, lines, tones) => {
     }
     newNodes[toId].input[which].push(fromId);
   }
-  
   // Clone the lines object to maintain immutability
   const newLines = { ...lines, [id]: lineProps };
-  
   // call tone connections 
-  
-
   return [newLines, newNodes];
 }
-
-
-
 
 export const deleteLine = (id, lines, nodes) => {
   if (!lines[id]) {
@@ -154,7 +130,6 @@ export const deleteLine = (id, lines, nodes) => {
   const updatedNodes = JSON.parse(JSON.stringify(nodes));
   
   // Update connections for both 'from' and 'to' nodes
-  
   updatedNodes[line.from].connection = updatedNodes[line.from].connection.filter(c => c !== id)
   updatedNodes[line.to  ].connection = updatedNodes[line.to  ].connection.filter(c => c !== id)
   
@@ -168,53 +143,18 @@ export const deleteLine = (id, lines, nodes) => {
 }
 
 
-
-
 export const updateNodePositions = (id, x, y, nodes) => {
-
   const normX = (Math.floor(x / 40)) 
   const normY = (Math.floor(y / 40)) 
   const rx = Math.floor(normX/2)  
   const ry = Math.floor(normY/2)
-  const reducedIndex = 24 * ry + rx
 
   const updatedNodes = JSON.parse(JSON.stringify(nodes))
-  updatedNodes[id].reducedIndex = reducedIndex
   updatedNodes[id].positionIndices.x = rx
   updatedNodes[id].positionIndices.y = ry
   
   return updatedNodes
 }
-
-
-
-export const getValidMoves = (x, y, id, nodes) => {
-  let nx = x;
-  let ny = y;
-  const validMoves = [1, 1, 1, 1]
-  
-  for (const nodeKey of Object.keys(nodes)) {
-    const node = nodes[nodeKey]; 
-    if (node.id !== id) {
-      if (node.cellIndices.x + 2 === nx && Math.abs(node.cellIndices.y - ny) < 2 || nx === 0) {
-        validMoves[0] = 0
-      }
-      if (node.cellIndices.x - 2 === nx && Math.abs(node.cellIndices.y - ny) < 2 || nx === 48) {
-        validMoves[2] = 0
-      }
-      if (node.cellIndices.y + 2 === ny && (node.cellIndices.x - nx) < 2 || ny === 0) {
-        validMoves[1] = 0
-      }
-      if (node.cellIndices.y - 2 === ny && Math.abs(node.cellIndices.x - nx) < 2 || ny === 16) {
-        validMoves[3] = 0
-      }
-
-    }
-  }
-
-  return validMoves;
-};
-
 
 
 export const updateLinePosition = (x, y, id, lines) => {
@@ -246,6 +186,8 @@ const getReducedSize = (name) => {
   return reducedSizes[name]
 }
 
+
+// helper function for designating the node sizes
 const getSize = (name, type, snap) => {
   const single = {
     x: snap, y: snap
@@ -262,15 +204,9 @@ const getSize = (name, type, snap) => {
   const quad = {
     x: snap * 2 + 10, y: snap * 2 + 10
   }
-
-  const transport = {
-    x: snap * 3 + 10, y: snap * 2 + 10
-  }
-
   const sequencer = {
     x: snap * 3 + 20, y: snap * 2 + 10
   }
-
   const inParam = {
     x: snap * 1.5 + 10, y: snap 
   }
