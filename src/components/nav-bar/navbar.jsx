@@ -4,8 +4,8 @@ import "./navbar.scss"
 import { colorScheme } from '../node-system/node-helpers/helperFunctions'
 import { description } from '../node-system/node-helpers/tooltips'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faFileArchive, faFileLines } from '@fortawesome/free-solid-svg-icons'
-import { pictograms } from './pictos.js'
+import { faFileLines } from '@fortawesome/free-solid-svg-icons'
+
 
 const Navbar = memo(({getNodeInfo}) => {
   const [active, setActive] = useState(null)
@@ -186,7 +186,7 @@ const Navbar = memo(({getNodeInfo}) => {
               <div className='subtitle'>
                 {node}
                 <a 
-                  href={`https://tonejs.github.io/docs/14.7.77/${node}`}
+                  href={node === "Transport" ? `https://github.com/merkwur/ohrwurm.io_the-alchemist-den#:~:text=Capabilities-,The%20Transport,-object%20is%20not` : `https://tonejs.github.io/docs/14.7.77/${node}`}
                   target='_blank'
                   style={{cursor: "help"}}
                 
