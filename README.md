@@ -18,9 +18,9 @@ Current looks v
 The rest of the objects are visual wrapper of Tone.js objects. 
 
 ## Next Steps
-Improving UI/UX
-Improving code
-Improving performance
+Improving UI/UX  
+Improving code  
+Improving performance  
 
 ## Getting Started
 If you have [Node.js installed](https://github.com/nodejs/node) on your machine, simply: clone the repository, move into the file, and install the dependencies. 
