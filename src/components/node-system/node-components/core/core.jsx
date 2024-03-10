@@ -18,6 +18,7 @@ const Core = ({node, tone}) => {
     tone.tone[type].value = value
   }
 
+  
 
   return (
     <div 
@@ -26,6 +27,20 @@ const Core = ({node, tone}) => {
 
       >
 
+      {!_parameters  ? (
+        <div className='background-wrapper'
+          style={{position: 'absolute'}}
+        >
+          <div 
+            className='background-image'
+            style={{
+              backgroundImage: `url(${node.name}.png)`,
+              backgroundSize: "contain",
+              
+            }}
+            > </div>
+        </div>
+      ) : null}
         <div 
           className='background-hint'
           style={{

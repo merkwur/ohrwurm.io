@@ -12,7 +12,6 @@ const Signal = ({node, tone}) => {
   const inputs = node.input ? Object.keys(node.input) : null 
   const [_parameters, setParameters] = useState(tone.parameters)
 
-  console.log(_parameters)
   const handleParameterChange = (value, type) => {
     if (typeof tone.tone[type] === "object") {
       tone.tone[type].value = value

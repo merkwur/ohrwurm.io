@@ -7,6 +7,7 @@ const LineCanvas = ({lines, deleteLine}) => {
   
 
   useEffect(() => {
+    console.log(lines)
     setDims({width: window.innerWidth, height: window.innerHeight})
   }, [window.innerWidth])
 

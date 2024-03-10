@@ -14,7 +14,8 @@ const MasterNode =  ({node,
                       updateNodePosition, 
                       removeNode, 
                       addLine, 
-                      updateLinePosition,                     
+                      updateLinePosition,
+                      deletePseudo,                     
                       tone
                     }) => {
 
@@ -69,11 +70,16 @@ const MasterNode =  ({node,
       
       
       const {left, top} = topElement.getBoundingClientRect()
-      setLine({ from: topElement.id, 
+      const lineProps = { from: topElement.id, 
                 fromType: topElement.getAttribute("whichparent"),               
                 sx: Math.floor(left) + 5,
-                sy: Math.floor(top) + 5 
-              })
+                sy: Math.floor(top) + 5,
+                ex: event.clientX, 
+                ey: event.clientY,
+                to: "pointer", toType: "pointer", which: "pointer"
+              }
+      addLine(lineProps)
+      setLine(lineProps)
       setLineMode(true)      
     }
   }
@@ -94,6 +100,12 @@ const MasterNode =  ({node,
         setSnapsY(sy)
       }, 20)
       return () => clearTimeout(handler)
+    }
+    if (isDragging && lineMode) {
+      const currentNode = nodeRef.current[node.id]
+      const diffX = (parseInt(currentNode.style.left) - event.clientX + 60)
+      const diffY = (parseInt(currentNode.style.top) - event.clientY + node.size.y / 2) 
+      updateLinePosition(-diffX, -diffY, "pointer")
     }
   }
 
@@ -120,6 +132,7 @@ const MasterNode =  ({node,
     setIsDragging(false)
     setIsNodeDragging(false)
     if (lineMode) {
+      deletePseudo()
       const dragEndElement = document.elementFromPoint( event.clientX, event.clientY)
       if (dragEndElement.id !== line.from) {
         if (dragEndElement.getAttribute("sockettype")) {

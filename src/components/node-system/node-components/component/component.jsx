@@ -19,6 +19,16 @@ const Component = ({node}) => {
         width :`${node.size.x}px`,
       }}
     >
+      <div className='background-wrapper'>
+        <div 
+          className='background-image'
+          style={{
+            backgroundImage: `url(${node.name}.png)`,
+            backgroundSize: "contain",
+            
+          }}
+          > </div>
+      </div>
       <div 
         className='background-hint'
         style={{

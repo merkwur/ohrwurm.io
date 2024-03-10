@@ -6,7 +6,8 @@ import {addNode,
         addLine,
         deleteLine,
         deleteNode,
-        updateLinePosition,      
+        updateLinePosition,
+        deletePseudoLine,      
       } from '../node-helpers/nodeData'
 
 import LineCanvas from '../node-helpers/lineCanvas'
@@ -47,8 +48,10 @@ const NodeCanvas = () => {
  
   // if the connection type and the connection is possible creates a line between the nodes
   const handleAddLine = (line) => {
-    console.log(line)
-    if (line && isConnectionValid(line.from.split(":")[0], line.which, line.to.split(":")[0], line.fromType)) {
+    if (line && line.to === "pointer") {
+      const updated = addLine(line, lineData)
+      setLineData(updated)
+    } else if (line && isConnectionValid(line.from.split(":")[0], line.which, line.to.split(":")[0], line.fromType)) {
       const updated = addLine(line, lineData, nodeData)
       const connected = connectToneObjects(line.from, line.to, line.which, toneData)  
       setLineData(updated[0])
@@ -57,6 +60,12 @@ const NodeCanvas = () => {
         setToneData(connected)
       }
     }
+  }
+
+  const handleDeletePseudoLine = () => {
+    const update = deletePseudoLine(lineData)
+    console.log("here we deleted the pseudo", update)
+    setLineData(update)
   }
   
   const handleDeleteLine = (id) => {
@@ -91,7 +100,7 @@ const NodeCanvas = () => {
     setNodeData(updatedNodes)  
   }
 
-  useEffect(() => {console.log(toneData)}, [toneData])
+  useEffect(() => {console.log(lineData)}, [lineData])
 
   return (
     <div 
@@ -120,6 +129,7 @@ const NodeCanvas = () => {
                 removeNode={(id) => nodeRemove(id)}
                 addLine={(line) => handleAddLine(line)}
                 updateLinePosition={(x, y, id) => handleLinePositionUpdate(x, y, id)}
+                deletePseudo={() => handleDeletePseudoLine()}
                 isLineExist={lineData ? lineData.length > 0 : false}
                 notesToTrigger={(arr, ids, bpm) => handleNotesToTrigger(arr, ids, bpm)}
                 getValidMoves={(x, y, id) => handleValidMoves(x, y, id)}

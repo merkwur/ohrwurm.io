@@ -60,8 +60,11 @@ export const deleteNode = (id, nodes, lines, tones) => {
   
   
   export const addLine = (lineProps, lines, nodes) => {
-
-    // Validate input
+    if (lineProps.to === "pointer") {
+      const newLines = { ...lines, "pointer": lineProps };
+      return newLines;
+    } 
+    console.log(lineProps, lines, nodes)
     if (
       !lines || 
       !nodes ||
@@ -111,6 +114,12 @@ export const deleteNode = (id, nodes, lines, tones) => {
   const newLines = { ...lines, [id]: lineProps };
   // call tone connections 
   return [newLines, newNodes];
+}
+
+export const deletePseudoLine = (lines) => {
+  console.log(lines)
+  const {["pointer"]: _, ...updatedLines} = lines
+  return updatedLines
 }
 
 export const deleteLine = (id, lines, nodes) => {
@@ -171,7 +180,7 @@ export const updateLinePosition = (x, y, id, lines) => {
         updateLines[line].ey += y; 
       }
       
-    }
+    } 
   })
   return updateLines
 }
