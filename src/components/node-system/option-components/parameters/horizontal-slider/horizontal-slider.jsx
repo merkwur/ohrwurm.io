@@ -140,7 +140,7 @@ const HorizontalSlider = ({
           style={{ fontSize: abbreviate ? "6.2pt" : ""
           }}
           > 
-          {state.float ? value.toFixed(2) : parseInt(value/unit)} {state.unit}
+          {state.float ? value.toFixed(3) : parseInt(value/unit)} {state.unit}
         </div>
       </div>
       

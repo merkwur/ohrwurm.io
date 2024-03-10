@@ -343,7 +343,7 @@ export const getNodeParameters = (name, type) => {
 
   const omniModNodeParams = {
       Oscillator: {
-        type: "sine"
+        type: "square"
       }, 
       FatOscillator: {
         type: "sine",
@@ -351,12 +351,8 @@ export const getNodeParameters = (name, type) => {
         count: 1
       },
       PWMOscillator: {
-        
-        
       },
       PulseOscillator: {
-        
-
       },
       AMOscillator: {
         type: "sine",

@@ -30,6 +30,16 @@ const Source = ({node, tone}) => {
         >
           {abbreviates[node.name] ? abbreviates[node.name] : node.name}
       </div> 
+      <div className='background-wrapper'>
+        <div 
+          className='background-image'
+          style={{
+            backgroundImage: `url(${node.name}.png)`,
+            backgroundSize: "contain",
+            
+          }}
+          > </div>
+      </div>
       <>
         {inputs ? (
           <>

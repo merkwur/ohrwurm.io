@@ -14,8 +14,8 @@ const InstrumentOptions = memo(({toneObj}) => {
   const [_parameters, setParameters] = useState(toneObj.parameters) 
   const [_envelope, setEnvelope] = useState(_parameters.hasOwnProperty("envelope") ? _parameters.envelope : null)
   const [_modulationEnvelope, setModulationEnvelope] = useState(_parameters.hasOwnProperty("modulationEnvelope") ? _parameters.modulationEnvelope : null)
-  const [_carrierParameters, setCarrierParameters] = useState(_parameters.hasOwnProperty("oscillator") ? _parameters.oscillator.osc : _parameters.oscillator0 ? _parameters.oscillator0.osc : null)
-  const [_modulatorParameters, setModulatorParameters] = useState(_parameters.hasOwnProperty("modulator") ? _parameters.modulator.osc : _parameters.oscillator1 ? _parameters.oscillator1.osc : null)
+  const [_carrierParameters, setCarrierParameters] = useState(_parameters.hasOwnProperty("oscillator") ? _parameters.oscillator.osc : null)
+  const [_modulatorParameters, setModulatorParameters] = useState(_parameters.hasOwnProperty("modulator") ? _parameters.modulator.osc : null)
   const [_oscillatorType, setOscillatorType] = useState(_parameters.noiseType ? _parameters.noiseType : _parameters.oscillatorType)
   const [_modulationType, setModulationType]  =useState(_parameters.modulationType)
   const [_carrierBaseType, setCarrierBaseType] = useState(_parameters.type)
@@ -27,10 +27,13 @@ const InstrumentOptions = memo(({toneObj}) => {
   const [_noiseTypes, setNoiseTypes] = useState(_parameters.noiseTypes ? _parameters.noiseTypes : null)
 
 
+  console.log(_modulatorParameters)
 
   useEffect(() => {
     if (toneObj.name === "Synth") {
       toneObj.tone.oscillator.baseType = "sine"
+    } 
+    if (_modulatorParameters) {
     }
   }, [])
 
@@ -116,6 +119,7 @@ const InstrumentOptions = memo(({toneObj}) => {
 
 
   const handleWaveTypes = (wave, which, parent) => {
+    console.log(wave, which, parent)
     if (wave && which && parent) {
       if (parent === "carrier") {
         if (which === "carrier") {

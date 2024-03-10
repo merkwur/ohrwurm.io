@@ -5,19 +5,25 @@ import { colorScheme } from '../node-system/node-helpers/helperFunctions'
 import { description } from '../node-system/node-helpers/tooltips'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faFileLines } from '@fortawesome/free-solid-svg-icons'
+import { connectToneObjects } from '../node-system/node-helpers/toneData.jsx'
 
 
-const Navbar = memo(({getNodeInfo}) => {
+const Navbar = memo(({getNodeInfo, snapSize}) => {
   const [active, setActive] = useState(null)
   const [nodeInfo, setNodeInfo] = useState({name: null, type: null})
   const [isDragging, setIsDragging] = useState(false)
   const [openSubMenu, setOpenSubMenu] = useState(false)
   const [node, setNode] = useState(null)
   const [openMenu, setOpenMenu] = useState(false)
+  const [initialX, setInitialX] = useState(0)
+  const [initialY, setInitialY] = useState(0)
+  const [snapX, setSnapX] = useState(0)
+  const [snapY, setSnapY] = useState(0)
   const itemRef = useRef() 
   const contentRef = useRef()
-  const scrollContainerRef = useRef(null);
-
+  const scrollContainerRef = useRef(null)
+  let dragPreview = useRef(null)
+  const ISaidSo = true // for test purpose
   const handleMouseEnter = (key) => {
     setActive(key);
     
@@ -44,17 +50,70 @@ const Navbar = memo(({getNodeInfo}) => {
     event.preventDefault()
     setNodeInfo({ name: event.currentTarget.id, type: active });
     setIsDragging(true)
-  }
+    const x = (Math.floor(event.clientX / snapSize) * snapSize) + 5
+    const y = (Math.floor(event.clientY / snapSize) * snapSize) + 5
+    
+    setInitialX(x)
+    setInitialY(y)
 
+    // creating hollow elements for the dragPreview
+    const img = `${node}.png`
+    console.log(img)
+
+    dragPreview.current = document.createElement("div")
+    dragPreview.current.style.position = "absolute"
+    dragPreview.current.style.zIndex = 10000
+    dragPreview.current.style.width = `${snapSize*2-10}px`
+    dragPreview.current.style.height = `${snapSize*2-10}px`
+    dragPreview.current.style.top = `${y}px`
+    dragPreview.current.style.left = `${x}px`
+    dragPreview.current.style.backgroundColor = "#0707007"
+    dragPreview.current.style.backgroundImage = `url(${img})`
+    dragPreview.current.style.backgroundSize = "cover"
+    dragPreview.current.style.pointerEvents = "none"
+    const canvas = document.getElementsByClassName("canvas")
+    canvas[0].appendChild(dragPreview.current)
+  }
+  
   const handleMouseMove = (event) => {
     event.preventDefault()
-    
+    if (isDragging) {
+      const handler = setTimeout(() => {
+        const mx = event.clientX
+        const my = event.clientY
+        const x = mx 
+        const y = my 
+          
+        const sx = Math.floor(x/snapSize)*snapSize + 5
+        const sy = Math.floor(y/snapSize)*snapSize + 5
+        setSnapX(sx)
+        setSnapY(sy)
+      }, 20)
+      return () => clearTimeout(handler)
+    } 
   }
+    
+        
+  useEffect(() => {
+    if (isDragging) {
+      dragPreview.current.style.left = `${snapX}px`;
+      dragPreview.current.style.top = `${snapY}px`;
+      console.log(dragPreview.current.style.left)
+    }
+  }, [snapX, snapY])
+
+
   const handleMouseUp = (event) => {
     const x = event.clientX
     const y = event.clientY
     setIsDragging(false)
-    getNodeInfo(x, y, nodeInfo);
+    getNodeInfo(x, y, nodeInfo)
+    if (dragPreview.current && ISaidSo) {
+      const canvas = document.getElementsByClassName("canvas")
+      canvas[0].removeChild(dragPreview.current)
+      
+      dragPreview.current = null; // Reset the ref
+    }
     window.removeEventListener('mousemove', handleMouseMove)
     window.removeEventListener('mouseup', handleMouseUp)
   }
@@ -112,7 +171,13 @@ const Navbar = memo(({getNodeInfo}) => {
     if (isDragging) {
       window.addEventListener("mousemove", handleMouseMove)
       window.addEventListener("mouseup", handleMouseUp)
-    } 
+    }
+    // clean up
+    return () => {
+      window.removeEventListener('mousemove', handleMouseMove)
+      window.removeEventListener('mouseup', handleMouseUp)
+    }
+     
   }, [isDragging])
 
 

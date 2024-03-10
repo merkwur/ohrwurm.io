@@ -40,8 +40,16 @@ const MasterNode =  ({node,
     const x = event.clientX
     const y = event.clientY
     let topElement = document.elementFromPoint(x, y)
-    if (topElement.className.includes("parameters") || topElement.className.includes("hint")){
-      topElement = topElement.parentElement
+    
+    if (topElement.className.includes("parameters") 
+        || topElement.className.includes("hint")
+        || topElement.className.includes("background")
+        ){
+      if (topElement.className.includes("image")) {
+        topElement = topElement.parentElement.parentElement
+      } else {
+        topElement = topElement.parentElement
+      }
     }
     setInitialX(x - parseInt(topElement.parentElement.style.left)-70)
     setInitialY(y - parseInt(topElement.parentElement.style.top)-70)

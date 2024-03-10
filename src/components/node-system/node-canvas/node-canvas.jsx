@@ -103,7 +103,10 @@ const NodeCanvas = () => {
       }}
     >
 
-      <Navbar getNodeInfo={(x, y, node) => getNodeInfo(x, y, node)}/>    
+      <Navbar 
+        getNodeInfo={(x, y, node) => getNodeInfo(x, y, node)}
+        snapSize={snapSize}
+        />    
         {Object.keys(nodeData).map(nodeId => {        
           const node = nodeData[nodeId];
           return (
