@@ -15,8 +15,6 @@ const Navbar = memo(({getNodeInfo, snapSize}) => {
   const [openSubMenu, setOpenSubMenu] = useState(false)
   const [node, setNode] = useState(null)
   const [openMenu, setOpenMenu] = useState(false)
-  const [initialX, setInitialX] = useState(0)
-  const [initialY, setInitialY] = useState(0)
   const [snapX, setSnapX] = useState(0)
   const [snapY, setSnapY] = useState(0)
   const itemRef = useRef() 
@@ -53,8 +51,6 @@ const Navbar = memo(({getNodeInfo, snapSize}) => {
     const x = (Math.floor(event.clientX / snapSize) * snapSize) + 5
     const y = (Math.floor(event.clientY / snapSize) * snapSize) + 5
     
-    setInitialX(x)
-    setInitialY(y)
 
     // creating hollow elements for the dragPreview
     const img = `${node}.png`

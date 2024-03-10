@@ -47,7 +47,8 @@ const NodeCanvas = () => {
  
   // if the connection type and the connection is possible creates a line between the nodes
   const handleAddLine = (line) => {
-    if (line && isConnectionValid(line.from.split(":")[0], line.which)) {
+    console.log(line)
+    if (line && isConnectionValid(line.from.split(":")[0], line.which, line.to.split(":")[0], line.fromType)) {
       const updated = addLine(line, lineData, nodeData)
       const connected = connectToneObjects(line.from, line.to, line.which, toneData)  
       setLineData(updated[0])

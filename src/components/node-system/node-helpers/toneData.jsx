@@ -57,6 +57,7 @@ export const invokeTriggerEvent = (notes, durations, probabilities, instruments,
 
 // handles the tone backend
 export const connectToneObjects = (from, to, which, nodes) => {
+  console.log(which)
   if (from.includes("Transport")) {
     const newTone = {
       ...nodes, 
