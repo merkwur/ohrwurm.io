@@ -4,6 +4,7 @@ export const menuContent = {
     'Destination',
     'Gain',
     'Transport',
+    'MIDI'
   ], 
 
   Source: [

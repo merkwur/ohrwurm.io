@@ -94,7 +94,6 @@ const Navbar = memo(({getNodeInfo, snapSize}) => {
     if (isDragging) {
       dragPreview.current.style.left = `${snapX}px`;
       dragPreview.current.style.top = `${snapY}px`;
-      console.log(dragPreview.current.style.left)
     }
   }, [snapX, snapY])
 

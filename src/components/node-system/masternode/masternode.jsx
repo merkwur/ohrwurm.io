@@ -8,6 +8,7 @@ import Effect from '../node-components/effects/effect'
 import Component from '../node-components/component/component'
 import Signal from '../node-components/signal/signal'
 import ComponentAnalyser from '../node-components/component-analyser/component-analyser'
+import MIDI from '../node-components/midi/midi'
 
 const MasterNode =  ({node, 
                       snapSize,
@@ -31,6 +32,8 @@ const MasterNode =  ({node,
   const [snapX, setSnapsX] = useState(0)
   const [snapY, setSnapsY] = useState(0)
   const [isNodeSelected, setIsNodeSelected] = useState(false)
+  const [outputPos, setOutputPos] = useState({x: 0, y: 0})
+
   const nodeRef = useRef({})
     
 
@@ -69,6 +72,7 @@ const MasterNode =  ({node,
     if (topElement.getAttribute("sockettype")) {
       
       
+      setOutputPos({x: parseInt(topElement.style.left), y: parseInt(topElement.style.top)})
       const {left, top} = topElement.getBoundingClientRect()
       const lineProps = { from: topElement.id, 
                 fromType: topElement.getAttribute("whichparent"),               
@@ -103,8 +107,9 @@ const MasterNode =  ({node,
     }
     if (isDragging && lineMode) {
       const currentNode = nodeRef.current[node.id]
-      const diffX = (parseInt(currentNode.style.left) - event.clientX + 60)
-      const diffY = (parseInt(currentNode.style.top) - event.clientY + node.size.y / 2) 
+      
+      const diffX = (parseInt(currentNode.style.left) - event.clientX + 70 - 80 *.03)
+      const diffY = (parseInt(currentNode.style.top) - event.clientY + outputPos.y + 7.5 ) 
       updateLinePosition(-diffX, -diffY, "pointer")
     }
   }
@@ -197,7 +202,13 @@ const MasterNode =  ({node,
     >
      {
       node.type === "Core" ? (
+        <>
+        {node.name === "MIDI" ? (
+          <MIDI node={node} tone={tone}/>
+        ): (
         <Core node={node} tone={tone} />  
+        )}
+        </>
       ) : node.type === "Source" ? (
         <Source node={node} /> 
       ) : node.type === "Instrument" ? (

@@ -51,7 +51,7 @@ const NodeCanvas = () => {
     if (line && line.to === "pointer") {
       const updated = addLine(line, lineData)
       setLineData(updated)
-    } else if (line && isConnectionValid(line.from.split(":")[0], line.which, line.to.split(":")[0], line.fromType)) {
+    } else if (line && isConnectionValid(line.from.split(":")[0], line.which, line.to.split(":")[0], line.toType)) {
       const updated = addLine(line, lineData, nodeData)
       const connected = connectToneObjects(line.from, line.to, line.which, toneData)  
       setLineData(updated[0])
@@ -64,7 +64,6 @@ const NodeCanvas = () => {
 
   const handleDeletePseudoLine = () => {
     const update = deletePseudoLine(lineData)
-    console.log("here we deleted the pseudo", update)
     setLineData(update)
   }
   
@@ -100,7 +99,7 @@ const NodeCanvas = () => {
     setNodeData(updatedNodes)  
   }
 
-  useEffect(() => {console.log(lineData)}, [lineData])
+  useEffect(() => {console.log(nodeData)}, [nodeData])
 
   return (
     <div 
@@ -134,7 +133,7 @@ const NodeCanvas = () => {
                 notesToTrigger={(arr, ids, bpm) => handleNotesToTrigger(arr, ids, bpm)}
                 getValidMoves={(x, y, id) => handleValidMoves(x, y, id)}
                 validMoves={valids}
-                tone={node.name === "Analyser" || node.type === "Signal" || node.name === "Gain"  ? toneData[node.id] : null}
+                tone={node.name === "Analyser" || node.type === "Signal" || node.name === "Gain"  ? toneData[node.id] : node.name === "MIDI" ? toneData : null}
                 />
             </React.Fragment>
           );  

@@ -5,7 +5,7 @@ import { addToneObject } from "./toneData"
 
 export const addNode = (x, y, name, type, snapSize, nodes, tones) => {
   let id
-  if (name !== "Transport" || name !== "Trigger" || name === "Sequencer") {
+  if (name !== "Transport" || name !== "Trigger" || name !== "MIDI" ) {
     id = name + ":" + uuidv4().split("-")[0]
   } else {
     id = name
@@ -226,7 +226,8 @@ const getSize = (name, type, snap) => {
       Gain: {...single},
       Transport:  {...single},
       Trigger: {...single},
-      Sequencer: {...sequencer}
+      MIDI: {...onequarter}
+
     },
     Source: {
       Oscillator: {...single },
@@ -368,7 +369,8 @@ const getInputs = (name, type) => {
         node: [] 
       },
       Transport: null, 
-      Trigger: null
+      MIDI: null
+
     },
     Source: {
       AMOscillator: {

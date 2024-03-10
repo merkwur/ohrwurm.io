@@ -8,4 +8,23 @@
   border-radius: 50%;
   background: radial-gradient(circle at 50%, #272727, #272727 40%, #aaa 55%, #272727 100%);
   cursor: grab;
+
+  .output-tooltips {
+    color: #aaa;
+    padding-left: .5em;
+    padding-right: .5em;
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+    right: -300%;
+    top: -20px;
+    width: fit-content;
+    height: 13px;
+    font-size: 7pt;
+    background-color: #070707;
+    border-radius: 4px;
+    border: 1px solid #77777777;
+  }
 }

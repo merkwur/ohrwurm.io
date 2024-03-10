@@ -1,0 +1,28 @@
+.background-hint{
+  padding-top: .1rem;
+  width: 70px;
+  height: 15px;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  white-space: normal;
+  font-weight: 400;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #171713;
+}
+.signal-parameters{
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  
+  .signal-sliders{
+    display: flex;
+    justify-content: center;
+    width: 50%;
+
+  }
+}
