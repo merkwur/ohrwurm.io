@@ -1,0 +1,52 @@
+* {
+  box-sizing: border-box;
+  margin: 0; /* Reset default margin */
+  
+  text-overflow: none;
+  scrollbar-width: none;
+  padding: 0; /* Reset default padding */
+}
+
+:root {
+  font-family: montserrat, Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.42;
+  font-weight: 400;
+
+  color-scheme: light dark;
+  color: #272727;
+  background-color: #ccc;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-text-size-adjust: 100%;
+
+  ::-webkit-scrollbar { 
+    width: 0px;
+  }
+
+  /* Track */
+  ::-webkit-scrollbar-track {
+    scrollbar-width: none;
+  }
+
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    
+    border-radius: none;
+  }
+}
+
+
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  appearance: textfield;
+}
