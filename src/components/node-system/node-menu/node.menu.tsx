@@ -2,7 +2,17 @@ import React, { useEffect, useRef, useState } from 'react'
 import "./node.menu.scss"
 import { positionHandler } from '../node-helpers/node.navigation'
 
-const NodeMenu = () => {
+
+interface NodeMenuProps {
+  getNodeInfo: (
+    x: number, 
+    y: number, 
+    name: string, 
+  ) => void
+}
+
+
+const NodeMenu: React.FC<NodeMenuProps> = ({getNodeInfo}) => {
   const nodeList: string[] = ["a", "b", "c", "d"]
   const [isDragging, setIsDragging] = useState<boolean>(false)
   const [hollowObjectPosition, setHollowObjectPosition] = useState<{x: number, y:number}>({x: 0, y: 0})  
@@ -34,14 +44,11 @@ const NodeMenu = () => {
 
   const handleMouseMove = (event: MouseEvent) => {
     if (isDragging) {
-      const handler = setTimeout(() => {
-        const px: number = event.clientX
-        const py: number = event.clientY
-        const {x, y} = positionHandler(px, py, 40)
-        console.log(`clicked on ${x} ${y}`)
-        setHollowObjectPosition({x: x, y: y})
-      }, 20)
-      return () => clearTimeout(handler)
+      const px: number = event.clientX
+      const py: number = event.clientY
+      const {x, y} = positionHandler(px, py, 40)
+      setHollowObjectPosition({x: x, y: y})
+
     }
   }
 
@@ -54,14 +61,19 @@ const NodeMenu = () => {
 
 
   const handleMouseUp = (event: MouseEvent) => {
-    const x = event.clientX
-    const y = event.clientY
-    setIsDragging(false)
     
+    const px: number = event.clientX
+    const py: number = event.clientY
+    const {x, y} = positionHandler(px, py, 40)
+
+    setIsDragging(false)
+
+    getNodeInfo(x, y, "osc")
+
     if (dragPreview.current) {
       const canvas = document.getElementsByClassName("canvas")
       canvas[0].removeChild(dragPreview.current)
-      dragPreview.current = null; // Reset the ref
+      dragPreview.current = null
     }
     window.removeEventListener('mousemove', handleMouseMove)
     window.removeEventListener('mouseup', handleMouseUp)
@@ -69,16 +81,16 @@ const NodeMenu = () => {
 
   useEffect(() => {
     if (isDragging) {
-      window.addEventListener('mousemove', handleMouseMove);
-      window.addEventListener('mouseup', handleMouseUp);
+      window.addEventListener('mousemove', handleMouseMove)
+      window.addEventListener('mouseup', handleMouseUp)
     } else {
-      window.removeEventListener('mousemove', handleMouseMove);
-      window.removeEventListener('mouseup', handleMouseUp);
+      window.removeEventListener('mousemove', handleMouseMove)
+      window.removeEventListener('mouseup', handleMouseUp)
     }
 
     return () => {
-      window.removeEventListener('mousemove', handleMouseMove);
-      window.removeEventListener('mouseup', handleMouseUp);
+      window.removeEventListener('mousemove', handleMouseMove)
+      window.removeEventListener('mouseup', handleMouseUp)
     };
   }, [isDragging]);
 
