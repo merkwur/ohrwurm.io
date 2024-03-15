@@ -6,13 +6,13 @@ interface Size {
   y: number
 }
 
-export const addNode = (x:number, y:number, name:string, nodes: Nodes): Nodes => {
+export const addNode = (x:number, y:number, name:string, snap: number, nodes: Nodes): Nodes => {
   const id: string = name + ":" + uuid4().split("-").pop()
   const newNode: Node = {
     id, 
     name, 
     position: {x, y}, 
-    size: getNodeSize(name)
+    size: getNodeSize(name, snap)
   }
 
   const updatedNodes: Nodes = {...nodes}
@@ -20,9 +20,22 @@ export const addNode = (x:number, y:number, name:string, nodes: Nodes): Nodes =>
   return updatedNodes
 }
 
-const getNodeSize = (name: string): Size => {
+export const deleteNode = (id: string, nodes: Nodes): Nodes | undefined => {
+  if (!nodes[id]) return undefined
+  const { [id]: __, ...updatedNodes} = nodes
+  return updatedNodes
+}
+
+const getNodeSize = (name: string, snap: number): Size => {
   const nodeSizes: {[key: string]: Size} = {
-    osc: {x: 70, y: 70}
+    osc: {x: snap * 2 - 10, y: snap * 2 - 10}
   }
-  return nodeSizes[name] || {x: 70, y: 70}
+  return nodeSizes[name] || {x: snap * 2 - 10, y: snap * 2 - 10}
+}
+
+export const updateNodePositions = (id: string, x: number, y: number, nodes: Nodes): Nodes => {
+  const updatedNodes = JSON.parse(JSON.stringify(nodes))
+  updatedNodes[id].position.x = x
+  updatedNodes[id].position.y = y
+  return updatedNodes
 }
