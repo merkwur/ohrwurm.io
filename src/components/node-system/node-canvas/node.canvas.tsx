@@ -16,6 +16,17 @@ const NodeCanvas = () => {
   const [currentId, setCurrentId] = useState<string>("")
   const nodeRef = useRef<{ [key: string]: HTMLDivElement | null }>({});
 
+  const handleMouseDown: React.MouseEventHandler<HTMLDivElement> = (event) => {
+    event.preventDefault()
+    const node = document.elementFromPoint(event.clientX, event.clientY) as HTMLElement
+    if (node && node.id && !node.getAttribute("data-socket")) {
+      setIsDragging(true)
+      const x = parseInt(node.style.left) - event.clientX + 40
+      const y = parseInt(node.style.top) - event.clientY + 40
+      setInitialPositions({x:x,y:y})
+      setCurrentId(node.id)
+    }
+  }
 
   const handleMouseMove = useCallback(
     throttle((event: MouseEvent) => {
@@ -42,17 +53,6 @@ const NodeCanvas = () => {
     event.preventDefault()
   }
 
-  const handleMouseDown: React.MouseEventHandler<HTMLDivElement> = (event) => {
-    event.preventDefault()
-    const node = document.elementFromPoint(event.clientX, event.clientY) as HTMLElement
-    if (node && node.id) {
-      setIsDragging(true)
-      const x = parseInt(node.style.left) - event.clientX + 35
-      const y = parseInt(node.style.top) - event.clientY + 35 
-      setInitialPositions({x:x,y:y})
-      setCurrentId(node.id)
-    }
-  }
 
   const handleAddNode = (x: number, y: number, name:string) => {
     console.log(x, y, name)
@@ -66,7 +66,7 @@ const NodeCanvas = () => {
     if (nodes) setNodeData(nodes)
   }
 
-  useEffect(() => {console.log(nodeData)},[nodeData])
+  // useEffect(() => {console.log(nodeData)},[nodeData])
 
   useEffect(() => {
     if (isDragging) {

@@ -11,12 +11,16 @@
 
     .node-parent-list{
       height: 100%;
-      width: 10%;
+      width: 12.5%;
       border-right: 1px solid #77777777;
   
       .node-parents{
+        display: flex;
+        align-items: center;
+        font-size: 9pt;
+        font-weight: 700;
         color: bisque;
-        padding-left: 1.2rem;
+        padding-left: .2rem;
         width: 100%;
         border-bottom: 1px solid #77777777;
       }
@@ -35,6 +39,7 @@
         border-radius: 5px;
         font-size: 7.7pt;
         font-weight: 600;
+        margin-right: .25rem;
         color: bisque;
         height: 70px;
         width: 70px;

@@ -1,6 +1,8 @@
-import React, { useEffect, useState } from 'react'
+import React, { } from 'react'
 import { Node } from '../../types/types'
 import "./node.master.scss"
+import OscillatorNode from '../nodes/oscillator-node/oscillator.node'
+import CoreNodes from '../nodes/core-nodes/core.nodes'
 
 interface NodeMasterProps {
   node: Node
@@ -12,7 +14,6 @@ interface NodeMasterProps {
 
 
 const NodeMaster: React.FC<NodeMasterProps> = ({node, deleteNode}) => {
-
 
   return (
     <div 
@@ -26,9 +27,11 @@ const NodeMaster: React.FC<NodeMasterProps> = ({node, deleteNode}) => {
         top: `${node.position.y}px`,
       }}
     >
-      <div className='node-haeder'>
-        {node.name}
-      </div>      
+      {node.name === "Oscillator" ? (
+        <OscillatorNode node={node}/>
+      ) : node.name === "Destination" ? (
+        <CoreNodes node={node} />
+      ) :  null}
     </div>
   )
 }

@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 import "./node.menu.scss"
 import { positionHandler } from '../node-helpers/node.navigation'
+import { nodeList } from '../node-helpers/node-list'
 
 
 interface NodeMenuProps {
@@ -13,9 +14,10 @@ interface NodeMenuProps {
 
 
 const NodeMenu: React.FC<NodeMenuProps> = ({getNodeInfo}) => {
-  const nodeList: string[] = ["a", "b", "c", "d"]
+  const nodes: string[] = Object.keys(nodeList)
   const [isDragging, setIsDragging] = useState<boolean>(false)
   const [hollowObjectPosition, setHollowObjectPosition] = useState<{x: number, y:number}>({x: 0, y: 0})  
+  const [selectedNode, setSelectedNode] = useState<string>("")
   const dragPreview = useRef<HTMLDivElement | null>(null)
 
 
@@ -23,8 +25,10 @@ const NodeMenu: React.FC<NodeMenuProps> = ({getNodeInfo}) => {
     setIsDragging(true)
     const px: number = event.clientX
     const py: number = event.clientY
+    const selected = document.elementsFromPoint(px, py)[0].getAttribute("data-name") 
+    setSelectedNode(selected!)
     const {x, y} = positionHandler(px, py, 40)
-
+    
     dragPreview.current = document.createElement("div")
     dragPreview.current.style.position = "absolute"
     dragPreview.current.style.zIndex = "10000"
@@ -68,7 +72,7 @@ const NodeMenu: React.FC<NodeMenuProps> = ({getNodeInfo}) => {
 
     setIsDragging(false)
 
-    getNodeInfo(x, y, "osc")
+    getNodeInfo(x, y, selectedNode)
 
     if (dragPreview.current) {
       const canvas = document.getElementsByClassName("canvas")
@@ -98,23 +102,27 @@ const NodeMenu: React.FC<NodeMenuProps> = ({getNodeInfo}) => {
     <div className='node-menu-wrapper'>
       <div className='node-menu'>
         <div className='node-parent-list'>
-          {nodeList.map((node, index) => (
+          {nodes.map((node, index) => (
             <div 
               className='node-parents'
               key={node+index}
-              style={{height: `${100/nodeList.length}%`}}
+              style={{height: `${100/nodes.length}%`}}
             >    
               {node}
             </div>
           ))}
         </div>
         <div className='node-menu-content'>
-          <div 
-            className='node-snap'
-            onMouseDown={handleMouseDown}
-          >
-              oscillator
-          </div>
+          {nodeList.Core.concat(nodeList.Source).map((n, i) => (
+            <div 
+              className='node-snap'
+              onMouseDown={handleMouseDown}
+              key={n+i}
+              data-name={n}
+            >
+                {n}
+            </div>
+          ))}
         </div>
       </div>
     </div>
