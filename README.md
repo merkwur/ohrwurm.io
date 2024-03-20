@@ -15,7 +15,7 @@ Current looks v
 
 **The WaveShaper** object has multiple functions support. It allows for distance-weighted interpolation of up to three functions.
 
-**The Analyser** object can plot two waves at the same time as waveforms and/or FFTs. And also capable of drawing Lissajous curves of two waves.
+**The Analyser** object can plot two waves simultaneously as waveforms or FFTs. And also capable of drawing Lissajous curves of two waves.
 
 The rest of the objects are visual wrappers of Tone.js objects.
 
