@@ -1,5 +1,5 @@
 import {v4 as uuid4} from "uuid"
-import { Nodes, Node } from "../../types/types"
+import { Nodes, Node, Line, Lines } from "../../types/types"
 import { getSockets } from "./IO"
 
 interface Size {
@@ -42,4 +42,14 @@ export const updateNodePositions = (id: string, x: number, y: number, nodes: Nod
   updatedNodes[id].position.x = x
   updatedNodes[id].position.y = y
   return updatedNodes
+}
+
+
+export const addLine = (line: Line, lines: Lines): Lines => {
+  // check if values are complete
+  // check if line exist 
+  const id: string = line.from + ">" + line.to
+  const updatedLines: Lines = {...lines}
+  updatedLines[id] = line
+  return updatedLines
 }
