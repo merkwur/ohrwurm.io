@@ -5,9 +5,10 @@ import { Lines } from "../../types/types";
 interface LineProps {
   lines: Lines, 
   deleteLine: (id: string) => void
+  isLineDragging: boolean
 }
 
-const LineCanvas: React.FC<LineProps> = ({lines, deleteLine}) => {
+const LineCanvas: React.FC<LineProps> = ({lines, deleteLine, isLineDragging}) => {
   const [dims, setDims] = useState<{width: number, height: number}>({width: 0, height: 0});
 
   useEffect(() => {
@@ -29,12 +30,27 @@ const LineCanvas: React.FC<LineProps> = ({lines, deleteLine}) => {
       {lines && Object.keys(lines).length > 0 ? (
         <React.Fragment > 
           {Object.keys(lines).map((line, index) => (  
-            <Curves
-              key={index+line}
-              id={line}
-              line={lines[line]}
-              deleteLine = {(id) => handleLineDelete(id)}         
-            />
+            <React.Fragment key={line+index}>
+              {!isLineDragging ? (
+                <>
+                  {line !== "pointer" ? (
+                    <Curves
+                      key={index+line}
+                      id={line}
+                      line={lines[line]}
+                      deleteLine = {(id) => handleLineDelete(id)}         
+                    />
+                  ) : null}
+                </>
+              ) : (
+                <Curves
+                  key={index+line}
+                  id={line}
+                  line={lines[line]}
+                  deleteLine = {(id) => handleLineDelete(id)}         
+                />
+              )}
+            </React.Fragment>
           ))}
         </React.Fragment>
       ) : null}

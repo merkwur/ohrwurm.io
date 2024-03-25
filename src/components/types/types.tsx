@@ -13,7 +13,8 @@ export interface Nodes {
 
 
 export interface Line {
-  sx: number, 
+  id: string, 
+  sx: number,
   sy: number, 
   ex: number, 
   ey: number,

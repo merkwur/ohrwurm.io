@@ -3,7 +3,7 @@ import "./node.canvas.scss"
 import NodeMenu from '../node-menu/node.menu'
 import NodeMaster from '../node-master/node.master'
 import { Lines, Nodes, Line } from '../../types/types'
-import { addLine, addNode, deleteNode, updateNodePositions } from '../node-helpers/nodeData'
+import { addLine, addNode, deleteNode, updateNodePositions, updatePointerPosition } from '../node-helpers/nodeData'
 import { positionHandler } from '../node-helpers/node.navigation'
 import { throttle } from 'lodash'
 import LineCanvas from '../line-canvas/line.canvas'
@@ -13,37 +13,43 @@ const NodeCanvas = () => {
   const [nodePosition, setNodePosition] = useState<{x: number, y:number}>({x: 0, y:0})
   const [nodeData, setNodeData] = useState<Nodes>({})
   const [lineData, setLineData] = useState<Lines>({})
-  const [pseudoLine, setPseudoLine] = useState<Line>({sx:0,sy:0,ex:0,ey:0,from:"",to:"pointer"})
-  const [isDragging, setIsDragging] = useState<boolean>(false) 
-  const [lineDragging, setLineDragging] = useState<boolean>(false)
+  const [pseudoLine, setPseudoLine] = useState<Line>({id: "pointer", sx:0,sy:0,ex:0,ey:0,from:"",to:"pointer"})
+  const [isNodeDragging, setIsNodeDragging] = useState<boolean>(false) 
+  const [isLineDragging, setIsLineDragging] = useState<boolean>(false)
   const [initialPositions, setInitialPositions] = useState<{x: number, y: number}>({x: 0, y: 0})
   const [currentId, setCurrentId] = useState<string>("")
   const nodeRef = useRef<{ [key: string]: HTMLDivElement | null }>({});
+  const [yOffset, setYOffset] = useState<number>(window.innerHeight * .1)
 
   const handleMouseDown: React.MouseEventHandler<HTMLDivElement> = (event) => {
     event.preventDefault()
     const node = document.elementFromPoint(event.clientX, event.clientY) as HTMLElement
     const dataAttr = node.getAttribute("data-socket")
     if (node && node.id && !dataAttr) {
-      setIsDragging(true)
+      setIsNodeDragging(true)
       const x = parseInt(node.style.left) - event.clientX + 70
       const y = parseInt(node.style.top) - event.clientY + 70
       setInitialPositions({x:x,y:y})
       setCurrentId(node.id)
     } else if(node && node.id && dataAttr) {
       console.log("we are draggin a line babeeee!")
-      setLineDragging(true)
+      setIsLineDragging(true)
       const {left, top, right, bottom} = node.getBoundingClientRect() 
       const sx = left + (right-left) / 2
-      const sy = top  + (bottom-top) / 2
-      const updatedLines = addLine({sx: sx, sy:sy, ex:event.clientX, ey:event.clientY, from: node.id, to: "pointer"}, lineData)
+      const sy = top  + (bottom-top) / 2 - yOffset
+      console.log(sx, sy, event.clientX, event.clientY)
+      const updatedLines = addLine({id: "pointer",sx: sx, sy:sy, ex:event.clientX, ey:event.clientY - yOffset, from: node.id, to: "pointer"}, lineData)
       setLineData(updatedLines)
     }
   }
 
+  useEffect(() => {
+    setYOffset(window.innerHeight * .1)
+  }, [window.innerHeight])
+
   const nodePositionHandler = useCallback(
     throttle((event: MouseEvent) => {
-      if (isDragging) {
+      if (isNodeDragging) {
         const tx = event.clientX - initialPositions.x
         const ty = event.clientY - initialPositions.y
         const {x, y} = positionHandler(tx, ty, snapSize)
@@ -56,25 +62,25 @@ const NodeCanvas = () => {
           setNodeData(updated)
         }
       }
-    }, 50), [isDragging, currentId])
+    }, 50), [isNodeDragging, currentId])
 
 
   const linePositionHandler = (event: MouseEvent) => {
-    setPseudoLine({...pseudoLine, ex: event.clientX, ey: event.clientY})
+    const updatedLines = updatePointerPosition(event.clientX, event.clientY-yOffset, lineData)
+    setLineData(updatedLines)
   } 
 
   const handleMouseMove = (event: MouseEvent) => {
-    if (isDragging) {
+    if (isNodeDragging) {
       nodePositionHandler(event)
-    }
-    if (lineDragging) {
+    } else if (isLineDragging) {
       linePositionHandler(event)
     }
   }
 
   const handleMouseUp = () => {
-    setIsDragging(false)
-    setLineDragging(false)
+    setIsNodeDragging(false)
+    setIsLineDragging(false)
   }
 
   const handeRightClick: React.MouseEventHandler<HTMLDivElement> = (event) => {
@@ -95,10 +101,6 @@ const NodeCanvas = () => {
     if (nodes) setNodeData(nodes)
   }
 
-  const updateLinePosition = (id: string) => {
-
-  }
-
   const handleLineDeletion = (id: string) => {  
     console.log(`delete line call for ${id}`)
   }
@@ -107,7 +109,7 @@ const NodeCanvas = () => {
   useEffect(() => {console.log(lineData)}, [lineData])
 
   useEffect(() => {
-    if (isDragging) {
+    if (isNodeDragging || isLineDragging) {
       window.addEventListener('mousemove', handleMouseMove);
       window.addEventListener('mouseup', handleMouseUp);
     } else {
@@ -119,7 +121,11 @@ const NodeCanvas = () => {
       window.removeEventListener('mousemove', handleMouseMove);
       window.removeEventListener('mouseup', handleMouseUp);
     };
-  }, [isDragging]);
+  }, [isNodeDragging, isLineDragging]);
+
+  const handleAddRed = (ref: any, node: string) => {
+    nodeRef.current[nodeData[node].id] = ref
+  }
 
   return (
     <div 
@@ -130,21 +136,22 @@ const NodeCanvas = () => {
         backgroundSize: `${snapSize*2}px ${snapSize*2}px, ${snapSize}px ${snapSize}px`,
       }}
     >
+      <NodeMenu getNodeInfo={(x, y, name) => handleAddNode(x, y, name)}/>
       <LineCanvas 
         lines={lineData} 
         deleteLine={(id) => handleLineDeletion(id)}
+        isLineDragging={isLineDragging}
        />
-      <NodeMenu getNodeInfo={(x, y, name) => handleAddNode(x, y, name)}/>
       {Object.keys(nodeData).map((node, index) => (
-        <div 
+        <React.Fragment 
           key={node+index}
-          ref={(ref) => (nodeRef.current[nodeData[node].id] = ref)}
           >
           <NodeMaster 
             node={nodeData[node]}
             deleteNode={(id) => handleDeleteNode(id)}       
+            getRef={(ref) => handleAddRed(ref, node)}
           />
-        </div>
+        </React.Fragment>
       ))}
     </div>
   )

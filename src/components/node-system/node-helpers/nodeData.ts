@@ -48,8 +48,21 @@ export const updateNodePositions = (id: string, x: number, y: number, nodes: Nod
 export const addLine = (line: Line, lines: Lines): Lines => {
   // check if values are complete
   // check if line exist 
-  const id: string = line.from + ">" + line.to
+  let id: string
+  if (line.to === "pointer") {
+    id = "pointer"
+  } else {
+    id = line.from + ">" + line.to
+  }
+  line.id = id
   const updatedLines: Lines = {...lines}
   updatedLines[id] = line
   return updatedLines
+}
+
+export const updatePointerPosition = (x: number, y: number, lines: Lines): Lines => {
+  const newLines = JSON.parse(JSON.stringify(lines));
+  newLines["pointer"].ex = x
+  newLines["pointer"].ey = y
+  return newLines
 }
