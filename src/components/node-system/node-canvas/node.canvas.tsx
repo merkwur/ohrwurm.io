@@ -2,15 +2,18 @@ import React, { useCallback, useEffect, useRef, useState} from 'react'
 import "./node.canvas.scss"
 import NodeMenu from '../node-menu/node.menu'
 import NodeMaster from '../node-master/node.master'
-import { Nodes } from '../../types/types'
+import { Lines, Nodes, Line } from '../../types/types'
 import { addNode, deleteNode, updateNodePositions } from '../node-helpers/nodeData'
 import { positionHandler } from '../node-helpers/node.navigation'
 import { throttle } from 'lodash'
+import LineCanvas from '../line-canvas/line.canvas'
 
 const NodeCanvas = () => {
   const [snapSize, setSnapSize] = useState<number>(40)
   const [nodePosition, setNodePosition] = useState<{x: number, y:number}>({x: 0, y:0})
   const [nodeData, setNodeData] = useState<Nodes>({})
+  const [lineData, setLineData] = useState<Lines>({})
+  const [pseudoLine, setPseudoLine] = useState<Line>({sx:0,sy:0,ex:0,ey:0,from:"pseudo",to:"pseudo"})
   const [isDragging, setIsDragging] = useState<boolean>(false) 
   const [initialPositions, setInitialPositions] = useState<{x: number, y: number}>({x: 0, y: 0})
   const [currentId, setCurrentId] = useState<string>("")
@@ -21,10 +24,12 @@ const NodeCanvas = () => {
     const node = document.elementFromPoint(event.clientX, event.clientY) as HTMLElement
     if (node && node.id && !node.getAttribute("data-socket")) {
       setIsDragging(true)
-      const x = parseInt(node.style.left) - event.clientX + 40
-      const y = parseInt(node.style.top) - event.clientY + 40
+      const x = parseInt(node.style.left) - event.clientX + 70
+      const y = parseInt(node.style.top) - event.clientY + 70
       setInitialPositions({x:x,y:y})
       setCurrentId(node.id)
+    } else if(node && node.id && node.getAttribute("data-socket")) {
+      console.log("we are draggin a line babeeee!")
     }
   }
 
@@ -54,6 +59,7 @@ const NodeCanvas = () => {
   }
 
 
+
   const handleAddNode = (x: number, y: number, name:string) => {
     console.log(x, y, name)
     const nodes = addNode(x, y, name, snapSize, nodeData)
@@ -64,6 +70,10 @@ const NodeCanvas = () => {
     console.log(`delete call for ${id}`)
     const nodes = deleteNode(id, nodeData)
     if (nodes) setNodeData(nodes)
+  }
+
+  const handleLineDeletion = (id: string) => {  
+    console.log(`delete line call for ${id}`)
   }
 
   // useEffect(() => {console.log(nodeData)},[nodeData])
@@ -104,7 +114,10 @@ const NodeCanvas = () => {
           />
         </div>
       ))}
-
+      <LineCanvas 
+        lines={lineData} 
+        deleteLine={(id) => handleLineDeletion(id)}
+       />
     </div>
   )
 }

@@ -10,3 +10,29 @@ export interface Node {
 export interface Nodes {
   [key: string]: Node
 }
+
+
+export interface Line {
+  sx: number, 
+  sy: number, 
+  ex: number, 
+  ey: number,
+  from: string, 
+  to: string
+}
+
+export interface Lines {
+  [key: string]: Line
+}
+
+export interface Bezier {
+  mx: number, 
+  my: number, 
+  x1: number,
+  y1: number,
+  x2: number, 
+  y2: number,
+  x:  number,
+  y:  number
+} 
+
