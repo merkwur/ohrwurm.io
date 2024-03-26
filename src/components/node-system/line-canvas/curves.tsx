@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { colorScheme } from "../node-helpers/color.scheme"
 import { Bezier, Line } from '../../types/types';
 
 

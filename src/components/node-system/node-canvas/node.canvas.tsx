@@ -2,18 +2,17 @@ import React, { useCallback, useEffect, useRef, useState} from 'react'
 import "./node.canvas.scss"
 import NodeMenu from '../node-menu/node.menu'
 import NodeMaster from '../node-master/node.master'
-import { Lines, Nodes, Line } from '../../types/types'
+import { Lines, Nodes } from '../../types/types'
 import { addLine, addNode, deleteNode, updateNodePositions, updatePointerPosition } from '../node-helpers/nodeData'
 import { positionHandler } from '../node-helpers/node.navigation'
 import { throttle } from 'lodash'
 import LineCanvas from '../line-canvas/line.canvas'
 
+
 const NodeCanvas = () => {
-  const [snapSize, setSnapSize] = useState<number>(40)
-  const [nodePosition, setNodePosition] = useState<{x: number, y:number}>({x: 0, y:0})
+  const snapSize = 40
   const [nodeData, setNodeData] = useState<Nodes>({})
   const [lineData, setLineData] = useState<Lines>({})
-  const [pseudoLine, setPseudoLine] = useState<Line>({id: "pointer", sx:0,sy:0,ex:0,ey:0,from:"",to:"pointer"})
   const [isNodeDragging, setIsNodeDragging] = useState<boolean>(false) 
   const [isLineDragging, setIsLineDragging] = useState<boolean>(false)
   const [initialPositions, setInitialPositions] = useState<{x: number, y: number}>({x: 0, y: 0})
@@ -36,7 +35,7 @@ const NodeCanvas = () => {
       setIsLineDragging(true)
       const {left, top, right, bottom} = node.getBoundingClientRect() 
       const sx = left + (right-left) / 2
-      const sy = top  + (bottom-top) / 2 - yOffset
+      const sy = top + (bottom-top) / 2 - yOffset
       console.log(sx, sy, event.clientX, event.clientY)
       const updatedLines = addLine({id: "pointer",sx: sx, sy:sy, ex:event.clientX, ey:event.clientY - yOffset, from: node.id, to: "pointer"}, lineData)
       setLineData(updatedLines)
@@ -57,7 +56,6 @@ const NodeCanvas = () => {
         if (currentNode) {
           currentNode.style.left = `${x}px`
           currentNode.style.top = `${y}px`
-          setNodePosition({x: x, y: y})
           const updated = updateNodePositions(currentId, x, y, nodeData)
           setNodeData(updated)
         }
@@ -78,8 +76,22 @@ const NodeCanvas = () => {
     }
   }
 
-  const handleMouseUp = () => {
+  const handleMouseUp = (event: MouseEvent) => {
     setIsNodeDragging(false)
+    if (isLineDragging) {
+      const dragEndElement = document.elementFromPoint(event.clientX, event.clientY)
+      if (dragEndElement && dragEndElement.getAttribute("data-socket")) {
+        const line = {...lineData.pointer}
+        const {left, top, right, bottom} = dragEndElement.getBoundingClientRect() 
+        const ex = left + (right-left) / 2
+        const ey = top + (bottom-top) / 2 - yOffset
+        line.ex = ex
+        line.ey = ey
+        line.to = dragEndElement.id
+        const updatedLine = addLine(line, lineData)
+        setLineData(updatedLine)
+      }
+    }
     setIsLineDragging(false)
   }
 

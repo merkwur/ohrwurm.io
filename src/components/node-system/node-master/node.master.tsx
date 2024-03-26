@@ -1,4 +1,4 @@
-import React, { useRef } from 'react'
+import React, { } from 'react'
 import { Node } from '../../types/types'
 import "./node.master.scss"
 import OscillatorNode from '../nodes/oscillator-node/oscillator.node'
