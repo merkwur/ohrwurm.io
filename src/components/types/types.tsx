@@ -20,6 +20,7 @@ export interface Line {
   ey: number,
   from: string, 
   to: string
+  which: string | null
 }
 
 export interface Lines {

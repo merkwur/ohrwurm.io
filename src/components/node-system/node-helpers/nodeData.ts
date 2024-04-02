@@ -44,19 +44,47 @@ export const updateNodePositions = (id: string, x: number, y: number, nodes: Nod
   return updatedNodes
 }
 
+export const addLine = (line: Line, lines: Lines, nodes: Nodes): [Lines, Nodes]=> {
+  
+  if(
+      !line    || !lines   || !line.id ||
+      !line.sx || !line.sy || !line.ex  || !line.ey ||
+      !line.to || !line.from || line.which
+    ) { throw new Error("Invalid line properties") }
+  
+  if (line.from === line.to) return [lines, nodes]
 
-export const addLine = (line: Line, lines: Lines): Lines => {
-  // check if values are complete
-  // check if line exist 
   let id: string
   if (line.to === "pointer") {
     id = "pointer"
   } else {
     id = line.from + ">" + line.to
   }
+
+  const updatedNodes = JSON.parse(JSON.stringify(nodes))
+
+
+
   line.id = id
   const updatedLines: Lines = {...lines}
   updatedLines[id] = line
+
+
+  return [updatedLines, updatedNodes]
+}
+
+export const deleteLine = (id: string, lines: Lines, nodes: Nodes): Lines => {
+  
+  if (!lines[id]) return lines
+  const [from, to, which] = id.split(/>|:/)
+
+  const updatedNodes = JSON.parse(JSON.stringify(nodes))
+
+  updatedNodes[from].output.node.filter((n: string) => n !== to)
+  updatedNodes[to].input[which] = null
+
+  const {[id]: _, ...updatedLines}: Lines = lines
+
   return updatedLines
 }
 
@@ -65,4 +93,11 @@ export const updatePointerPosition = (x: number, y: number, lines: Lines): Lines
   newLines["pointer"].ex = x
   newLines["pointer"].ey = y
   return newLines
+}
+
+export const updateLinePosition = (line: Line, lines: Lines): Lines => {
+  if (line) {
+    
+  }
+  return lines
 }

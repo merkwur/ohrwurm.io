@@ -19,13 +19,13 @@ const Curves: React.FC<CurveProps> = ({id, line, deleteLine}) => {
 
     setCurvePosition({
       mx: line.sx,
-      my: line.sy + 1,
+      my: line.sy,
       x1: x1,
-      y1: line.sy-1,
+      y1: line.sy,
       x2: x2,
-      y2: line.ey+1,
+      y2: line.ey,
       x: line.ex,
-      y: line.ey+1,
+      y: line.ey,
     });
   }, [line])
 

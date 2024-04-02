@@ -3,7 +3,7 @@ import "./node.canvas.scss"
 import NodeMenu from '../node-menu/node.menu'
 import NodeMaster from '../node-master/node.master'
 import { Lines, Nodes } from '../../types/types'
-import { addLine, addNode, deleteNode, updateNodePositions, updatePointerPosition } from '../node-helpers/nodeData'
+import { addLine, addNode, deleteLine, deleteNode, updateNodePositions, updatePointerPosition } from '../node-helpers/nodeData'
 import { positionHandler } from '../node-helpers/node.navigation'
 import { throttle } from 'lodash'
 import LineCanvas from '../line-canvas/line.canvas'
@@ -24,21 +24,23 @@ const NodeCanvas = () => {
     event.preventDefault()
     const node = document.elementFromPoint(event.clientX, event.clientY) as HTMLElement
     const dataAttr = node.getAttribute("data-socket")
+    if (node instanceof SVGElement) return 
     if (node && node.id && !dataAttr) {
       setIsNodeDragging(true)
-      const x = parseInt(node.style.left) - event.clientX + 70
-      const y = parseInt(node.style.top) - event.clientY + 70
+      const x = parseInt(node.style.left) - event.clientX + 40
+      const y = parseInt(node.style.top) - event.clientY + yOffset  /2
       setInitialPositions({x:x,y:y})
       setCurrentId(node.id)
     } else if(node && node.id && dataAttr) {
-      console.log("we are draggin a line babeeee!")
+      
       setIsLineDragging(true)
       const {left, top, right, bottom} = node.getBoundingClientRect() 
+      console.log(left, top)
       const sx = left + (right-left) / 2
       const sy = top + (bottom-top) / 2 - yOffset
       console.log(sx, sy, event.clientX, event.clientY)
-      const updatedLines = addLine({id: "pointer",sx: sx, sy:sy, ex:event.clientX, ey:event.clientY - yOffset, from: node.id, to: "pointer"}, lineData)
-      setLineData(updatedLines)
+      const updatedLines = addLine({id: "pointer",sx: sx, sy:sy, ex:event.clientX, ey:event.clientY - yOffset, from: node.id, to: "pointer", which: "hollow"}, lineData, nodeData)
+      setLineData(updatedLines[0])
     }
   }
 
@@ -77,9 +79,10 @@ const NodeCanvas = () => {
   }
 
   const handleMouseUp = (event: MouseEvent) => {
+    
     setIsNodeDragging(false)
     if (isLineDragging) {
-      const dragEndElement = document.elementFromPoint(event.clientX, event.clientY)
+      const dragEndElement = document.elementFromPoint(event.clientX, event.clientY) as HTMLDivElement
       if (dragEndElement && dragEndElement.getAttribute("data-socket")) {
         const line = {...lineData.pointer}
         const {left, top, right, bottom} = dragEndElement.getBoundingClientRect() 
@@ -88,8 +91,10 @@ const NodeCanvas = () => {
         line.ex = ex
         line.ey = ey
         line.to = dragEndElement.id
-        const updatedLine = addLine(line, lineData)
-        setLineData(updatedLine)
+        line.which = dragEndElement.getAttribute("socket-type")
+        const updated = addLine(line, lineData, nodeData)
+        setLineData(updated[0])
+        setNodeData(updated[1])
       }
     }
     setIsLineDragging(false)
@@ -98,8 +103,6 @@ const NodeCanvas = () => {
   const handeRightClick: React.MouseEventHandler<HTMLDivElement> = (event) => {
     event.preventDefault()
   }
-
-
 
   const handleAddNode = (x: number, y: number, name:string) => {
     console.log(x, y, name)
@@ -115,10 +118,13 @@ const NodeCanvas = () => {
 
   const handleLineDeletion = (id: string) => {  
     console.log(`delete line call for ${id}`)
+    const updated = deleteLine(id, lineData, nodeData)
+    console.log(updated)
+    setLineData(updated)
   }
 
-  // useEffect(() => {console.log(nodeData)},[nodeData])
-  useEffect(() => {console.log(lineData)}, [lineData])
+  useEffect(() => {console.log(nodeData)},[nodeData])
+  // useEffect(() => {console.log(lineData)}, [lineData])
 
   useEffect(() => {
     if (isNodeDragging || isLineDragging) {
@@ -135,7 +141,7 @@ const NodeCanvas = () => {
     };
   }, [isNodeDragging, isLineDragging]);
 
-  const handleAddRed = (ref: any, node: string) => {
+  const handleAddRef = (ref: any, node: string) => {
     nodeRef.current[nodeData[node].id] = ref
   }
 
@@ -161,7 +167,7 @@ const NodeCanvas = () => {
           <NodeMaster 
             node={nodeData[node]}
             deleteNode={(id) => handleDeleteNode(id)}       
-            getRef={(ref) => handleAddRed(ref, node)}
+            getRef={(ref) => handleAddRef(ref, node)}
           />
         </React.Fragment>
       ))}
