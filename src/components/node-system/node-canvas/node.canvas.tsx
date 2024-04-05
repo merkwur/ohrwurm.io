@@ -3,7 +3,7 @@ import "./node.canvas.scss"
 import NodeMenu from '../node-menu/node.menu'
 import NodeMaster from '../node-master/node.master'
 import { Lines, Nodes } from '../../types/types'
-import { addLine, addNode, deleteLine, deleteNode, updateNodePositions, updatePointerPosition } from '../node-helpers/nodeData'
+import { addLine, addNode, deleteLine, deleteNode, updateLinePosition, updateNodePositions, updatePointerPosition } from '../node-helpers/nodeData'
 import { positionHandler } from '../node-helpers/node.navigation'
 import { throttle } from 'lodash'
 import LineCanvas from '../line-canvas/line.canvas'
@@ -60,6 +60,8 @@ const NodeCanvas = () => {
           currentNode.style.top = `${y}px`
           const updated = updateNodePositions(currentId, x, y, nodeData)
           setNodeData(updated)
+          const lineUpdate = updateLinePosition(currentNode.id, x, y, lineData)
+          setLineData(lineUpdate)
         }
       }
     }, 50), [isNodeDragging, currentId])
@@ -82,7 +84,7 @@ const NodeCanvas = () => {
     
     setIsNodeDragging(false)
     if (isLineDragging) {
-      const dragEndElement = document.elementFromPoint(event.clientX, event.clientY) as HTMLDivElement
+      let dragEndElement = document.elementFromPoint(event.clientX, event.clientY) as HTMLDivElement
       if (dragEndElement && dragEndElement.getAttribute("data-socket")) {
         const line = {...lineData.pointer}
         const {left, top, right, bottom} = dragEndElement.getBoundingClientRect() 
@@ -91,7 +93,7 @@ const NodeCanvas = () => {
         line.ex = ex
         line.ey = ey
         line.to = dragEndElement.id
-        line.which = dragEndElement.getAttribute("socket-type")
+        line.which = dragEndElement.getAttribute("data-which")
         const updated = addLine(line, lineData, nodeData)
         setLineData(updated[0])
         setNodeData(updated[1])
@@ -123,8 +125,8 @@ const NodeCanvas = () => {
     setLineData(updated)
   }
 
-  useEffect(() => {console.log(nodeData)},[nodeData])
-  // useEffect(() => {console.log(lineData)}, [lineData])
+  //useEffect(() => {console.log(nodeData)},[nodeData])
+  //  useEffect(() => {console.log(lineData)}, [lineData])
 
   useEffect(() => {
     if (isNodeDragging || isLineDragging) {
