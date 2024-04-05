@@ -16,6 +16,7 @@ export const addNode = (x:number, y:number, name:string, snap: number, nodes: No
     input,
     output,
     position: {x, y}, 
+    connection: [],
     size: getNodeSize(name, snap)
   }
 
@@ -24,10 +25,21 @@ export const addNode = (x:number, y:number, name:string, snap: number, nodes: No
   return updatedNodes
 }
 
-export const deleteNode = (id: string, nodes: Nodes): Nodes | undefined => {
+export const deleteNode = (id: string, nodes: Nodes, lines: Lines): [Nodes, Lines] | undefined => {
   if (!nodes[id]) return undefined
-  const { [id]: __, ...updatedNodes} = nodes
-  return updatedNodes
+  
+  let updatedLines = {...lines}
+  let updatedNodes = {...nodes}
+  
+  nodes[id].connection?.forEach((line: string) => {
+    const updated = deleteLine(line, updatedLines, updatedNodes)
+    updatedLines = updated[0]
+    updatedNodes = updated[1]
+    delete updatedLines[line];
+  });
+  
+    delete updatedNodes[id]
+  return [updatedNodes, updatedLines]
 }
 
 const getNodeSize = (name: string, snap: number): Size => {
@@ -62,11 +74,10 @@ export const addLine = (line: Line, lines: Lines, nodes: Nodes): [Lines, Nodes]=
     id = line.from + ">" + line.to + "=" + line.which
   }
 
-
-
   if (id !== "pointer") {
-    console.log("do we even execute this line/")
     const updatedNodes = JSON.parse(JSON.stringify(nodes))
+    updatedNodes[line.from].connection.push(id)
+    updatedNodes[line.to].connection.push(id)
     const fromNode = Object.keys(nodes).find((node: string) => nodes[node].id === line.from)  
     const toNode = Object.keys(nodes).find((node: string) => nodes[node].id === line.to)  
     updatedNodes[fromNode!].output.node.push(toNode)
@@ -93,18 +104,21 @@ export const addLine = (line: Line, lines: Lines, nodes: Nodes): [Lines, Nodes]=
 
 }
 
-export const deleteLine = (id: string, lines: Lines, nodes: Nodes): Lines => {
+export const deleteLine = (id: string, lines: Lines, nodes: Nodes): [Lines, Nodes] => {
   
-  if (!lines[id]) return lines
+  if (!lines[id]) return [lines, nodes]
   const [from, to, which] = id.split(/>|=/)
   const updatedNodes = JSON.parse(JSON.stringify(nodes))
-
-  //updatedNodes[from].output.node.filter((n: string) => n !== to)
-  //updatedNodes[to].input[which] = null
-
+  console.log(from, to , which)
+  updatedNodes[from].output.node = updatedNodes[from].output.node.filter((n: string) => n !== to)
+  console.log(updatedNodes[from].output.node)
+  if (Array.isArray(updatedNodes[to].input[which])){
+    updatedNodes[to].input[which] = updatedNodes[to].input[which].filter((inputs: string) => inputs !== from) 
+  } else {
+    updatedNodes[to].input[which] = null
+  }
   const {[id]: _, ...updatedLines}: Lines = lines
-
-  return updatedLines
+  return [updatedLines, updatedNodes]
 }
 
 export const updatePointerPosition = (x: number, y: number, lines: Lines): Lines => {

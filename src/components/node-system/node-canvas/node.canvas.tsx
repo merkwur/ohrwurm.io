@@ -113,19 +113,19 @@ const NodeCanvas = () => {
   }
 
   const handleDeleteNode = (id: string) => {
-    console.log(`delete call for ${id}`)
-    const nodes = deleteNode(id, nodeData)
-    if (nodes) setNodeData(nodes)
+    const updated = deleteNode(id, nodeData, lineData)
+    if (updated) setNodeData(updated[0]); 
+    if (updated) setLineData(updated[1]) 
   }
 
   const handleLineDeletion = (id: string) => {  
     console.log(`delete line call for ${id}`)
     const updated = deleteLine(id, lineData, nodeData)
-    console.log(updated)
-    setLineData(updated)
+    setLineData(updated[0])
+    setNodeData(updated[1])
   }
 
-  //useEffect(() => {console.log(nodeData)},[nodeData])
+  useEffect(() => {console.log(nodeData)},[nodeData])
   //  useEffect(() => {console.log(lineData)}, [lineData])
 
   useEffect(() => {
