@@ -1,16 +1,16 @@
 export interface Node {
   id: string,
   name: string, 
-  input: {} | undefined, 
+  input: {} | string | undefined, 
   output: {} | undefined,
   position: {x: number, y: number},
-  size: {x: number, y: number}
+  size: {x: number, y: number},
+  connection: [] | undefined
 }
 
 export interface Nodes {
-  [key: string]: Node
+  [key: string]: Node 
 }
-
 
 export interface Line {
   id: string, 
@@ -21,6 +21,24 @@ export interface Line {
   from: string, 
   to: string
   which: string | null
+}
+
+export interface Channel {
+  id: number, 
+  input: undefined | string, 
+  pan: undefined | number, 
+  volume: undefined | number, 
+}
+
+export interface Mixer {
+  0 : Channel, 
+  1 : Channel, 
+  2 : Channel, 
+  3 : Channel, 
+  4 : Channel, 
+  5 : Channel, 
+  6 : Channel, 
+  7 : Channel, 
 }
 
 export interface Lines {
@@ -37,4 +55,3 @@ export interface Bezier {
   x:  number,
   y:  number
 } 
-

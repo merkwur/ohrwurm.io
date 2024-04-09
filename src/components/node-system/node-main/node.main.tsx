@@ -1,11 +1,12 @@
 import React, { } from 'react'
-import { Node } from '../../types/types'
-import "./node.master.scss"
+import {Node} from '../../types/types'
+import "./node.main.scss"
 import OscillatorNode from '../nodes/oscillator-node/oscillator.node'
 import CoreNodes from '../nodes/core-nodes/core.nodes'
+import MixerInput from '../nodes/mixer-inputs/mixer.input'
 
 interface NodeMasterProps {
-  node: Node
+  node: Node 
   deleteNode: (
     id: string
   ) => void
@@ -34,7 +35,9 @@ const NodeMaster: React.FC<NodeMasterProps> = ({node, deleteNode, getRef}) => {
         <OscillatorNode node={node}/>
       ) : node.name === "Destination" ? (
         <CoreNodes node={node} />
-      ) :  null}
+      ) : node.name.includes("channel") ? (
+        <MixerInput node={node} />
+      ) : null}
     </div>
   )
 }

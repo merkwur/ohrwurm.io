@@ -6,7 +6,7 @@ interface CoreProps {
   node: Node
 }
 
-const CoreNodes: React.FC<CoreProps> = ({node}) => {
+const MixerInput: React.FC<CoreProps> = ({node}) => {
   return (
     <>
       <div className='node-header'>
@@ -24,4 +24,4 @@ const CoreNodes: React.FC<CoreProps> = ({node}) => {
   )
 }
 
-export default CoreNodes
+export default MixerInput

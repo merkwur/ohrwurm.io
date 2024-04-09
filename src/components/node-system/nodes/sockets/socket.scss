@@ -1,7 +1,20 @@
-.socket{
+.input-socket{
   position: absolute;
-  width: 15px;
+  width: 12px;
   height: 15px;
-  border-radius: 50%;
-
+  border-bottom-right-radius: 50%;
+  border-top-right-radius: 50%;
+  border-right: 2px solid #424242;
+  border-top: 2px solid #424242;
+  border-bottom: 2px solid #424242;
+}
+.output-socket{ 
+  position: absolute;
+  width: 12px;
+  height: 15px;
+  border-bottom-left-radius: 50%;
+  border-top-left-radius: 50%;
+  border-left: 2px solid #424242;
+  border-top: 2px solid #424242;
+  border-bottom: 2px solid #424242;
 }

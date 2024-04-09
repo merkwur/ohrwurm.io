@@ -1,12 +1,15 @@
 import React, { useCallback, useEffect, useRef, useState} from 'react'
 import "./node.canvas.scss"
 import NodeMenu from '../node-menu/node.menu'
-import NodeMaster from '../node-master/node.master'
+import NodeMaster from '../node-main/node.main'
 import { Lines, Nodes } from '../../types/types'
 import { addLine, addNode, deleteLine, deleteNode, updateLinePosition, updateNodePositions, updatePointerPosition } from '../node-helpers/nodeData'
 import { positionHandler } from '../node-helpers/node.navigation'
 import { throttle } from 'lodash'
 import LineCanvas from '../line-canvas/line.canvas'
+import NodeConfigHub from '../node-config-hub/node.config.hub'
+
+
 
 
 const NodeCanvas = () => {
@@ -19,6 +22,7 @@ const NodeCanvas = () => {
   const [currentId, setCurrentId] = useState<string>("")
   const nodeRef = useRef<{ [key: string]: HTMLDivElement | null }>({});
   const [yOffset, setYOffset] = useState<number>(window.innerHeight * .1)
+
 
   const handleMouseDown: React.MouseEventHandler<HTMLDivElement> = (event) => {
     event.preventDefault()
@@ -147,6 +151,10 @@ const NodeCanvas = () => {
     nodeRef.current[nodeData[node].id] = ref
   }
 
+  const handleAddChannel = (name: string, channel: number) => {
+    console.log(channel, name)
+  }
+
   return (
     <div 
     className='canvas'
@@ -173,6 +181,9 @@ const NodeCanvas = () => {
           />
         </React.Fragment>
       ))}
+      <NodeConfigHub 
+        addChannel={(channelName, channelNumber) => handleAddChannel(channelName, channelNumber)}
+        />  
     </div>
   )
 }

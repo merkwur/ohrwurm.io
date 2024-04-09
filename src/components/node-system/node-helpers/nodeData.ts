@@ -44,7 +44,8 @@ export const deleteNode = (id: string, nodes: Nodes, lines: Lines): [Nodes, Line
 
 const getNodeSize = (name: string, snap: number): Size => {
   const nodeSizes: {[key: string]: Size} = {
-    osc: {x: snap * 2 - 10, y: snap * 2 - 10}
+    osc: {x: snap * 2 - 10, y: snap * 2 - 10},
+    "mixer-channel": {x: snap * 2 - 10, y: snap * 2 - 10}
   }
   return nodeSizes[name] || {x: snap * 2 - 10, y: snap * 2 - 10}
 }
