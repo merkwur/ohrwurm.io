@@ -28,8 +28,8 @@ Improving performance
 If you have [Node.js installed](https://github.com/nodejs/node) on your machine, simply: clone the repository, move into the file, and install the dependencies. 
 
 ```
-git clone https://github.com/merkwur/browser-daw.git
-cd browser-daw
+git clone https://github.com/merkwur/ohrwurm.io.git
+cd ohrwurm.io
 npm install
 npm run dev
 ```
