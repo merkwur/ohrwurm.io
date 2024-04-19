@@ -33,9 +33,9 @@ const NodeMaster: React.FC<NodeMasterProps> = ({node, deleteNode, getRef}) => {
     >
       {node.name === "Oscillator" ? (
         <OscillatorNode node={node}/>
-      ) : node.name === "Destination" ? (
+      ) : node.name.includes("c") ? (
         <CoreNodes node={node} />
-      ) : node.name.includes("channel") ? (
+      ) : node.name.includes("c") ? (
         <MixerInput node={node} />
       ) : null}
     </div>

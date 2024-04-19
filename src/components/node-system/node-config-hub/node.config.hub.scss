@@ -1,0 +1,21 @@
+.node-config-hub-container{
+    background-color: #171717;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 280px;
+    border-top: 1px solid #77777777;
+
+    .node-config-hub{
+        border: 12px solid #121212;
+        width: 100%;
+        height: 100%;
+        background-color: #171717;
+        background-size: 40px 40px;
+        background-image: 
+           radial-gradient(circle, #22dbc017 1px, rgba(0, 0, 0, .8) 2px)
+        
+    }
+
+}

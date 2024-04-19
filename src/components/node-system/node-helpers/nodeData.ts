@@ -10,6 +10,7 @@ interface Size {
 export const addNode = (x:number, y:number, name:string, snap: number, nodes: Nodes): Nodes => {
   const id: string = name + ":" + uuid4().split("-").pop()
   const {input, output} = getSockets(name)
+  console.log(input, output)
   const newNode: Node = {
     id, 
     name, 
@@ -17,7 +18,8 @@ export const addNode = (x:number, y:number, name:string, snap: number, nodes: No
     output,
     position: {x, y}, 
     connection: [],
-    size: getNodeSize(name, snap)
+    size: getNodeSize(name, snap),
+    socketPositions: undefined
   }
 
   const updatedNodes: Nodes = {...nodes}
@@ -129,16 +131,39 @@ export const updatePointerPosition = (x: number, y: number, lines: Lines): Lines
   return newLines
 }
 
-export const updateLinePosition = (id: string, xOff: number, yOff: number, lines: Lines): Lines => {
+export const updateLinePosition = (id: string, sockets: NodeListOf<Element>, lines: Lines): Lines => {
   const updatedLines = Object.keys(lines).reduce((acc, line) => {
-    const [from, to] = line.split(/>|=/);
+    const [from, to, which] = line.split(/>|=/);
     let whichLine = lines[line];
+    if (whichLine.id === "pointer") return lines
     if (id === from) {
-      whichLine = { ...whichLine, sx: xOff + 70, sy: yOff-60};
+      console.log(which, line, sockets)
+      sockets.forEach((socket: Element) => {
+        if (socket.getAttribute("data-which") === "node"){
+          const {x, y} = socket.getBoundingClientRect()
+
+          whichLine = { 
+            ...whichLine, 
+            sx: x + 7.5, 
+            sy: y - 90
+          }
+        }
+      })
     } else if (id === to) {
-      whichLine = { ...whichLine, ex: xOff , ey: yOff - 60 };
+      sockets.forEach((socket: Element) => {
+        if (socket.getAttribute("data-which") === which) {
+          const {x, y} = socket.getBoundingClientRect()
+          whichLine = { 
+            ...whichLine, 
+            ex: x + 7.5 , 
+            ey: y - 90
+          }
+
+        }
+      })
+      
     }
-    return { ...acc, [line]: whichLine };
-  }, {});
-  return updatedLines;
+    return { ...acc, [line]: whichLine }
+  }, {})
+  return updatedLines
 }

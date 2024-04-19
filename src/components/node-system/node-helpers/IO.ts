@@ -11,14 +11,23 @@ export const getSockets = (name: string): Socket => {
     },
     Destination: {
       node: []
+    },
+    channel: {
+      pan: null, 
+      volume: null, 
+      node: null
     }
 
   }
 
   const nodeOutputs: Record<string, Record<string, []>>= {
     Oscillator: {node: []},
-    Destination: {node: []}
+    Destination: {node: []},
+    
   }
-
-  return { input: nodeInputs[name], output: nodeOutputs[name] }
+  if (name.includes("channel")) {
+    return  { input: nodeInputs["channel"], output: nodeOutputs["channel"] }
+  } else {
+    return { input: nodeInputs[name], output: nodeOutputs[name] }
+  }
 }

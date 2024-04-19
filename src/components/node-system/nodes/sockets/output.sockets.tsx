@@ -11,6 +11,7 @@ const OutputSocket: React.FC<OutputProps> = ({id}) => {
       className='output-socket'
       id={id}
       data-socket="output"
+      data-which="node"
       style={{
         backgroundColor: `#070707`,
         top: `calc(50% - 7.5px)`,

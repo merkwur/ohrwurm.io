@@ -6,6 +6,7 @@ export interface Node {
   position: {x: number, y: number},
   size: {x: number, y: number},
   connection: [] | undefined
+  socketPositions: {} | undefined
 }
 
 export interface Nodes {

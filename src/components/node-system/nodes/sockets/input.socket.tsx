@@ -4,9 +4,10 @@ import "./socket.scss"
 interface InputProps {
   id: string, 
   inputType: string,
+  verticalPosition: number
 }
 
-const InputSocket: React.FC<InputProps> = ({id, inputType}) => {
+const InputSocket: React.FC<InputProps> = ({id, inputType, verticalPosition}) => {
   const inputs = inputType ? inputType : "node"
 
   return (
@@ -17,7 +18,7 @@ const InputSocket: React.FC<InputProps> = ({id, inputType}) => {
       data-which={inputs}
       style={{
         backgroundColor: `#070707`,
-        top: `calc(50% - 7.5px)`,
+        top: `${verticalPosition}px`,
         left: `${0}%`,
 
         // background: `radial-gradient(circle at 50%, #272727, #272727 40%, #${777} 55%, #272727 100%)`,

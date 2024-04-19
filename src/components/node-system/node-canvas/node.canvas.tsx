@@ -5,7 +5,7 @@ import NodeMaster from '../node-main/node.main'
 import { Lines, Nodes } from '../../types/types'
 import { addLine, addNode, deleteLine, deleteNode, updateLinePosition, updateNodePositions, updatePointerPosition } from '../node-helpers/nodeData'
 import { positionHandler } from '../node-helpers/node.navigation'
-import { throttle } from 'lodash'
+import { forEach, throttle } from 'lodash'
 import LineCanvas from '../line-canvas/line.canvas'
 import NodeConfigHub from '../node-config-hub/node.config.hub'
 
@@ -60,11 +60,14 @@ const NodeCanvas = () => {
         const {x, y} = positionHandler(tx, ty, snapSize)
         const currentNode = document.getElementById(currentId) as HTMLElement
         if (currentNode) {
+          const sockets = currentNode.querySelectorAll("[data-socket]")
+ 
           currentNode.style.left = `${x}px`
           currentNode.style.top = `${y}px`
           const updated = updateNodePositions(currentId, x, y, nodeData)
           setNodeData(updated)
-          const lineUpdate = updateLinePosition(currentNode.id, x, y, lineData)
+          
+          const lineUpdate = updateLinePosition(currentNode.id, sockets, lineData)
           setLineData(lineUpdate)
         }
       }
@@ -123,14 +126,13 @@ const NodeCanvas = () => {
   }
 
   const handleLineDeletion = (id: string) => {  
-    console.log(`delete line call for ${id}`)
     const updated = deleteLine(id, lineData, nodeData)
     setLineData(updated[0])
     setNodeData(updated[1])
   }
 
-  useEffect(() => {console.log(nodeData)},[nodeData])
-  //  useEffect(() => {console.log(lineData)}, [lineData])
+  // useEffect(() => {console.log(nodeData)},[nodeData])
+  // useEffect(() => {console.log(lineData)}, [lineData])
 
   useEffect(() => {
     if (isNodeDragging || isLineDragging) {

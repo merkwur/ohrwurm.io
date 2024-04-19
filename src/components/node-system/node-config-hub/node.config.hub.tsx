@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
-import { Node } from '../../types/types'
 import MixerUI from './mixer/mixer'
+import "./node.config.hub.scss"
 
 interface NodeConfigHubProps {
   addChannel: (

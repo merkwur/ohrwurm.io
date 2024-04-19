@@ -7,6 +7,9 @@ interface CoreProps {
 }
 
 const CoreNodes: React.FC<CoreProps> = ({node}) => {
+  const verticalSpan = node.size.y / Object.keys(node.input!).length 
+
+
   return (
     <>
       <div className='node-header'>
@@ -15,7 +18,11 @@ const CoreNodes: React.FC<CoreProps> = ({node}) => {
         <div>
         {node.input && Object.keys(node.input).map((n, i) => (
           <React.Fragment key={n+i}>
-            <InputSocket id={node.id} inputType='node'/>
+            <InputSocket 
+              id={node.id} 
+              inputType={n}
+              verticalPosition={verticalSpan * i + 3.75}
+              />
           </React.Fragment>
         ))}
       </div>
